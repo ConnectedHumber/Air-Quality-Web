@@ -1,0 +1,17 @@
+{
+    "name": "sbrl/air-quality-mapper",
+    "description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
+    "type": "project",
+    "require": {
+        "yosymfony/toml": "^1.0",
+        "aura/autoload": "^2.0",
+        "php-di/php-di": "^6.0"
+    },
+    "license": "MPL-2.0",
+    "authors": [
+        {
+            "name": "Starbeamrainbowlabs",
+            "email": "sbrl@starbeamrainbowlabs.com"
+        }
+    ]
+}

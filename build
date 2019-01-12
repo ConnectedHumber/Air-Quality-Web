@@ -1,0 +1,122 @@
+#!/usr/bin/env bash
+# Make sure the current directory is the location of this script to simplify matters
+cd "$(dirname $(readlink -f $0))";
+################
+### Settings ###
+################
+
+# The name of this project
+project_name="Air Quality Mapper";
+
+# The path to the lantern build engine git submodule
+lantern_path="./lantern-build-engine";
+
+###
+# Custom Settings
+###
+
+# Put any custom settings here.
+build_output_folder="./dist";
+
+###############################################################################
+
+# Check out the lantern git submodule if needed
+if [ ! -d "${lantern_path}" ]; then git submodule update --init "${lantern_path}"; fi
+
+source "${lantern_path}/lantern.sh";
+
+if [[ "$#" -lt 1 ]]; then
+	echo -e "${FBLE}${project_name}${RS} build script";
+	echo -e "    by Starbeamrainbowlabs";
+	echo -e "${LC}Powered by the lantern build engine, v${version}${RS}";
+	echo -e "";
+	echo -e "${CSECTION}Usage${RS}";
+	echo -e "    ./build ${CTOKEN}{action}${RS} ${CTOKEN}{action}${RS} ${CTOKEN}{action}${RS} ...";
+	echo -e "";
+	echo -e "${CSECTION}Available actions${RS}";
+	echo -e "    ${CACTION}setup${RS}            - Perform initial setup";
+	echo -e "    ${CACTION}setup-dev${RS}        - Performa additional setup for development environments. Run after ${CACTION}setup${RS}.";
+	echo -e "    ${CACTION}database${RS}         - Connect to the database via SSH & open MariaDB CLI connection, prompting for a password";
+	echo -e "    ${CACTION}dev-server${RS}       - Start a development server";
+	echo -e "    ${CACTION}dev-server-stop${RS}  - Stop the currently running development server";
+	echo -e "";
+	
+	exit 1;
+fi
+
+###############################################################################
+
+function task_setup {
+	stage_begin "Setting up";
+	
+	task_begin "Checking environment";
+	check_command git true;
+	check_command php true;
+	check_command node true;
+	check_command composer true;
+	check_command npm true;
+	task_end $?;
+	
+	task_begin "Initialising submodules";
+	git submodule update --init;
+	task_end $?;
+	
+	task_begin "Installing client dependencies";
+	echo "${HC}Not including developement dependencies. To complete setup for development, execute the ${CACTION}setup-dev${RS} ${HC}build task.${RS}";
+	npm install --production;
+	task_end $?;
+	
+	task_begin "Installing server dependencies";
+	composer install --no-dev;
+	task_end $?;
+	
+	stage_end $?;
+}
+
+function task_setup-dev {
+	task_begin "Checking environment";
+	check_command mysql true optional;
+	task_end $?;
+	
+	task_begin "Installing client development dependencies";
+	npm install;
+	task_end $?;
+	
+	task_begin "Installing server development dependencies";
+	composer install --dev;
+	task_end $?;
+}
+
+function task_dev-server {
+	task_begin "Starting development server";
+	php -S [::1]:40482 -t "${build_output_folder}" &
+	exit_code=$?;
+	echo $! >/tmp/micro-lantern-dev-server.pid;
+	task_end $?; # Should be 0 unless php died for some reason
+	sleep 1;
+}
+
+function task_dev-server-stop {
+	task_begin "Stopping development server";
+	
+	kill "$(cat /tmp/micro-lantern-dev-server.pid)";
+	rm /tmp/micro-lantern-dev-server.pid;
+	
+	task_end $?;
+}
+
+function task_main {
+	run_task js;
+	
+	task_begin "Copying html";
+	cp index.html "${build_output_folder}";
+	task_end $?;
+	
+	task_begin "Copying css";
+	cp theme.css "${build_output_folder}";
+	task_end $?;
+}
+
+#########################################################################
+
+tasks_run $@;

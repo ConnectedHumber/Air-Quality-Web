@@ -1,0 +1,25 @@
+{
+  "name": "air-quality-mapper",
+  "version": "0.1.0",
+  "description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface.git"
+  },
+  "author": "Starbeamrainbowlabs",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface/issues"
+  },
+  "homepage": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface#readme",
+  "dependencies": {
+    "leaflet": "^1.4.0",
+    "leaflet-fullscreen": "^1.0.2",
+    "leaflet-timedimension": "^1.1.0",
+    "leaflet-webgl-heatmap": "^0.2.7"
+  }
+}
