@@ -35,7 +35,7 @@ if [[ "$#" -lt 1 ]]; then
 	echo -e "";
 	echo -e "${CSECTION}Available actions${RS}";
 	echo -e "    ${CACTION}setup${RS}            - Perform initial setup";
-	echo -e "    ${CACTION}setup-dev${RS}        - Performa additional setup for development environments. Run after ${CACTION}setup${RS}.";
+	echo -e "    ${CACTION}setup-dev${RS}        - Perform additional setup for development environments. Run after ${CACTION}setup${RS}.";
 	echo -e "    ${CACTION}database${RS}         - Connect to the database via SSH & open MariaDB CLI connection, prompting for a password";
 	echo -e "    ${CACTION}dev-server${RS}       - Start a development server";
 	echo -e "    ${CACTION}dev-server-stop${RS}  - Stop the currently running development server";
@@ -71,6 +71,17 @@ function task_setup {
 	task_end $?;
 	
 	stage_end $?;
+}
+
+function task_database {
+	task_begin "Connecting to the database";
+	
+	ssh -TN db.connectedhumber.org -L 3306:localhost:3306 &
+	ssh_pid=$!;
+	mysql --host localhost --port 3306 -u "${USER}" -p;
+	
+	kill $!; wait; sleep 0.5;
+	task_end $?;
 }
 
 function task_setup-dev {
