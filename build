@@ -21,7 +21,7 @@ build_output_folder="./dist";
 ###############################################################################
 
 # Check out the lantern git submodule if needed
-if [ ! -d "${lantern_path}" ]; then git submodule update --init "${lantern_path}"; fi
+if [ ! -f "${lantern_path}/lantern.sh" ]; then git submodule update --init "${lantern_path}"; fi
 
 source "${lantern_path}/lantern.sh";
 
@@ -73,17 +73,6 @@ function task_setup {
 	stage_end $?;
 }
 
-function task_database {
-	task_begin "Connecting to the database";
-	
-	ssh -TN db.connectedhumber.org -L 3306:localhost:3306 &
-	ssh_pid=$!;
-	mysql --host localhost --port 3306 -u "${USER}" -p;
-	
-	kill $!; wait; sleep 0.5;
-	task_end $?;
-}
-
 function task_setup-dev {
 	task_begin "Checking environment";
 	check_command mysql true optional;
@@ -94,7 +83,18 @@ function task_setup-dev {
 	task_end $?;
 	
 	task_begin "Installing server development dependencies";
-	composer install --dev;
+	composer install;
+	task_end $?;
+}
+
+function task_database {
+	task_begin "Connecting to the database";
+	
+	ssh -TN db.connectedhumber.org -L 3306:localhost:3306 &
+	ssh_pid=$!;
+	mysql --host localhost --port 3306 -u "${USER}" -p;
+	
+	kill $!; wait; sleep 0.5;
 	task_end $?;
 }
 
