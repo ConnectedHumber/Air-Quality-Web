@@ -16,7 +16,7 @@ lantern_path="./lantern-build-engine";
 ###
 
 # Put any custom settings here.
-build_output_folder="./dist";
+build_output_folder="./app";
 
 ###############################################################################
 
@@ -129,11 +129,12 @@ function task_client {
 	fi
 	
 	task_begin "Copying html";
-	cp index.html "${build_output_folder}";
+	cp client_src/index.html "${build_output_folder}";
 	task_end $?;
 	
 	task_begin "Copying css";
-	cp theme.css "${build_output_folder}";
+	# FUTURE: Package this up too?
+	cp -r client_src/css/ "${build_output_folder}";
 	task_end $?;
 }
 

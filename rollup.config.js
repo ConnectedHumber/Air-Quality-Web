@@ -2,7 +2,7 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 
 export default {
-	input: 'client_src/index.mjs',
+	input: 'client_src/js/index.mjs',
 	output: {
 		file: 'app/client.js',
 		format: 'es'
