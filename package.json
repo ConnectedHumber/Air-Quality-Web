@@ -21,5 +21,10 @@
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-timedimension": "^1.1.0",
     "leaflet-webgl-heatmap": "^0.2.7"
+  },
+  "devDependencies": {
+    "rollup": "^1.1.0",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0"
   }
 }

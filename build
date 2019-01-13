@@ -39,6 +39,8 @@ if [[ "$#" -lt 1 ]]; then
 	echo -e "    ${CACTION}database${RS}         - Connect to the database via SSH & open MariaDB CLI connection, prompting for a password";
 	echo -e "    ${CACTION}dev-server${RS}       - Start a development server";
 	echo -e "    ${CACTION}dev-server-stop${RS}  - Stop the currently running development server";
+	echo -e "    ${CACTION}client${RS}           - Build the client web app";
+	echo -e "    ${CACTION}client-watch${RS} - Watch for changes to the client code & rebuild automatically";
 	echo -e "";
 	
 	exit 1;
@@ -116,8 +118,15 @@ function task_dev-server-stop {
 	task_end $?;
 }
 
-function task_main {
-	run_task js;
+
+function task_client {
+	task_begin "Packaging Javascript";
+	node_modules/rollup/bin/rollup --sourcemap --config rollup.config.js;
+	exit_code=$?;
+	task_end ${exit_code};
+	if [[ "${exit_code}" -ne 0 ]]; then
+		exit ${exit_code};
+	fi
 	
 	task_begin "Copying html";
 	cp index.html "${build_output_folder}";
@@ -126,6 +135,15 @@ function task_main {
 	task_begin "Copying css";
 	cp theme.css "${build_output_folder}";
 	task_end $?;
+}
+
+function task_client-watch {
+	echo -e "Watching for changes.";
+	while inotifywait -qr --event modify --format '%:e %f' client_src; do
+		stage_begin "Rebuilding client code";
+		task_client;
+		stage_end $?;
+	done
 }
 
 #########################################################################
