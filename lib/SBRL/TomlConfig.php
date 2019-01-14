@@ -10,10 +10,12 @@ use \Yosymfony\Toml\TomlBuilder;
  * Handles the loading and saving of settings from a toml file.
  * Supports loading default settings from a separate file.
  * @author			Starbeamrainbowlabs
- * @version			v0.5
+ * @version			v0.5.1
  * @lastModified	22nd March 2017
  * @license			https://www.mozilla.org/en-US/MPL/2.0/	Mozilla Public License 2.0
  * Changelog:
+	 * v0.5.1 - 14th January 2018
+		 * Make auto-generated settings files valid
  	 * v0.5 - 9th September 2018
  	 	 * Made hasPropertyByPath() more intelligent
  	 * v0.4 - 23rd August 2018
@@ -49,7 +51,7 @@ class TomlConfig
 	 * @param string $defaultSettingsFilePath	The path to the default settings file.
 	 */
 	public function __construct($settingsFilePath, $defaultSettingsFilePath) {
-		$this->customSettingsBanner = "-------[ Custom Settings File - Last updated " . date("Y-m-d") . " ]-------";
+		$this->customSettingsBanner = "# -------[ Custom Settings File - Last updated " . date("Y-m-d") . " ]-------";
 		
 		$this->defaultSettings = Toml::ParseFile($defaultSettingsFilePath, true);
 		
