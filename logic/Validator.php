@@ -1,8 +1,6 @@
 <?php
 namespace AirQuality;
 
-
-
 class Validator {
 	private $target_data;
 	private $tests = [];
@@ -77,6 +75,17 @@ class Validator {
 			},
 			400,
 			"That email address isn't valid."
+		);
+	}
+	
+	public function is_datetime($key) {
+		$this->add_test(
+			$key,
+			function($data) {
+				return strtotime($data) !== false;
+			},
+			400,
+			"The datetime provided in the '$key' parameter is invalid."
 		);
 	}
 	
