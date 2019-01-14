@@ -6,7 +6,7 @@
 [database]
 # Settings that control the database, or the connection to it
 
-type = mysql # MariaDB. MySQL servers might work too, but no promises.
+type = "mysql" # MariaDB. MySQL servers might work too, but no promises.
 username = "user"
 password = "Define_in_custom_config_file"
 
@@ -14,4 +14,4 @@ password = "Define_in_custom_config_file"
 # Settings that control the router's behaviour
 
 # The default action to take if no action is specified
-default-action = fetch-data
+default-action = "fetch-data"
