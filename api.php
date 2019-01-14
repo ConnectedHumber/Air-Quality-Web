@@ -1,4 +1,5 @@
 <?php
+$start_time = microtime(true);
 
 define("ROOT_DIR", dirname(__FILE__) . "/");
 

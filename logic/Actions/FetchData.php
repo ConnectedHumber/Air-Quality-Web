@@ -13,10 +13,24 @@ class FetchData {
 		$this->validator = new \AirQuality\Validator($_GET);
 	}
 	
-	public function handle() {
+	public function handle() : Boolean {
+		global $start_time;
+		
+		// 1: Validate params
 		$this->validator->is_datetime("datetime");
 		$this->validator->run();
 		
-		echo("Params valid!");
+		// 2: Pull data from database
+		
+		// 2.5: Validate data from database
+		
+		// 3: Serialise data
+		$response = json_encode("Coming soon");
+		
+		// 4: Send response
+		header("x-time-taken: " . (microtime(true) - $start_time) . "ms");
+		header("content-type: application/json");
+		echo($response);
+		return true;
 	}
 }
