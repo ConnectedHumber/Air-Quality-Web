@@ -7,6 +7,7 @@
 # Settings that control the database, or the connection to it
 
 type = "mysql" # MariaDB. MySQL servers might work too, but no promises.
+
 username = "user"
 password = "Define_in_custom_config_file"
 

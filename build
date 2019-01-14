@@ -18,6 +18,9 @@ lantern_path="./lantern-build-engine";
 # Put any custom settings here.
 build_output_folder="./app";
 
+database_host="db.connectedhumber.org";
+database_name="aq_db";
+
 ###############################################################################
 
 # Check out the lantern git submodule if needed
@@ -92,9 +95,10 @@ function task_setup-dev {
 function task_database {
 	task_begin "Connecting to the database";
 	
-	ssh -TN db.connectedhumber.org -L 3306:localhost:3306 &
+	ssh -TN "${database_host}" -L 3306:localhost:3306 &
 	ssh_pid=$!;
-	mysql --host localhost --port 3306 -u "${USER}" -p;
+	sleep 1;
+	mysql --host 127.0.0.1 --port 3306 --database "${database_name}" --user "${USER}" --password;
 	
 	kill $!; wait; sleep 0.5;
 	task_end $?;
