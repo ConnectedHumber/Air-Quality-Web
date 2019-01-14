@@ -8,10 +8,8 @@ class FetchData {
 	private $validator;
 	
 	public function __construct(
-		\SBRL\TomlConfig $in_settings,
-		\AirQuality\Database $in_database) {
+		\SBRL\TomlConfig $in_settings) {
 		$this->settings = $in_settings;
-		$this->database = $in_database;
 		$this->validator = new \AirQuality\Validator($_GET);
 	}
 	
