@@ -100,7 +100,7 @@ function task_database {
 	sleep 1;
 	mysql --host 127.0.0.1 --port 3306 --database "${database_name}" --user "${USER}" --password;
 	
-	kill $!; wait; sleep 0.5;
+	kill "${ssh_pid}"; wait; sleep 0.5;
 	task_end $?;
 }
 
