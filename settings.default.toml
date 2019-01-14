@@ -7,8 +7,15 @@
 # Settings that control the database, or the connection to it
 
 type = "mysql" # MariaDB. MySQL servers might work too, but no promises.
-database_name = "aq_db"
+
+# The host that the database is running on. Both IP addresses & domain names are fine :-)
+host = "localhost"
+# The database to use.
+name = "aq_db"
+
+# The username to connect with
 username = "user"
+# the password to connect with
 password = "Define_in_custom_config_file"
 
 [routing]
