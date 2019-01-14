@@ -7,7 +7,7 @@
 # Settings that control the database, or the connection to it
 
 type = "mysql" # MariaDB. MySQL servers might work too, but no promises.
-
+database_name = "aq_db"
 username = "user"
 password = "Define_in_custom_config_file"
 
