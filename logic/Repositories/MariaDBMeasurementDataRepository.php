@@ -29,36 +29,47 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	 */
 	private $database;
 	
+	/** Function that gets a static variable by it's name. Useful in preparing SQL queries. */
+	private $get_static;
+	
+	private $get_static_extra;
+	
 	function __construct(\AirQuality\Database $in_database) {
 		$this->database = $in_database;
+		$this->get_static = function($name) { return self::$$name; };
+		$this->get_static_extra = function($class_name, $name) {
+			return $class_name::$$name;
+		};
 	}
 	
 	public function get_readings_by_date(\DateTime $datetime, string $reading_type) {
+		$s = $this->get_static;
+		$o = $this->get_static_extra;
 		return $this->database->query(
 			"SELECT
-				$this->table_name_values.*,
-				$this->table_name_metadata.device_id,
+				{$s("table_name_values")}.*,
+				{$s("table_name_metadata")}.device_id,
 				COALESCE(
-					$this->table_name_metadata.$this->column_metadata_recordedon,
-					$this->table_name_metadata.$this->column_metadata_storedon
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
 				) AS datetime,
 				COALESCE(
-					$this->table_name_metadata.$this->column_metadata_lat,
-					{MariaDBDeviceRepository::$table_name}.device_latitude
+					{$s("table_name_metadata")}.{$s("column_metadata_lat")},
+					{$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_lat")}
 				) AS latitude,
 				COALESCE(
-					$this->table_name_metadata.$this->column_metadata_long,
-					devices.device_longitude
+					{$s("table_name_metadata")}.{$s("column_metadata_long")},
+					{$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_long")}
 				) AS longitude
-			FROM $this->table_name_values
-			JOIN $this->table_name_metadata ON $this->table_name_values.$this->column_values_reading_id = $this->table_name_metadata.id
-			JOIN devices ON $this->table_name_metadata.$this->column_metadata_device_id = devices.device_id
+			FROM {$s("table_name_values")}
+			JOIN {$s("table_name_metadata")} ON {$s("table_name_values")}.{$s("column_values_reading_id")} = {$s("table_name_metadata")}.id
+			JOIN {$o(MariaDBDeviceRepository::class, "table_name")} ON {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = {$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_device_id")}
 			WHERE COALESCE(
-				$this->table_name_metadata.$this->column_metadata_recordedon,
-				$this->table_name_metadata.$this->column_metadata_storedon
-			) = :datetime",
-			[
-				"datetime" => $datetime,
+				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+			) = :datetime", [
+				// The database likes strings, not PHP DateTime() instances
+				"datetime" => $datetime->format(\DateTime::ISO8601),
 				"reading_type" => $reading_type
 			]
 		)->fetchAll();

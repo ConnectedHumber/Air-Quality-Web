@@ -88,7 +88,7 @@ class TomlConfig
 	/**
 	 * Determines whether the given property has been customised or explicitly specified in the customised settings file.
 	 * @param	string	$key	The property, in dotted notation, to check.
-	 * @return	boolean			Whether the specified properties file has been explicitly specified in the custom settings file.
+	 * @return	bool			Whether the specified properties file has been explicitly specified in the custom settings file.
 	 */
 	public function hasChanged($key) {
 		return static::hasPropertyByPath($this->customSettings, $key);
@@ -112,7 +112,7 @@ class TomlConfig
 	
 	/**
 	 * Saves the customised settings back to the disk.
-	 * @return boolean Whether the save was successful or not.
+	 * @return bool Whether the save was successful or not.
 	 */
 	public function save() {
 		$output_builder = new TomlBuilder();
@@ -139,7 +139,7 @@ class TomlConfig
 	 * Works out whether a given dotted path to a property exists on a given object.
 	 * @param	stdClass  	$obj	The object to search.
 	 * @param	string		$path	The dotted path to search with. e.g. `Network.Firewall.OpenPorts`
-	 * @return	boolean		Whether the given property is present in the given object.
+	 * @return	bool		Whether the given property is present in the given object.
 	 */
 	public static function hasPropertyByPath($obj, $path) {
 		$pathParts = explode(".", $path);

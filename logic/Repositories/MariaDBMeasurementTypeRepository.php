@@ -24,11 +24,10 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 	
 	function __construct(\AirQuality\Database $in_database) {
 		$this->database = $in_database;
-		
 		$this->get_static = function($name) { return self::$$name; };
 	}
 	
-	public function is_valid_type(string $type_name) : boolean {
+	public function is_valid_type(string $type_name) : bool {
 		$s = $this->get_static;
 		return !empty($this->database->query(
 			"SELECT {$s("column_id")} FROM {$s("table_name")};"

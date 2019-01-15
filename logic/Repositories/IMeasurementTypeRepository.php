@@ -6,9 +6,9 @@ interface IMeasurementTypeRepository {
 	/**
 	 * Returns whether the specified type is valid or not.
 	 * @param	string	$type_name	The name of the type to validate.
-	 * @return	boolean	Whether the specified type name is valid or not.
+	 * @return	bool	Whether the specified type name is valid or not.
 	 */
-	public function is_valid_type(string $type_name) : boolean;
+	public function is_valid_type(string $type_name) : bool;
 	
 	/**
 	 * Gets the friendly name for the specified type name.

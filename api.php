@@ -30,7 +30,8 @@ $settings = $di_container->get(\SBRL\TomlConfig::class);
 
 // 4: Database
 
-// Done via a static factory method & PHP-DI
+// Done automagically by PHP-DI.
+// PHP-DI autowires it, and doesn't create more than 1 instance of it either
 
 // 5: Action
 

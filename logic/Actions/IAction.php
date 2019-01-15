@@ -3,5 +3,5 @@
 namespace AirQuality\Actions;
 
 interface IAction {
-    public function handle() : boolean;
+    public function handle() : bool;
 }

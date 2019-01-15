@@ -38,7 +38,7 @@ class FetchData implements IAction {
 		$this->validator = new Validator($_GET);
 	}
 	
-	public function handle() : boolean {
+	public function handle() : bool {
 		global $start_time;
 		
 		$start_handle = microtime(true);

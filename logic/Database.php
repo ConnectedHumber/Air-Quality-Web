@@ -24,14 +24,12 @@ class Database
 	];
 	
 	function __construct(TomlConfig $in_settings) {
-		error_log("Created database instance");
 		$this->settings = $in_settings;
 		
 		$this->connect(); // Connect automagically
 	}
 	
 	public function connect() {
-		error_log($this->get_connection_string());
 		$this->connection = new \PDO(
 			$this->get_connection_string(),
 			$this->settings->get("database.username"),
@@ -45,7 +43,9 @@ class Database
 	
 	public function query($sql, $variables = []) {
 		// FUTURE: Optionally cache prepared statements?
-		return $this->connection->prepare($sql)->execute($variables);
+		$statement = $this->connection->prepare($sql);
+		$statement->execute($variables);
+		return $statement; // fetchColumn(), fetchAll(), etc. are defined on the statement, not the return value of execute()
 	}
 	
 	private function get_connection_string() {
