@@ -14,10 +14,10 @@ class Database
 	
 	private $pdo_options = [
 		// https://devdocs.io/php/pdo.setattribute
-	    PDO::ATTR_ERRMODE				=> PDO::ERRMODE_EXCEPTION,
-	    PDO::ATTR_DEFAULT_FETCH_MODE	=> PDO::FETCH_ASSOC,
-	    PDO::ATTR_EMULATE_PREPARES		=> false,
-		PDO::ATTR_AUTOCOMMIT			=> false
+	    \PDO::ATTR_ERRMODE				=> \PDO::ERRMODE_EXCEPTION,
+	    \PDO::ATTR_DEFAULT_FETCH_MODE	=> \PDO::FETCH_ASSOC,
+	    \PDO::ATTR_EMULATE_PREPARES		=> false,
+		\PDO::ATTR_AUTOCOMMIT			=> false
 	];
 	
 	function __construct(\SBRL\TomlConfig $in_settings) {
@@ -29,6 +29,7 @@ class Database
 			$this->get_connection_string(),
 			$this->settings->get("database.username"),
 			$this->settings->get("database.password"),
+			$this->pdo_options
 		);
 		// Make this connection read-only
 		if(self::read_only)

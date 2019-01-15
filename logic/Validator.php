@@ -65,18 +65,7 @@ class Validator {
 			$message
 		);
 	}
-	
-	public function is_valid_email($key) {
-		$this->add_test(
-			$key,
-			function($data) {
-				$validator = new \EmailValidator\Validator();
-				return $validator->isValid($data);
-			},
-			400,
-			"That email address isn't valid."
-		);
-	}
+
 	
 	public function is_datetime($key) {
 		$this->add_test(

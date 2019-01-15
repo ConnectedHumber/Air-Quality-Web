@@ -17,6 +17,9 @@ $autoloader->register();
 
 $di_builder = new DI\ContainerBuilder();
 $di_builder->addDefinitions("di_config.php");
+// TODO: In production, we should use something like this - see http://php-di.org/doc/container-configuration.html
+// $builder->enableCompilation(__DIR__ . '/tmp');
+// $builder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
 
 $di_container = $di_builder->build();
 
