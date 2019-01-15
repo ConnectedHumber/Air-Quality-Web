@@ -2,6 +2,9 @@
 
 namespace AirQuality;
 
+use \SBRL\TomlConfig;
+use Psr\Container\ContainerInterface;
+
 /**
  * Holds the main database connection.
  */
@@ -20,11 +23,15 @@ class Database
 		\PDO::ATTR_AUTOCOMMIT			=> false
 	];
 	
-	function __construct(\SBRL\TomlConfig $in_settings) {
+	function __construct(TomlConfig $in_settings) {
+		error_log("Created database instance");
 		$this->settings = $in_settings;
+		
+		$this->connect(); // Connect automagically
 	}
 	
 	public function connect() {
+		error_log($this->get_connection_string());
 		$this->connection = new \PDO(
 			$this->get_connection_string(),
 			$this->settings->get("database.username"),
@@ -44,4 +51,5 @@ class Database
 	private function get_connection_string() {
 		return "{$this->settings->get("database.type")}:host={$this->settings->get("database.host")};dbname={$this->settings->get("database.name")};charset=utf8mb4";
 	}
+	
 }

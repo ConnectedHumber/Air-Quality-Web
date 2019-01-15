@@ -8,8 +8,8 @@
 
 type = "mysql" # MariaDB. MySQL servers might work too, but no promises.
 
-# The host that the database is running on. Both IP addresses & domain names are fine :-)
-host = "localhost"
+# The host that the database is running on. Both IP addresses & domain names are fine I think :-)
+host = "127.0.0.1"
 # The database to use.
 name = "aq_db"
 

@@ -3,6 +3,8 @@
 use Psr\Container\ContainerInterface;
 use SBRL\TomlConfig;
 
+use AirQuality\Database;
+
 use AirQuality\Repositories\IDeviceRepository;
 use AirQuality\Repositories\MariaDBDeviceRepository;
 use AirQuality\Repositories\IMeasurementDataRepository;
@@ -23,8 +25,5 @@ return [
 	
 	IDeviceRepository::class => DI\autowire(MariaDBDeviceRepository::class),
 	IMeasurementDataRepository::class => DI\autowire(MariaDBMeasurementDataRepository::class),
-	IMeasurementTypeRepository::class => DI\autowire(MariaDBMeasurementTypeRepository::class),
-	
-	
-	\SBRL\SessionManager::class => DI\factory([ \SBRL\SessionManager::class, "get_instance" ])
+	IMeasurementTypeRepository::class => DI\autowire(MariaDBMeasurementTypeRepository::class)
 ];

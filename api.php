@@ -28,11 +28,9 @@ $di_container = $di_builder->build();
 
 $settings = $di_container->get(\SBRL\TomlConfig::class);
 
-
 // 4: Database
 
-// TODO: Setup the database here
-
+// Done via a static factory method & PHP-DI
 
 // 5: Action
 
