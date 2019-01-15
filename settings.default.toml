@@ -3,6 +3,10 @@
 # Your changes may be overwritten in a future update.
 # Instead, edit the custom configuration file located at "data/settings.toml".
 
+[env]
+# The operating mode. Can be either "development", or "production" (default; activates a number of optimisations which might make development harder, such as 3rd-party library caches)
+mode = "production"
+
 [database]
 # Settings that control the database, or the connection to it
 

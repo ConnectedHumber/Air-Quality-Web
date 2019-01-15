@@ -16,11 +16,9 @@ return [
 	"settings.file_default" => "data/settings.toml",
 	"settings.file_custom" => "settings.default.toml",
 	
-	\SBRL\TomlConfig::class => function(ContainerInterface $c) {
-		return new TomlConfig(
-			$c->get("settings.file_default"),
-			$c->get("settings.file_custom")
-		);
+	TomlConfig::class => function(ContainerInterface $c) {
+		global $settings;
+		return $settings;
 	},
 	
 	IDeviceRepository::class => DI\autowire(MariaDBDeviceRepository::class),

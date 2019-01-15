@@ -12,14 +12,27 @@ $autoloader->addPrefix("AirQuality", "logic");
 $autoloader->addPrefix("SBRL", "lib/SBRL");
 $autoloader->register();
 
+// 2: Settings
+$settings = new \SBRL\TomlConfig(
+	"data/settings.toml",
+	"settings.default.toml"
+);
+
 
 // 2: Dependency injection
 
 $di_builder = new DI\ContainerBuilder();
 $di_builder->addDefinitions("di_config.php");
-// TODO: In production, we should use something like this - see http://php-di.org/doc/container-configuration.html
-// $builder->enableCompilation(__DIR__ . '/tmp');
-// $builder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
+if($settings->get("env.mode") == "production") {
+	// http://php-di.org/doc/container-configuration.html
+	if(!file_exists(ROOT_DIR."data/cache/php_di"))
+		mkdir(ROOT_DIR."data/cache/php_di", 0700);
+	$builder->enableCompilation(ROOT_DIR."data/cache/php_di");
+	
+	if(!file_exists(ROOT_DIR."data/cache/php_di_proxies"))
+		mkdir(ROOT_DIR."data/cache/php_di_proxies", 0700);
+	$builder->writeProxiesToFile(true, ROOT_DIR."data/cache/php_di_proxies");
+}
 
 $di_container = $di_builder->build();
 
