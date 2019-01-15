@@ -12,7 +12,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	public static $column_values_id = "id";
 	public static $column_values_reading_id = "reading_id";
 	public static $column_values_value = "value";
-	public static $column_values_reading_value_types_id = "reading_value_types_id";
+	public static $column_values_reading_type = "reading_value_types_id";
 	
 	public static $column_metadata_id = "id";
 	public static $column_metadata_storedon = "storedon";
@@ -67,7 +67,9 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 			WHERE COALESCE(
 				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
 				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			) = :datetime", [
+			) = :datetime AND
+				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type
+				", [
 				// The database likes strings, not PHP DateTime() instances
 				"datetime" => $datetime->format(\DateTime::ISO8601),
 				"reading_type" => $reading_type
