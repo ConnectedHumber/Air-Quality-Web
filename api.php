@@ -3,14 +3,15 @@ $start_time = microtime(true);
 
 define("ROOT_DIR", dirname(__FILE__) . "/");
 
-// 1: Autoloaders
 
+// 1: Autoloaders
 require("vendor/autoload.php");
 
 $autoloader = new \Aura\Autoload\Loader();
 $autoloader->addPrefix("AirQuality", "logic");
 $autoloader->addPrefix("SBRL", "lib/SBRL");
 $autoloader->register();
+
 
 // 2: Settings
 $settings = new \SBRL\TomlConfig(
@@ -19,7 +20,7 @@ $settings = new \SBRL\TomlConfig(
 );
 
 
-// 2: Dependency injection
+// 3: Dependency injection
 
 $di_builder = new DI\ContainerBuilder();
 $di_builder->addDefinitions("di_config.php");
@@ -37,14 +38,11 @@ if($settings->get("env.mode") == "production") {
 $di_container = $di_builder->build();
 
 
-// 3: Settings
-
-$settings = $di_container->get(\SBRL\TomlConfig::class);
-
 // 4: Database
 
 // Done automagically by PHP-DI.
 // PHP-DI autowires it, and doesn't create more than 1 instance of it either
+
 
 // 5: Action
 
