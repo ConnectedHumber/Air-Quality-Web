@@ -36,7 +36,7 @@ class Database
 			$this->connection->query("SET SESSION TRANSACTION READ ONLY;");
 	}
 	
-	public function query($sql, $variables) {
+	public function query($sql, $variables = []) {
 		// FUTURE: Optionally cache prepared statements?
 		return $this->connection->prepare($sql)->execute($variables);
 	}

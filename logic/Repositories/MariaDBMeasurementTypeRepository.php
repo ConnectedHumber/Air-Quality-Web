@@ -19,31 +19,36 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 	 */
 	private $database;
 	
+	/** Function that gets a static variable by it's name. Useful in preparing SQL queries. */
+	private $get_static;
+	
 	function __construct(\AirQuality\Database $in_database) {
 		$this->database = $in_database;
+		
+		$this->get_static = function($name) { return self::$$name; };
 	}
 	
-	
-	
 	public function is_valid_type(string $type_name) : boolean {
+		$s = $this->get_static;
 		return !empty($this->database->query(
-			"SELECT $this->column_id FROM $this->table_name;",
-			[]
+			"SELECT {$s("column_id")} FROM {$s("table_name")};"
 		)->fetchColumn());
 	}
 	public function get_friendly_name(string $type_name) : string {
+		// TODO: Cache results here? Maybe https://packagist.org/packages/thumbtack/querycache will be of some use
+		
+		$s = $this->get_static;
 		return $this->database->query(
-			"SELECT $this->column_friendly_text FROM $this->table_name WHERE $this->column_id = :type_name;", [
+			"SELECT {$s("column_friendly_text")} FROM {$s("table_name")} WHERE $this->column_id = :type_name;", [
 				"type_name" => $type_name
 			]
 		)->fetchColumn();
-		// TODO: Cache results here? Maybe https://packagist.org/packages/thumbtack/querycache will be of some use
-		throw new Exception("Error: Not implemented yet :-\\");
 	}
 	
     public function get_all_types() {
+		$s = $this->get_static;
 		return $this->database->query(
-			"SELECT * FROM $this->table_name"
+			"SELECT * FROM {$s("table_name")}"
 		)->fetchAll();
 	}
 }
