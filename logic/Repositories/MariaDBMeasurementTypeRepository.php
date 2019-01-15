@@ -25,15 +25,25 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 	
 	
 	
-	public function is_valid_type(string $type_name) {
-		throw new Exception("Error: Not implemented yet :-\\");
+	public function is_valid_type(string $type_name) : boolean {
+		return !empty($this->database->query(
+			"SELECT $this->column_id FROM $this->table_name;",
+			[]
+		)->fetchColumn());
 	}
-	public function get_friendly_name(string $type_name) {
+	public function get_friendly_name(string $type_name) : string {
+		return $this->database->query(
+			"SELECT $this->column_friendly_text FROM $this->table_name WHERE $this->column_id = :type_name;", [
+				"type_name" => $type_name
+			]
+		)->fetchColumn();
 		// TODO: Cache results here? Maybe https://packagist.org/packages/thumbtack/querycache will be of some use
 		throw new Exception("Error: Not implemented yet :-\\");
 	}
 	
     public function get_all_types() {
-		throw new Exception("Error: Not implemented yet :-\\");
+		return $this->database->query(
+			"SELECT * FROM $this->table_name"
+		)->fetchAll();
 	}
 }

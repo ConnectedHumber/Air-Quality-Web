@@ -61,6 +61,6 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				"datetime" => $datetime,
 				"reading_type" => $reading_type
 			]
-		);
+		)->fetchAll();
 	}
 }
