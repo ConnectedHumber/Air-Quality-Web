@@ -1,5 +1,7 @@
 <?php
 
+namespace AirQuality;
+
 /**
  * Formats performance data to be sent in a HTTP header.
  */

@@ -23,3 +23,15 @@ password = "Define_in_custom_config_file"
 
 # The default action to take if no action is specified
 default-action = "fetch-data"
+
+[data]
+# Settings relating to the data returned by the API.
+
+# The maximum number of seconds difference allowed before a reading is 
+# considered to be part of a different set.
+# 
+# This is required, as not all the data items come in at the same time - so we 
+# need to be a bit 'fuzzy' about which readings we consider to be part of which 
+# time-step. Ideally, this value should be half of the actual data recording 
+# interval.
+max_reading_timediff = 15

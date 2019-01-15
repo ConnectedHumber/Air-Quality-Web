@@ -2,6 +2,9 @@
 
 namespace AirQuality\Repositories;
 
+use \AirQuality\Database;
+use \SBRL\TomlConfig;
+
 /**
  * Fetches measurement readings from a MariaDB database.
  */
@@ -23,9 +26,12 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	
 	// ------------------------------------------------------------------------
 	
+	/** @var TomlConfig */
+	private $settings;
+	
 	/**
 	 * The database connection.
-	 * @var \AirQuality\Database
+	 * @var Database
 	 */
 	private $database;
 	
@@ -34,8 +40,10 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	
 	private $get_static_extra;
 	
-	function __construct(\AirQuality\Database $in_database) {
+	function __construct(Database $in_database, TomlConfig $in_settings) {
 		$this->database = $in_database;
+		$this->settings = $in_settings;
+		
 		$this->get_static = function($name) { return self::$$name; };
 		$this->get_static_extra = function($class_name, $name) {
 			return $class_name::$$name;
@@ -64,15 +72,21 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON {$s("table_name_values")}.{$s("column_values_reading_id")} = {$s("table_name_metadata")}.id
 			JOIN {$o(MariaDBDeviceRepository::class, "table_name")} ON {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = {$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_device_id")}
-			WHERE COALESCE(
-				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			) = :datetime AND
+			WHERE ABS(TIME_TO_SEC(TIMEDIFF(
+				:datetime,
+				COALESCE(
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+				)
+			))) < :max_reading_timediff
+			AND 
 				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type
+			
 				", [
 				// The database likes strings, not PHP DateTime() instances
 				"datetime" => $datetime->format(\DateTime::ISO8601),
-				"reading_type" => $reading_type
+				"reading_type" => $reading_type,
+				"max_reading_timediff" => $this->settings->get("data.max_reading_timediff")
 			]
 		)->fetchAll();
 	}
