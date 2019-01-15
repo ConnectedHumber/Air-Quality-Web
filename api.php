@@ -27,11 +27,11 @@ if($settings->get("env.mode") == "production") {
 	// http://php-di.org/doc/container-configuration.html
 	if(!file_exists(ROOT_DIR."data/cache/php_di"))
 		mkdir(ROOT_DIR."data/cache/php_di", 0700, true);
-	$builder->enableCompilation(ROOT_DIR."data/cache/php_di");
+	$di_builder->enableCompilation(ROOT_DIR."data/cache/php_di");
 	
 	if(!file_exists(ROOT_DIR."data/cache/php_di_proxies"))
 		mkdir(ROOT_DIR."data/cache/php_di_proxies", 0700, true);
-	$builder->writeProxiesToFile(true, ROOT_DIR."data/cache/php_di_proxies");
+	$di_builder->writeProxiesToFile(true, ROOT_DIR."data/cache/php_di_proxies");
 }
 
 $di_container = $di_builder->build();
