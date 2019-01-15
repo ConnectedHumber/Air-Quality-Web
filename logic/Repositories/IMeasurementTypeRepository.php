@@ -15,7 +15,7 @@ interface IMeasurementTypeRepository {
 	 * @param	string	$type_name	The type name to get the friendly name for.
 	 * @return	string	The friendly name for the specified type name.
 	 */
-	public function get_friendly_name(string $type_name) : boolean;
+	public function get_friendly_name(string $type_name) : string;
 	
 	/**
 	 * Returns all the currently known meeasurement types.
