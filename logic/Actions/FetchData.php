@@ -78,6 +78,8 @@ class FetchData implements IAction {
 		$response = json_encode($data);
 		
 		// 4: Send response
+		
+		// TODO: Add cache-control headers here in production mode only
 		header("content-type: application/json");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);
