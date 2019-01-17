@@ -15,20 +15,15 @@ class LayerDeviceMarkers {
 		// Create a new clustering layer
 		this.layer = L.markerClusterGroup();
 		
-		console.log("Loading device list");
 		// Fetch the device list
 		let device_list = JSON.parse(await GetFromUrl(
 			`${Config.api_root}?action=list-devices&only-with-location=yes`
 		));
 		
-		console.log("Device list loaded");
-		
 		// Add a marker for each device
 		for (let device of device_list) {
 			this.add_device_marker(device);
 		}
-		
-		console.log("Device markers created");
 		
 		// Display this layer
 		this.map.addLayer(this.layer);
