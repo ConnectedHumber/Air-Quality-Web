@@ -30,7 +30,23 @@ class Map {
 		this.device_markers = new LayerDeviceMarkers(this.map);
 		this.device_markers.setup().then(() => {
 			console.info("[map] Device markers loaded successfully.");
+			
+			// Display a layer controller
+			this.setup_layer_control();
 		});
+		
+	}
+	
+	setup_layer_control() {
+		this.layer_control = L.control.layers({
+			// Base layer(s)
+			"OpenStreetMap": this.layer_openstreet
+		}, { // Overlay(s)
+			"Devices": this.device_markers.layer
+		}, { // Options
+			collapsed: false
+		});
+		this.layer_control.addTo(this.map);
 	}
 }
 

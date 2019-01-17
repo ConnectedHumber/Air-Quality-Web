@@ -9,11 +9,12 @@ import GetFromUrl from './Helpers/GetFromUrl.mjs';
 class LayerDeviceMarkers {
 	constructor(in_map) {
 		this.map = in_map;
+		
+		// Create a new clustering layer
+		this.layer = L.markerClusterGroup();
 	}
 	
 	async setup() {
-		// Create a new clustering layer
-		this.layer = L.markerClusterGroup();
 		
 		// Fetch the device list
 		let device_list = JSON.parse(await GetFromUrl(
