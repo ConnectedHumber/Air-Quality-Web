@@ -44,7 +44,7 @@ Some configuration must be done before the application is ready for use. The fir
 ## Notes
  - Readings are taken every 6 minutes as standard.
 
-### Contributing
+## Contributing
 Contributions are welcome - feel free to [open an issue](https://github.com/ConnectedHumber/Air-Quality-Web/issues/new) or (even better) a [pull request](https://github.com/ConnectedHumber/Air-Quality-Web/compare).
 
 The [issue tracker](https://github.com/ConnectedHumber/Air-Quality-Web/issues) is the place where all the tasks relating to the project are kept.
