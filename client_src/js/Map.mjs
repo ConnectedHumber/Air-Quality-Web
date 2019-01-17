@@ -16,7 +16,7 @@ class Map {
 		this.layer_openstreet = Leaflet.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 			id: "openstreetmap",
 			maxZoom: 19,
-			attribution: "&copy; OSM Mapnik <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>"
+			attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
 		}).addTo(this.map);
 	}
 }
