@@ -84,6 +84,7 @@ class FetchData implements IAction {
 			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age"));
 		}
 		
+		header("content-length: " . strlen($response));
 		header("content-type: application/json");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);
