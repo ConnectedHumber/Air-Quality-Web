@@ -1,5 +1,9 @@
 @import "../../node_modules/leaflet/dist/leaflet.css";
+
 @import "../../node_modules/leaflet-fullscreen/dist/leaflet.fullscreen.css";
+
+@import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
+@import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 html, body { font-size: 100%; }
 body {

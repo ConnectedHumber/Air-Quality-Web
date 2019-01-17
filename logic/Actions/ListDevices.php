@@ -33,7 +33,7 @@ class ListDevices implements IAction {
 		$start_handle = microtime(true);
 		
 		// 1: Parse & validate parameters
-		$only_with_location = !empty($_GET["only_with_location"]);
+		$only_with_location = !empty($_GET["only-with-location"]);
 		
 		// 1: Pull data from database
 		$data = $this->device_repo->get_all_devices($only_with_location);
