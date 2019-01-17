@@ -36,10 +36,10 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 		$s = $this->get_static;
 		
 		$sql = "SELECT
-			{$s("column_device_id")},
-			{$s("column_device_name")},
-			{$s("column_lat")},
-			{$s("column_long")}
+			{$s("column_device_id")} AS id,
+			{$s("column_device_name")} AS name,
+			{$s("column_lat")} AS latitude,
+			{$s("column_long")} AS longitude
 		FROM {$s("table_name")}";
 		
 		if($only_with_location)
