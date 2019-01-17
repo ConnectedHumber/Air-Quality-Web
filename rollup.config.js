@@ -8,7 +8,7 @@ import postcss_url from 'postcss-url';
 export default {
 	input: 'client_src/js/index.mjs',
 	output: {
-		file: 'app/client.js',
+		file: 'app/app.js',
 		format: 'es'
 	},
 	plugins: [
