@@ -55,7 +55,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 		return $this->database->query(
 			"SELECT
 				{$s("table_name_values")}.*,
-				{$s("table_name_metadata")}.device_id,
+				{$s("table_name_metadata")}.{$s("column_metadata_device_id")},
 				COALESCE(
 					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
 					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
@@ -67,7 +67,8 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				COALESCE(
 					{$s("table_name_metadata")}.{$s("column_metadata_long")},
 					{$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_long")}
-				) AS longitude
+				) AS longitude,
+				COUNT({$s("table_name_metadata")}.{$s("column_metadata_device_id")}) AS record_count
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON {$s("table_name_values")}.{$s("column_values_reading_id")} = {$s("table_name_metadata")}.id
 			JOIN {$o(MariaDBDeviceRepository::class, "table_name")} ON {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = {$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_device_id")}
@@ -80,7 +81,8 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 			))) < :max_reading_timediff
 			AND 
 				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type
-			
+			GROUP BY {$s("table_name_metadata")}.{$s("column_metadata_device_id")}
+			ORDER BY {$s("table_name_metadata")}.{$s("column_metadata_recordedon")}
 				", [
 				// The database likes strings, not PHP DateTime() instances
 				"datetime" => $datetime->format(\DateTime::ISO8601),

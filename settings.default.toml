@@ -44,4 +44,4 @@ max-age = 2592000 # 30 days
 # need to be a bit 'fuzzy' about which readings we consider to be part of which 
 # time-step. Ideally, this value should be half of the actual data recording 
 # interval.
-max_reading_timediff = 15
+max_reading_timediff = 180
