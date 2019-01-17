@@ -2,7 +2,7 @@
 
 import L from 'leaflet';
 import 'leaflet-webgl-heatmap';
-import '../../node_modules/webgl-heatmap/webgl-heatmap.js'; // Someone didn't define this as a dependency. I'm looking at you, leaflet-webgl-heatmap.....
+import '../../lib/webgl-heatmap/webgl-heatmap.js'; // Someone didn't define this as a dependency. I'm looking at you, leaflet-webgl-heatmap.....
 
 import Config from './Config.mjs';
 

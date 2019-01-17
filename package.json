@@ -21,8 +21,7 @@
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-timedimension": "^1.1.0",
     "leaflet-webgl-heatmap": "^0.2.7",
-    "leaflet.markercluster": "^1.4.1",
-    "webgl-heatmap": "^0.2.3"
+    "leaflet.markercluster": "^1.4.1"
   },
   "devDependencies": {
     "@types/leaflet": "^1.2.14",
