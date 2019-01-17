@@ -54,7 +54,9 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 		$o = $this->get_static_extra;
 		return $this->database->query(
 			"SELECT
-				{$s("table_name_values")}.*,
+				{$s("table_name_values")}.{$s("column_values_value")},
+				{$s("table_name_values")}.{$s("column_values_reading_id")},
+				
 				{$s("table_name_metadata")}.{$s("column_metadata_device_id")},
 				COALESCE(
 					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
