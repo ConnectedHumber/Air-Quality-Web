@@ -41,6 +41,34 @@ For development purposes, the `client-watch` command is available.
 ### Configuration
 Some configuration must be done before the application is ready for use. The first time `api.php` is called from a browser, it will create a new blank configuration file at `data/settings.toml`, if it doesn't already exist. See the `settings.default.toml` file in this repository for a list of configurable settings, but do **not** edit `settings.default.toml`! Instead, enter your configuration details into `data/settings.toml`, which overrides `settings.default.toml`. In particular, you'll probably want to change the settings under the `[database]` header - but ensure you give the entire file a careful read.
 
+## API
+The server-side API is accessed through `api.php`, and supports a number of GET parameters. The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
+
+### fetch-data
+> Fetches air quality data from the system for a specific data type at a specific date and time.
+
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`datetime`			| date/time	| Required. Specifies the date and time for which readings are desired.
+`reading_type`		| string	| Required. Specifies the type of reading desired.
+
+Examples:
+
+```
+https://example.com/path/to/api.php?action=fetch-data&datetime=2019-01-03%2007:52:10&reading_type=PM10
+```
+
+### list-devices
+> Fetches a list of devices currently in the system.
+
+_No additional parameters are supported by this action._
+
+Examples:
+
+```
+https://example.com/path/to/api.php?action=list-devices
+```
+
 ## Notes
  - Readings are taken every 6 minutes as standard.
 
