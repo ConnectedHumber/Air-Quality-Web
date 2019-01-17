@@ -4,8 +4,11 @@
 import L from 'leaflet';
 import 'leaflet-fullscreen';
 
+import GetFromUrl from './Helpers/GetFromUrl.mjs';
+
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
+import LayerHeatmap from './LayerHeatmap.mjs';
 
 class Map {
 	constructor() {
@@ -27,14 +30,35 @@ class Map {
 		
 		// Add the device markers
 		console.info("[map] Loading device markers....");
-		this.device_markers = new LayerDeviceMarkers(this.map);
-		this.device_markers.setup().then(() => {
+		this.setup_device_markers().then(() => {
 			console.info("[map] Device markers loaded successfully.");
 			
 			// Display a layer controller
 			this.setup_layer_control();
 		});
 		
+		// Add the heatmap
+		console.info("[map] Loading heatmap....");
+		this.setup_heatmap().then(() => {
+			console.info("[map] Heatmap loaded successfully.");
+		});
+		
+	}
+	
+	async setup_device_markers() {
+		this.device_markers = new LayerDeviceMarkers(this.map);
+		await this.device_markers.setup();
+	}
+	
+	async setup_heatmap() {
+		this.heatmap = new LayerHeatmap(this.map);
+		
+		// TODO: Use leaflet-timedimension here
+		// TODO: Allow configuration of the different reading types here
+		
+		this.heatmap.setup(JSON.parse(await GetFromUrl(
+			`${Config.api_root}?action=fetch-data&datetime=2019-01-03 07:52:10&reading_type=PM10`
+		)));
 	}
 	
 	setup_layer_control() {
@@ -42,7 +66,9 @@ class Map {
 			// Base layer(s)
 			"OpenStreetMap": this.layer_openstreet
 		}, { // Overlay(s)
-			"Devices": this.device_markers.layer
+			"Devices": this.device_markers.layer,
+			// TODO: Have 1 heatmap layer per reading type?
+			"Heatmap": this.heatmap.layer
 		}, { // Options
 			
 		});
