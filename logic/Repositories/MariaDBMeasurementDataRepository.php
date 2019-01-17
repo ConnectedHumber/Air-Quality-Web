@@ -37,7 +37,6 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	
 	/** Function that gets a static variable by it's name. Useful in preparing SQL queries. */
 	private $get_static;
-	
 	private $get_static_extra;
 	
 	function __construct(Database $in_database, TomlConfig $in_settings) {
