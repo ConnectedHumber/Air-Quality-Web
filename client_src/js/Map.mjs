@@ -44,7 +44,7 @@ class Map {
 		}, { // Overlay(s)
 			"Devices": this.device_markers.layer
 		}, { // Options
-			collapsed: false
+			
 		});
 		this.layer_control.addTo(this.map);
 	}

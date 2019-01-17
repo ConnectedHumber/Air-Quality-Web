@@ -29,12 +29,12 @@ h1 {
 	background: rgba(255, 255, 255, 0.5);
 	border-radius: 0 0 0.25em 0.25em;
     
-    z-index: 10;
+    z-index: 100;
 }
 
 main {
 	position: absolute;
 	top: 0; bottom: 0; left: 0; right: 0;
 	
-	z-index: -100;
+	z-index: 50;
 }
