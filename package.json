@@ -23,8 +23,11 @@
     "leaflet-webgl-heatmap": "^0.2.7"
   },
   "devDependencies": {
+    "postcss-import": "^12.0.1",
+    "postcss-url": "^8.0.0",
     "rollup": "^1.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
-    "rollup-plugin-node-resolve": "^4.0.0"
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "rollup-plugin-postcss": "^1.6.3"
   }
 }

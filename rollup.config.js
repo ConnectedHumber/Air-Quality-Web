@@ -1,5 +1,9 @@
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import postcss from 'rollup-plugin-postcss';
+
+import postcss_import from 'postcss-import';
+import postcss_url from 'postcss-url';
 
 export default {
 	input: 'client_src/js/index.mjs',
@@ -33,6 +37,20 @@ export default {
 		
 		commonjs({
 			
+		}),
+		
+		postcss({
+			plugins: [
+				postcss_import({}),
+				postcss_url({
+					url: "rebase"
+				})
+			],
+			// Save it to a .css file - we'll reference it ourselves thank you 
+			// very much
+			extract: true,
+			sourceMap: true,
+			//minimize: true, // Causes an error at the moment for some reason
 		})
 	]
 };

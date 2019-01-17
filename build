@@ -136,10 +136,10 @@ function task_client {
 	cp client_src/index.html "${build_output_folder}";
 	task_end $?;
 	
-	task_begin "Copying css";
-	# FUTURE: Package this up too?
-	cp -r client_src/css/ "${build_output_folder}";
-	task_end $?;
+	# task_begin "Copying css";
+	# # FUTURE: Package this up too?
+	# cp -r client_src/css/ "${build_output_folder}";
+	# task_end $?;
 }
 
 function task_client-watch {
