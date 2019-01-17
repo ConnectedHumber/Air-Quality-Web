@@ -79,7 +79,11 @@ class FetchData implements IAction {
 		
 		// 4: Send response
 		
-		// TODO: Add cache-control headers here in production mode only
+		// Send a cache-control header, but only in production mode
+		if($this->settings->get("env.mode") == "production") {
+			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age"));
+		}
+		
 		header("content-type: application/json");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);

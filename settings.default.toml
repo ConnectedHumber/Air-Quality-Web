@@ -28,6 +28,12 @@ password = "Define_in_custom_config_file"
 # The default action to take if no action is specified
 default-action = "fetch-data"
 
+[cache]
+# Settings that control how we request that appropriate API responses be cached.
+# Note that these only affect select responses that won't change.
+# Note also that cache headers are only sent in production mode - see env.mode above
+max-age = 2592000 # 30 days
+
 [data]
 # Settings relating to the data returned by the API.
 
