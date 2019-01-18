@@ -75,6 +75,20 @@ https://example.com/path/to/api.php?action=list-devices
 https://example.com/path/to/api.php?action=list-devices&only-with-location=yes
 ```
 
+### device-info
+> Gets (lots of) information about a single device.
+
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`device-id`         | int		| Required. The id of the device to get extended information for. See the `list-device` action for how to get a hold of one.
+
+Examples:
+
+```
+https://example.com/path/to/api.php?action=device-info&device-id=10
+https://example.com/path/to/api.php?action=device-info&device-id=18
+```
+
 ## Notes
  - Readings are taken every 6 minutes as standard.
 
