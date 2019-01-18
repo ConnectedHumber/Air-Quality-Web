@@ -9,9 +9,11 @@ import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
 import LayerHeatmap from './LayerHeatmap.mjs';
+import UI from './UI.mjs';
 
 class Map {
 	constructor() {
+		
 	}
 	
 	setup() {
@@ -42,6 +44,8 @@ class Map {
 		this.setup_heatmap().then(() => {
 			console.info("[map] Heatmap loaded successfully.");
 		});
+		
+		this.ui = new UI(this);
 		
 	}
 	

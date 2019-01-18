@@ -9,7 +9,7 @@ class LayerHeatmap {
 	constructor(in_map) {
 		this.map = in_map;
 		
-		this.layer = new HeatmapOverlay({
+		this.overlay_config = {
 			radius: Config.heatmap.blob_radius,
 			maxOpacity: 0.8,
 			scaleRadius: true,
@@ -18,7 +18,8 @@ class LayerHeatmap {
 			latField: "latitude",
 			lngField: "longitude",
 			valueField: "value"
-		});
+		};
+		this.layer = new HeatmapOverlay(this.overlay_config);
 		this.map.addLayer(this.layer);
 	}
 	

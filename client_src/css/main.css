@@ -38,3 +38,8 @@ main {
 	
 	z-index: 50;
 }
+
+.sms-panel {
+    top: initial !important; bottom: 0;
+    z-index: 100 !important;
+}

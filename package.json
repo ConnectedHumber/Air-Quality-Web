@@ -20,7 +20,8 @@
     "leaflet": "^1.4.0",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-timedimension": "^1.1.0",
-    "leaflet.markercluster": "^1.4.1"
+    "leaflet.markercluster": "^1.4.1",
+    "smartsettings": "^1.2.3"
   },
   "devDependencies": {
     "@types/leaflet": "^1.2.14",
