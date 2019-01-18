@@ -61,6 +61,10 @@ class LayerDeviceMarkers {
 		
 		let device_info = JSON.parse(await GetFromUrl(`${Config.api_root}?action=device-info&device-id=${device_id}`));
 		
+		device_info.location = [ device_info.latitude, device_info.longitude ];
+		delete device_info.latitude;
+		delete device_info.longitude;
+		
 		event.popup.setContent(this.render_device_info(device_info));
 	}
 	
@@ -72,19 +76,36 @@ class LayerDeviceMarkers {
 		));
 		result.querySelector(".device-name").dataset.id = device_info.id;
 		
-		
 		let info_list = [];
 		for(let property in device_info) {
 			// Filter out properties we're handling specially
-			if(["id"].includes(property)) continue;
+			if(["id", "other"].includes(property)) continue;
+			
+			// Ensure the property is a string - giving special handling to 
+			// some property values
+			let value = device_info[property];
+			if(typeof value != "string") {
+				switch(property) {
+					case "location":
+						value = `(${value[0]}, ${value[1]})`;
+						break;
+					default:
+						value = value.toString();
+						break;
+				}
+			}
 			
 			info_list.push(CreateElement(
-				"li.device-property",
-				`${property.split("_").map((word) => word[0].toUpperCase()+word.slice(1)).join(" ")}: ${device_info[property]}`
+				"tr.device-property",
+				CreateElement("th.name", property.split("_").map((word) => word[0].toUpperCase()+word.slice(1)).join(" ")),
+				CreateElement("td.value", value)
 			));
 		}
-		result.appendChild(CreateElement("ul.device-property-list", ...info_list));
+		result.appendChild(CreateElement("table.device-property-list", ...info_list));
 		
+		result.appendChild(CreateElement("p.device-notes",
+			CreateElement("em", device_info.other)
+		));
 		
 		return result;
 	}
