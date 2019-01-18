@@ -102,7 +102,7 @@ class LayerDeviceMarkers {
 				CreateElement("td.value", value)
 			));
 		}
-		result.appendChild(CreateElement("table.device-property-list", ...info_list));
+		result.appendChild(CreateElement("table.device-property-table", ...info_list));
 		
 		result.appendChild(CreateElement("p.device-notes",
 			CreateElement("em", device_info.other)

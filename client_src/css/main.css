@@ -51,6 +51,16 @@ main {
     font-size: 80%;
     color: hsl(230, 45%, 65%);
 }
-.device-property-list {
-    margin: 0; padding: 0 0 0 1em;
+.device-property-table {
+    border-collapse: collapse;
+}
+.device-property-table tr:nth-child(odd) {
+    background: hsla(222, 100%, 70%, 0.25);
+}
+.device-property-table th {
+    padding-right: 2em;
+}
+.device-property-table td:nth-child(2) {
+    border-left: 0.2em solid hsl(222, 100%, 59%);
+    padding-left: 0.5em;
 }
