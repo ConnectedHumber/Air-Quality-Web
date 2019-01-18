@@ -2,6 +2,9 @@
 
 import L from 'leaflet';
 import 'leaflet.markercluster';
+// import CreateElement from 'dom-create-element-query-selector';
+// We're using the git repo for now until an update is released, and rollup doesn't like that apparently
+import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
 
 import Config from './Config.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
@@ -31,6 +34,7 @@ class LayerDeviceMarkers {
 	}
 	
 	add_device_marker(device) {
+		// Create the marker
 		let marker = L.marker(
 			L.latLng(device.latitude, device.longitude),
 			{ // See https://leafletjs.com/reference-1.4.0.html#marker
@@ -39,7 +43,50 @@ class LayerDeviceMarkers {
 				autoPanPadding: L.point(100, 100)
 			}
 		);
+		// Create the popup
+		let popup = L.popup({
+			className: "popup-device",
+			autoPanPadding: L.point(100, 100)
+		}).setContent("&#x231b; Loading..."); // TODO: Display a nice loading animation here
+		marker.on("popupopen", this.marker_popup_open_handler.bind(this, device.id));
+		
+		marker.bindPopup(popup);
+		
 		this.layer.addLayer(marker);
+	}
+	
+	async marker_popup_open_handler(device_id, event) {
+		if(typeof device_id !== "number")
+			throw new Exception("Error: Invalid device id passed.");
+		
+		let device_info = JSON.parse(await GetFromUrl(`${Config.api_root}?action=device-info&device-id=${device_id}`));
+		
+		event.popup.setContent(this.render_device_info(device_info));
+	}
+	
+	render_device_info(device_info) {
+		let result = document.createDocumentFragment();
+		
+		result.appendChild(CreateElement("h2.device-name",
+			`Device: ${device_info.name}`
+		));
+		result.querySelector(".device-name").dataset.id = device_info.id;
+		
+		
+		let info_list = [];
+		for(let property in device_info) {
+			// Filter out properties we're handling specially
+			if(["id"].includes(property)) continue;
+			
+			info_list.push(CreateElement(
+				"li.device-property",
+				`${property.split("_").map((word) => word[0].toUpperCase()+word.slice(1)).join(" ")}: ${device_info[property]}`
+			));
+		}
+		result.appendChild(CreateElement("ul.device-property-list", ...info_list));
+		
+		
+		return result;
 	}
 }
 

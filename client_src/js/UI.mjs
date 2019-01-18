@@ -25,7 +25,7 @@ class UI {
 				}).bind(this)
 			}
 		]);
-		this.ui_panel.watch((event) => console.log(event));
+		// this.ui_panel.watch((event) => console.log(event));
 	}
 }
 
