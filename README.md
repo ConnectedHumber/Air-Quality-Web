@@ -84,9 +84,13 @@ Parameter			| Type		| Meaning
 
 Examples:
 
+### list-reading-types
+> Lists the different types of readings that can be specified.
+
+_No parameters are currently supported by this action._
+
 ```
-https://example.com/path/to/api.php?action=device-info&device-id=10
-https://example.com/path/to/api.php?action=device-info&device-id=18
+https://example.com/path/to/api.php?action=list-reading-types
 ```
 
 ## Notes
