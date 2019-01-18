@@ -8,9 +8,8 @@ export default {
 	// The default zoom level to use when loading the page.
 	default_zoom: 12,
 	
-	// The size, in metres, of the blobs on the heatmap.
-	heatmap_blob_size: 5000,
-	
-	heatmap_opacity: 0.75,
-	heatmap_alpha_range: 0.5
+	heatmap: {
+		// The radius fo blobs on the heatmap
+		blob_radius: 0.02
+	}
 }

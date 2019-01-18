@@ -1,8 +1,6 @@
 "use strict";
 
-import L from 'leaflet';
-import 'leaflet-webgl-heatmap';
-import '../../lib/webgl-heatmap/webgl-heatmap.js'; // Someone didn't define this as a dependency. I'm looking at you, leaflet-webgl-heatmap.....
+import HeatmapOverlay from 'leaflet-heatmap';
 
 import Config from './Config.mjs';
 
@@ -11,24 +9,25 @@ class LayerHeatmap {
 	constructor(in_map) {
 		this.map = in_map;
 		
-		this.layer = new L.webGLHeatmap({
-			size: Config.heatmap_blob_size,
-			opacity: Config.heatmap_opacity,
-			alphaRange: Config.heatmap_alpha_range
+		this.layer = new HeatmapOverlay({
+			radius: Config.heatmap.blob_radius,
+			maxOpacity: 0.8,
+			scaleRadius: true,
+			useLocalExtrema: false,
+			
+			latField: "latitude",
+			lngField: "longitude",
+			valueField: "value"
 		});
-	}
-	
-	setup(initial_data) {
-		this.set_data(initial_data);
 		this.map.addLayer(this.layer);
 	}
 	
 	set_data(readings_list) {
-		this.layer.setData(readings_list.map((reading) => [
-			reading.latitude,
-			reading.longitude,
-			reading.value
-		]));
+		let data_object = {
+			max: readings_list.reduce((prev, next) => next.value > prev ? next.value : prev, 0),
+			data: readings_list
+		}
+		this.layer.setData(data_object);
 	}
 }
 
