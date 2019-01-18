@@ -80,7 +80,7 @@ class LayerDeviceMarkers {
 		let info_list = [];
 		for(let property in device_info) {
 			// Filter out properties we're handling specially
-			if(["id", "other"].includes(property)) continue;
+			if(["id", "name", "other"].includes(property)) continue;
 			
 			// Ensure the property is a string - giving special handling to 
 			// some property values
