@@ -59,6 +59,7 @@ class LayerDeviceMarkers {
 		if(typeof device_id !== "number")
 			throw new Exception("Error: Invalid device id passed.");
 		
+		console.info("Fetching device info for device", device_id);
 		let device_info = JSON.parse(await GetFromUrl(`${Config.api_root}?action=device-info&device-id=${device_id}`));
 		
 		device_info.location = [ device_info.latitude, device_info.longitude ];
