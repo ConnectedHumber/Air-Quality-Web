@@ -76,7 +76,10 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				{$s("table_name_type")}.*
 			FROM {$s("table_name")}
 			JOIN {$s("table_name_type")} ON
-				{$s("table_name")}.{$s("column_device_type")} = {$s("table_name_type")}.{$s("column_type_id")};"
+				{$s("table_name")}.{$s("column_device_type")} = {$s("table_name_type")}.{$s("column_type_id")}
+			WHERE {$s("table_name")}.{$s("column_device_id")} = :device_id;", [
+				"device_id" => $device_id
+			]
 		)->fetch(); // gets the next row from the query
 		
 		$result = [];
