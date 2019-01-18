@@ -13,7 +13,8 @@ class LayerHeatmap {
 		
 		this.layer = new L.webGLHeatmap({
 			size: Config.heatmap_blob_size,
-			opacity: Config.heatmap_opacity
+			opacity: Config.heatmap_opacity,
+			alphaRange: Config.heatmap_alpha_range
 		});
 	}
 	

@@ -9,7 +9,8 @@ export default {
 	default_zoom: 12,
 	
 	// The size, in metres, of the blobs on the heatmap.
-	heatmap_blob_size: 500,
+	heatmap_blob_size: 5000,
 	
-	heatmap_opacity: 0.75
+	heatmap_opacity: 0.75,
+	heatmap_alpha_range: 0.5
 }
