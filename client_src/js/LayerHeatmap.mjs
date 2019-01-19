@@ -64,6 +64,17 @@ class LayerHeatmap {
 					"0.5": "hsl(176, 77%, 40%)",
 					"1": "blue"
 				}
+			},
+			"temperature": {
+				max: 40,
+				gradient: {
+					"-0.25": "blue",
+					"0.25": "cyan",
+					"0.375": "green",
+					"0.5": "yellow",
+					"0.75": "orange",
+					"1": "red"
+				}
 			}
 		};
 	}
