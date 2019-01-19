@@ -45,8 +45,8 @@ class Map {
 			console.info("[map] Heatmap loaded successfully.");
 		});
 		
-		this.ui = new UI(this);
-		
+		this.ui = new UI(Config, this);
+		this.ui.setup().then(() => console.log("[map] Settings initialised."));
 	}
 	
 	async setup_device_markers() {
