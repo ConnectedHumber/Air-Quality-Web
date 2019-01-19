@@ -45,6 +45,7 @@ class UI {
 				}).bind(this)
 			}
 		]);
+		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.id == "PM25"));
 	}
 }
 
