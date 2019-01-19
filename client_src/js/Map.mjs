@@ -60,7 +60,7 @@ class Map {
 		// TODO: Use leaflet-timedimension here
 		// TODO: Allow configuration of the different reading types here
 		
-		this.heatmap.update_data(new Date(), "PM25");
+		this.heatmap.update_data(new Date(new Date-10*60), "PM25");
 	}
 	
 	setup_layer_control() {
