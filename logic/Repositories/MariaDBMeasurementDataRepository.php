@@ -108,12 +108,46 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				)) AS end
 			FROM {$s("table_name_metadata")}
 			WHERE {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id;", [
-				$device_id
+				"device_id" => $device_id
 			]
 		)->fetch();
 	}
 	
-	public function get_readings_by_device(int $device_id, string $reading_type, \DateTime $start, \DateTime $end) {
-		
+	public function get_readings_by_device(int $device_id, string $reading_type, \DateTime $start, \DateTime $end, int $average_seconds = 1) {
+		if($average_seconds < 1)
+			throw new Exception("Error: average_seconds must be greater than 1, but '$average_seconds' was specified.");
+		$s = $this->get_static;
+		return $this->database->query(
+			"SELECT
+				AVG({$s("table_name_values")}.{$s("column_values_value")}) AS {$s("column_values_value")},
+				MIN({$s("table_name_values")}.{$s("column_values_reading_id")}) AS {$s("column_values_reading_id")},
+				
+				MIN(COALESCE(
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+				)) AS datetime
+			FROM {$s("table_name_values")}
+			JOIN {$s("table_name_metadata")} ON
+				{$s("table_name_metadata")}.{$s("column_metadata_id")} = {$s("table_name_values")}.{$s("column_values_reading_id")}
+			WHERE
+				{$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id AND
+				COALESCE(
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+				) >= :start_datetime AND
+				COALESCE(
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+				) <= :end_datetime
+			GROUP BY CEIL(UNIX_TIMESTAMP(COALESCE(
+				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+			)) / :average_seconds);", [
+				"device_id" => $device_id,
+				"start_datetime" => $start->format(\DateTime::ISO8601),
+				"end_datetime" => $end->format(\DateTime::ISO8601),
+				"average_seconds" => $average_seconds
+			]
+		)->fetchAll();
 	}
 }

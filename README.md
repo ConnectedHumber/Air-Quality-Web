@@ -110,6 +110,7 @@ https://example.com/path/to/api.php?action=device-data-bounds&device-id=11
 ## Notes
  - Readings are taken every 6 minutes as standard.
 
+
 ## Contributing
 Contributions are welcome - feel free to [open an issue](https://github.com/ConnectedHumber/Air-Quality-Web/issues/new) or (even better) a [pull request](https://github.com/ConnectedHumber/Air-Quality-Web/compare).
 

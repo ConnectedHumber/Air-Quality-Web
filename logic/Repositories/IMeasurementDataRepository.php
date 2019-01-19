@@ -24,8 +24,9 @@ interface IMeasurementDataRepository {
 	 * @param	string		$reading_type	The reading type to fetch.
 	 * @param	DateTime	$start			The starting DateTime.
 	 * @param	DateTime	$end			The ending DateTime.
+	 * @param	int			$average_seconds	The number of seconds to averageg the data over. For example a value of 3600 (1 hour) will return 1 data point per hour, with the value of each point an average of all the readings for that hour.
 	 * @return	array		The requested data.
 	 */
-	public function get_readings_by_device(int $device_id, string $reading_type, \DateTime $start, \DateTime $end);
+	public function get_readings_by_device(int $device_id, string $reading_type, \DateTime $start, \DateTime $end, int $average_seconds = 1);
 	
 }

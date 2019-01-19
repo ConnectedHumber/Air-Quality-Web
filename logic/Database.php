@@ -42,7 +42,7 @@ class Database
 	}
 	
 	public function query($sql, $variables = []) {
-		error_log("[Database/SQL] $sql");
+		//error_log("[Database/SQL] $sql");
 		// FUTURE: Optionally cache prepared statements?
 		$statement = $this->connection->prepare($sql);
 		$statement->execute($variables);
