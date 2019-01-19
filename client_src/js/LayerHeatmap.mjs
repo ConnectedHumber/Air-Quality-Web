@@ -12,7 +12,7 @@ class LayerHeatmap {
 		
 		this.overlay_config = {
 			radius: Config.heatmap.blob_radius,
-			minOpacity: 0.25,
+			minOpacity: 0.5,
 			maxOpacity: 0.8,
 			scaleRadius: true,
 			useLocalExtrema: false,
@@ -29,8 +29,9 @@ class LayerHeatmap {
 				1: "purple"
 			}
 		};
-		this.layer = new HeatmapOverlay(this.overlay_config);
+		this.layer = new L.LayerGroup();
 		this.map.addLayer(this.layer);
+		this.recreate_overlay();
 		
 		// Custom configuration directives to apply based on the reading type displayed.
 		this.reading_type_configs = {
@@ -38,23 +39,40 @@ class LayerHeatmap {
 				// 0 to 35 low (green), 36 to 53 moderate (amber) 54 to 70 high (red) and above 71 (purple)
 				max: 75,
 				gradient: {
-					0.233: "green",
-					0.593: "orange",
-					0.827: "red",
-					1: "purple"
+					"0": "hsla(111, 76%, 42%, 0.00)",
+					"0.233": "hsl(111, 76%, 42%)", // green
+					"0.593": "orange",
+					"0.827": "red",
+					"1": "purple"
 				}
 			},
 			"PM10": {
 				// 0 to 50 low (green) 51 to75 moderate (amber) 76 to 100 high (red) and more than 100 very high (purple)
 				max: 100,
 				gradient: {
-					0.45: "green",
-					0.573: "orange",
-					0.8: "red",
-					1: "purple"
+					"0": "hsla(111, 76%, 42%, 0)",
+					"0.45": "hsl(111, 76%, 42%)", // green
+					"0.573": "orange",
+					"0.8": "red",
+					"1": "purple"
+				}
+			},
+			"humidity": {
+				max: 100,
+				gradient: {
+					"0": "hsla(176, 77%, 40%, 0)",
+					"0.5": "hsl(176, 77%, 40%)",
+					"1": "blue"
 				}
 			}
 		};
+	}
+	
+	recreate_overlay() {
+		if(typeof this.heatmap != "undefined")
+			this.layer.removeLayer(this.heatmap);
+		this.heatmap = new HeatmapOverlay(this.overlay_config);
+		this.layer.addLayer(this.heatmap);
 	}
 	
 	set_data(readings_list) {
@@ -68,9 +86,9 @@ class LayerHeatmap {
 		else
 			data_object.max = readings_list.reduce((prev, next) => next.value > prev ? next.value : prev, 0);
 		
-		console.log("[map/heatmap] Displaying", data_object);
+		console.log("[map/heatmap] Displaying", this.reading_type, data_object);
 		
-		this.layer.setData(data_object);
+		this.heatmap.setData(data_object);
 	}
 	
 	async update_data(datetime, reading_type) {
@@ -86,14 +104,21 @@ class LayerHeatmap {
 		
 		if(typeof this.reading_type_configs[this.reading_type] != "undefined") {
 			this.overlay_config.gradient = this.reading_type_configs[this.reading_type].gradient;
+			console.log("[map/heatmap] Gradient is now", this.overlay_config.gradient);
+			this.recreate_overlay();
 		}
 		else {
 			delete this.overlay_config.gradient;
 		}
 		
-		this.set_data(JSON.parse(await GetFromUrl(
-			`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(this.datetime.toISOString())}&reading_type=${encodeURIComponent(this.reading_type)}`
-		)));
+		try {
+			this.set_data(JSON.parse(await GetFromUrl(
+				`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(this.datetime.toISOString())}&reading_type=${encodeURIComponent(this.reading_type)}`
+			)));
+		} catch(error) {
+			console.log(error);
+			alert(error);
+		}
 	}
 	
 	
