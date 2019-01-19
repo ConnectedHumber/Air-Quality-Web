@@ -60,9 +60,7 @@ class Map {
 		// TODO: Use leaflet-timedimension here
 		// TODO: Allow configuration of the different reading types here
 		
-		this.heatmap.set_data(JSON.parse(await GetFromUrl(
-			`${Config.api_root}?action=fetch-data&datetime=2019-01-03 07:52:10&reading_type=PM10`
-		)));
+		this.heatmap.update_data(new Date(), "PM25");
 	}
 	
 	setup_layer_control() {

@@ -23,7 +23,6 @@ class UI {
 			{
 				type: "range",
 				name: "Heatmap Blob Radius",
-				help: "The radius of blobs on the heatmap.",
 				items: [
 					0.001,		// min
 					0.05,	// max
@@ -37,7 +36,13 @@ class UI {
 			{
 				// TODO: Add a setting for the different reading types here
 				type: "select",
-				items: this.reading_types.map((type) => type.friendly_text)
+				name: "Reading Type",
+				items: this.reading_types.map((type) => type.friendly_text),
+				callback: ((event) => {
+					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).id;
+					
+					this.map_manager.heatmap.update_reading_type(new_type);
+				}).bind(this)
 			}
 		]);
 	}
