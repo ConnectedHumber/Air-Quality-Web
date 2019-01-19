@@ -11,7 +11,7 @@ import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
 import LayerHeatmap from './LayerHeatmap.mjs';
 import UI from './UI.mjs';
 
-class Map {
+class MapManager {
 	constructor() {
 		
 	}

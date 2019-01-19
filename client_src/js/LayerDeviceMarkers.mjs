@@ -7,6 +7,7 @@ import 'leaflet.markercluster';
 import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
 
 import Config from './Config.mjs';
+import DeviceReadingDisplay from './DeviceReadingDisplay.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
 class LayerDeviceMarkers {
@@ -107,6 +108,11 @@ class LayerDeviceMarkers {
 		result.appendChild(CreateElement("p.device-notes",
 			CreateElement("em", device_info.other)
 		));
+		
+		// TODO: Allow the user to change the reading type
+		let chart_device_data = new DeviceReadingDisplay(Config, device_info.id, "PM25");
+		
+		result.appendChild(chart_device_data.display);
 		
 		return result;
 	}
