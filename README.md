@@ -106,6 +106,17 @@ https://example.com/path/to/api.php?action=device-data-bounds&device-id=18
 https://example.com/path/to/api.php?action=device-data-bounds&device-id=11
 ```
 
+### device-data
+> Gets data by device given a start and end time.
+
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`device-id`			| int		| The id of the device to get data for.
+`reading-type`		| string	| The type of reading to obtain data for.
+`start`				| datetime  | The starting datetime.
+`end`				| datetime  | The ending datetime.
+`average-seconds`	| int		| Optional. If specified, readings will be grouped into lumps of this many seconds and averaged. For example a value of 3600 (1 hour) will return 1 data point per hour, with the value of each point an average of all the readings for that hour.
+
 
 ## Notes
  - Readings are taken every 6 minutes as standard.
