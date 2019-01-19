@@ -93,6 +93,20 @@ _No parameters are currently supported by this action._
 https://example.com/path/to/api.php?action=list-reading-types
 ```
 
+
+### device-data-bounds
+> Gets the start and end DateTime bounds for the data recorded for a specific device.
+
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`device-id`         | int		| Required. The id of the device to get the data DateTime bounds for.
+
+```
+https://example.com/path/to/api.php?action=device-data-bounds&device-id=18
+https://example.com/path/to/api.php?action=device-data-bounds&device-id=11
+```
+
+
 ## Notes
  - Readings are taken every 6 minutes as standard.
 

@@ -93,4 +93,27 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 			]
 		)->fetchAll();
 	}
+	
+	public function get_device_reading_bounds(int $device_id) {
+		$s = $this->get_static;
+		return $this->database->query(
+			"SELECT
+				MIN(COALESCE(
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+				)) AS start,
+				MAX(COALESCE(
+					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+				)) AS end
+			FROM {$s("table_name_metadata")}
+			WHERE {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id;", [
+				$device_id
+			]
+		)->fetch();
+	}
+	
+	public function get_readings_by_device(int $device_id, string $reading_type, \DateTime $start, \DateTime $end) {
+		
+	}
 }
