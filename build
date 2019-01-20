@@ -67,7 +67,7 @@ function task_setup {
 	task_end $?;
 	
 	task_begin "Installing client dependencies";
-	echo "${HC}Not including developement dependencies. To complete setup for development, execute the ${CACTION}setup-dev${RS} ${HC}build task.${RS}";
+	echo -e "${HC}Not including developement dependencies. To complete setup for development, execute the ${CACTION}setup-dev${RS} ${HC}build task.${RS}";
 	npm install --production;
 	task_end $?;
 	
