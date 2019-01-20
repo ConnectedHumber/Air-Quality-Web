@@ -131,6 +131,8 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				{$s("table_name_metadata")}.{$s("column_metadata_id")} = {$s("table_name_values")}.{$s("column_values_reading_id")}
 			WHERE
 				{$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id AND
+				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type AND
+				
 				COALESCE(
 					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
 					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
@@ -144,6 +146,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
 			)) / :average_seconds);", [
 				"device_id" => $device_id,
+				"reading_type" => $reading_type,
 				"start_datetime" => $start->format(\DateTime::ISO8601),
 				"end_datetime" => $end->format(\DateTime::ISO8601),
 				"average_seconds" => $average_seconds
