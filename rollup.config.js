@@ -1,6 +1,9 @@
+import os from 'os';
+
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
+import { terser } from "rollup-plugin-terser";
 
 import postcss_import from 'postcss-import';
 import postcss_url from 'postcss-url';
@@ -51,6 +54,13 @@ export default {
 			extract: true,
 			sourceMap: true,
 			//minimize: true, // Causes an error at the moment for some reason
+		}),
+		
+		terser({
+			numWorkers: os.cpus().length,
+			compress: {
+				ecma: 6
+			}
 		})
 	]
 };

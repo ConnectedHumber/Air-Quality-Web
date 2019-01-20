@@ -78,4 +78,4 @@ class MapManager {
 	}
 }
 
-export default Map;
+export default MapManager;

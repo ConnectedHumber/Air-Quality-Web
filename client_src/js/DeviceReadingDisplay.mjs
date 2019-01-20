@@ -4,7 +4,7 @@
 // We're using the git repo for now until an update is released, and rollup doesn't like that apparently
 import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
 
-import Chart from 'chart.js';
+// import Chart from 'chart.js';
 
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import Postify from './Helpers/Postify.mjs';

@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface#readme",
   "dependencies": {
-    "chart.js": "^2.7.3",
     "dom-create-element-query-selector": "github:hekigan/dom-create-element-query-selector",
     "leaflet": "^1.4.0",
     "leaflet-fullscreen": "^1.0.2",
@@ -35,6 +34,7 @@
     "rollup": "^1.1.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-postcss": "^1.6.3"
+    "rollup-plugin-postcss": "^1.6.3",
+    "rollup-plugin-terser": "^4.0.2"
   }
 }
