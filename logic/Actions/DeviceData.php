@@ -51,6 +51,15 @@ class DeviceData implements IAction {
 		$this->validator->is_datetime("end");
 		$this->validator->run();
 		
+		if(new \DateTime($_GET["start"]) > new \DateTime($_GET["end"])) {
+			$this->sender->send_error_plain(
+				400, "Error: The start date must be earlier than the end date.", [
+					[ "x-time-taken", PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+				]
+			);
+			return false;
+		}
+		
 		if(!empty($_GET["average-seconds"]) && intval($_GET["average-seconds"]) == 0) {
 			$this->sender->send_error_plain(
 				400, "Error: That average-seconds value is invalid (an integer greater than 0 required).", [
