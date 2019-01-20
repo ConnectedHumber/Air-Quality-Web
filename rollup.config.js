@@ -46,7 +46,8 @@ export default {
 			plugins: [
 				postcss_import({}),
 				postcss_url({
-					url: "rebase"
+					url: "copy",
+					assetPath: "resources"
 				})
 			],
 			// Save it to a .css file - we'll reference it ourselves thank you 
