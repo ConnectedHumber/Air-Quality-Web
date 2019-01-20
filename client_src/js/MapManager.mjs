@@ -24,7 +24,7 @@ class MapManager {
 		this.map.setView(Config.default_location, Config.default_zoom);
 		
 		// Add the OpenStreetMap tile layer
-		this.layer_openstreet = L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+		this.layer_openstreet = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
 			id: "openstreetmap",
 			maxZoom: 19,
 			attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
