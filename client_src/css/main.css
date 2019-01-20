@@ -77,3 +77,13 @@ h2.device-name { text-align: center; }
     border-left: 0.2em solid hsl(222, 100%, 59%);
     padding-left: 0.5em;
 }
+
+.reading-types {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
+
+button.selected {
+    font-weight: bolder;
+}

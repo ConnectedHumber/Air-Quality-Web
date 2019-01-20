@@ -35,7 +35,12 @@ class DeviceReadingDisplay {
 		
 		let reading_type_list = this.display.querySelector(".reading-types");
 		for(let reading_type of this.reading_types) {
-			let new_element = CreateElement("li", reading_type.friendly_text);
+			let new_element = CreateElement("li",
+				CreateElement("button", reading_type.friendly_text)
+			);
+			if(reading_type.id == this.reading_type.id)
+				new_element.querySelector("button").classList.add("selected");
+			
 			new_element.dataset.id = reading_type.id;
 			reading_type_list.appendChild(new_element);
 		}
