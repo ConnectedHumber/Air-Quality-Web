@@ -69,6 +69,8 @@ class DeviceReadingDisplay {
 				data: {
 					labels: data.map((point) => point.t),
 					datasets: [{
+						borderColor: "hsl(184, 69%, 40%)",
+						backgroundColor: "hsla(188, 53%, 46%, 0.58)",
 						label: this.reading_type.friendly_text,
 						data
 					}]
@@ -110,7 +112,7 @@ class DeviceReadingDisplay {
 		
 		return new_data.map((data_point) => { return {
 			t: moment(data_point.datetime),
-			y: data_point.value
+			y: Math.round(data_point.value*10000)/10000
 		}});
 	}
 	

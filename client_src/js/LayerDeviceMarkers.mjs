@@ -47,7 +47,7 @@ class LayerDeviceMarkers {
 		// Create the popup
 		let popup = L.popup({
 			className: "popup-device",
-			maxWidth: 640,
+			maxWidth: 720,
 			autoPanPadding: L.point(100, 100)
 		}).setContent("&#x231b; Loading..."); // TODO: Display a nice loading animation here
 		marker.on("popupopen", this.marker_popup_open_handler.bind(this, device.id));
