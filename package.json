@@ -23,6 +23,7 @@
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-timedimension": "^1.1.0",
     "leaflet.markercluster": "^1.4.1",
+    "moment": "^2.23.0",
     "smartsettings": "^1.2.3"
   },
   "devDependencies": {

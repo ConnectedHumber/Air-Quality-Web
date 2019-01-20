@@ -4,9 +4,10 @@
 // We're using the git repo for now until an update is released, and rollup doesn't like that apparently
 import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
 
+import moment from 'moment';
 // import Chart from 'chart.js';
 // Chart.js pollutes the global scope, but the main entry point is going to change soon in v2.8 - which should fix our issue here
-import Chart from '../../node_modules/chart.js/dist/Chart.min.js';
+import Chart from '../../node_modules/chart.js/dist/Chart.bundle.min.js';
 
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import Postify from './Helpers/Postify.mjs';
@@ -61,17 +62,37 @@ class DeviceReadingDisplay {
 	}
 	
 	setup_chart(data) {
+		console.log("[marker/popup/device-graph] Data:", data);
 		this.chart = new Chart(
 			this.display.querySelector("canvas").getContext("2d"), {
 				type: "line",
 				data: {
+					labels: data.map((point) => point.t),
 					datasets: [{
 						label: this.reading_type.friendly_text,
 						data
 					}]
 				},
 				options: {
-					
+					scales: {
+						xAxes: [{
+							type: "time",
+							time: {
+								format: "YYYY-MM-DD HH:mm",
+								tooltipFormat: 'll HH:mm'
+							},
+							scaleLabel: {
+								display: true,
+								labelString: "Time"
+							}
+						}],
+						yAxes: [{
+							scaleLabel: {
+								display: true,
+								labelString: "Value"
+							}
+						}]
+					}
 				}
 			}
 		);
@@ -82,14 +103,13 @@ class DeviceReadingDisplay {
 			action: "device-data",
 			"device-id": this.device_id,
 			"reading-type": this.reading_type.id,
-			// Need to work in milliseconds here, not seconds
-			start: new Date(new Date - 1000*60*60*24).toISOString(),
-			end: (new Date()).toISOString(),
+			start: moment().subtract(1, "days").toISOString(),
+			end: moment().toISOString(),
 			"average-seconds": 3600
 		})));
 		
 		return new_data.map((data_point) => { return {
-			x: new Date(data_point.datetime),
+			t: moment(data_point.datetime),
 			y: data_point.value
 		}});
 	}
