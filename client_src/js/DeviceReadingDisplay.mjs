@@ -141,7 +141,7 @@ class DeviceReadingDisplay {
 			// TODO: Display a nice error message here instead of an alert()
 			alert(error);
 			console.error(error);
-			return false;
+			return null;
 		}
 		
 		console.log("[marker/popup/device-graph] Fetched data:", new_data);
@@ -157,21 +157,20 @@ class DeviceReadingDisplay {
 	}
 	
 	async switch_graph_type_handler(event) {
-		let old_reading_type = this.reading_type;
 		// Figure out what the new reading type is
 		this.reading_type = this.reading_types.find((type) => type.id == event.target.parentNode.dataset.id);
 		
 		console.log("[marker/device-graph] Reading type is now", this.reading_type);
 		
-		await this.update_chart();
-		
-		// If we get to here, we updated the chart without error
-		
-		// Update the button list to highlight the newly-selected reading type
-		// Remove the selected class from the old one
-		event.target.parentNode.parentNode.querySelector(`[data-id=${old_reading_type.id}] button`).classList.remove("selected");
-		// Add the selected class to the new one
-		event.target.classList.add("selected");
+		// Update the button list to highlight the newly-selected reading type, but only if we managed to update the chart successfully
+		if(await this.update_chart()) {
+			// Remove the selected class from the old one(s?)
+			event.target.parentNode.parentNode.querySelectorAll(`button`)
+				.forEach((next_button) => next_button.classList.remove("selected"));
+			
+			// Add the selected class to the new one
+			event.target.classList.add("selected");
+		}
 	}
 	
 	async update_chart() {
@@ -182,6 +181,8 @@ class DeviceReadingDisplay {
 			label: this.reading_type.friendly_text,
 			data: await this.get_data()
 		};
+		
+		if(new_data_obj.data == null) return false;
 		
 		// Update the colour & suggested min/max values
 		let def = this.reading_type_defs[this.reading_type.id],
@@ -210,6 +211,8 @@ class DeviceReadingDisplay {
 		
 		// Update the chart
 		this.chart.update();
+		
+		return true;
 	}
 }
 

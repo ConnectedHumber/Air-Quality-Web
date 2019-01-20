@@ -144,9 +144,15 @@ function task_client {
 
 function task_client-watch {
 	echo -e "Watching for changes.";
-	while inotifywait -qr --event modify --format '%:e %f' client_src; do
+	while :; do # : = infinite loop
+		# Wait for an update
+		# inotifywait's non-0 exit code forces an exit for some reason :-/
+		inotifywait -qr --event modify --format '%:e %f' client_src;
+		
+		# Rebuild the client code - spawn a sub-process to avoid the hard exit
+		# This still doesn't work though, which is *really* annoying
 		stage_begin "Rebuilding client code";
-		task_client;
+		./build client;
 		stage_end $?;
 	done
 }
