@@ -21,6 +21,10 @@ class DeviceReadingDisplay {
 		/** The current reading type to display a graph for. @type {Object} */
 		this.reading_type = null;
 		
+		this.default_colours = {
+			borderColor: "hsla(0, 0%, 50%, 1)",
+			backgroundColor: "hsla(0, 0%, 65%, 0.5)"
+		};
 		this.reading_type_colours = {
 			"PM10": {
 				borderColor: "hsla(0, 82%, 56%, 1)",
@@ -71,9 +75,55 @@ class DeviceReadingDisplay {
 		
 		// ----------------------------------------------------
 		
-		let data = null;
+		this.setup_chart();
+	}
+	
+	setup_chart() {
+		this.chart = new Chart(this.display.querySelector("canvas").getContext("2d"), {
+			type: "line",
+			data: {
+				// We need to define an initial dataset here because otherwise
+				// Chart.js gets confused 'cause it has nothing to animate from
+				labels: [],
+				datasets: []
+			},
+			options: {
+				scales: {
+					xAxes: [{
+						type: "time",
+						time: {
+							format: "YYYY-MM-DD HH:mm",
+							tooltipFormat: 'll HH:mm'
+						},
+						scaleLabel: {
+							display: true,
+							labelString: "Time"
+						}
+					}],
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: "Value"
+						}
+					}]
+				}
+			}
+		});
+		
+		this.update_chart();
+	}
+	
+	async get_data() {
+		let new_data = null;
 		try {
-			data = await this.get_data();
+			new_data = JSON.parse(await GetFromUrl(`${this.config.api_root}?` + Postify({
+				action: "device-data",
+				"device-id": this.device_id,
+				"reading-type": this.reading_type.id,
+				start: moment().subtract(1, "days").toISOString(),
+				end: moment().toISOString(),
+				"average-seconds": 3600
+			})));
 		} catch(error) {
 			// TODO: Display a nice error message here instead of an alert()
 			alert(error);
@@ -81,58 +131,7 @@ class DeviceReadingDisplay {
 			return false;
 		}
 		
-		this.setup_chart(data);
-	}
-	
-	setup_chart(data) {
-		console.log("[marker/popup/device-graph] Data:", data);
-		this.chart = new Chart(
-			this.display.querySelector("canvas").getContext("2d"), {
-				type: "line",
-				data: {
-					labels: data.map((point) => point.t),
-					datasets: [{
-						borderColor: this.reading_type_colours[this.reading_type.id].borderColor,
-						backgroundColor: this.reading_type_colours[this.reading_type.id].backgroundColor,
-						
-						label: this.reading_type.friendly_text,
-						data
-					}]
-				},
-				options: {
-					scales: {
-						xAxes: [{
-							type: "time",
-							time: {
-								format: "YYYY-MM-DD HH:mm",
-								tooltipFormat: 'll HH:mm'
-							},
-							scaleLabel: {
-								display: true,
-								labelString: "Time"
-							}
-						}],
-						yAxes: [{
-							scaleLabel: {
-								display: true,
-								labelString: "Value"
-							}
-						}]
-					}
-				}
-			}
-		);
-	}
-	
-	async get_data() {
-		let new_data = JSON.parse(await GetFromUrl(`${this.config.api_root}?` + Postify({
-			action: "device-data",
-			"device-id": this.device_id,
-			"reading-type": this.reading_type.id,
-			start: moment().subtract(1, "days").toISOString(),
-			end: moment().toISOString(),
-			"average-seconds": 3600
-		})));
+		console.log("[marker/popup/device-graph] Fetched data:", new_data);
 		
 		return new_data.map((data_point) => { return {
 			t: moment(data_point.datetime),
@@ -142,6 +141,41 @@ class DeviceReadingDisplay {
 	
 	async fetch_reading_types() {
 		this.reading_types = JSON.parse(await GetFromUrl(`${this.config.api_root}?action=list-reading-types`));
+	}
+	
+	async switch_graph_type_handler(event) {
+		// Figure out what the new reading type is
+		this.reading_type = this.reading_types.find((type) => type.id == event.target.dataset.id);
+		
+		await this.update_chart();
+	}
+	
+	async update_chart() {
+		this.chart.data.datasets.length = 0;
+		
+		// Get the Chart.js data object
+		let new_data_obj = {
+			label: this.reading_type.friendly_text,
+			data: await this.get_data()
+		};
+		
+		// Update the colour
+		if(typeof this.reading_type_colours[this.reading_type.id] !== "undefined") {
+			new_data_obj.borderColor = this.reading_type_colours[this.reading_type.id].borderColor;
+			new_data_obj.backgroundColor = this.reading_type_colours[this.reading_type.id].backgroundColor;
+		}
+		else {
+			new_data_obj.borderColor = this.default_colours.borderColor;
+			new_data_obj.backgroundColor = this.default_colours.backgroundColor;
+		}
+		
+		this.chart.data.datasets.push(new_data_obj);
+		
+		// Update the x axis labels
+		this.chart.data.labels = new_data_obj.data.map((point) => point.t);
+		
+		// Update the chart
+		this.chart.update();
 	}
 }
 
