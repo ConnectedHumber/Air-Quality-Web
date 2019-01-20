@@ -5,6 +5,8 @@
 import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
 
 // import Chart from 'chart.js';
+// Chart.js pollutes the global scope, but the main entry point is going to change soon in v2.8 - which should fix our issue here
+import Chart from '../../node_modules/chart.js/dist/Chart.min.js';
 
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import Postify from './Helpers/Postify.mjs';

@@ -13,7 +13,7 @@ export default {
 	input: 'client_src/js/index.mjs',
 	output: {
 		file: 'app/app.js',
-		format: 'es'
+		format: 'esm'
 	},
 	plugins: [
 		resolve({

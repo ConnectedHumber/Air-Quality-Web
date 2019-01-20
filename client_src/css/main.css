@@ -50,6 +50,7 @@ main {
     z-index: 100 !important;
 }
 
+h2.device-name { text-align: center; }
 .device-name::after {
     content: "#" attr(data-id);
     float: right; margin-right: 1em;
@@ -57,6 +58,12 @@ main {
     font-size: 80%;
     color: hsl(230, 45%, 65%);
 }
+
+.device-data {
+    display: flex;
+    flex-direction: row;
+}
+
 .device-property-table {
     border-collapse: collapse;
 }

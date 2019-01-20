@@ -47,6 +47,7 @@ class LayerDeviceMarkers {
 		// Create the popup
 		let popup = L.popup({
 			className: "popup-device",
+			maxWidth: 640,
 			autoPanPadding: L.point(100, 100)
 		}).setContent("&#x231b; Loading..."); // TODO: Display a nice loading animation here
 		marker.on("popupopen", this.marker_popup_open_handler.bind(this, device.id));
@@ -73,10 +74,20 @@ class LayerDeviceMarkers {
 	render_device_info(device_info) {
 		let result = document.createDocumentFragment();
 		
+		// ----------------------------------
+		
 		result.appendChild(CreateElement("h2.device-name",
 			`Device: ${device_info.name}`
 		));
 		result.querySelector(".device-name").dataset.id = device_info.id;
+		
+		// ----------------------------------
+		
+		let data_container = CreateElement("div.device-data",
+			CreateElement("div.device-params")
+		);
+		result.appendChild(data_container);
+		let params_container = data_container.querySelector(".device-params");
 		
 		let info_list = [];
 		for(let property in device_info) {
@@ -103,16 +114,20 @@ class LayerDeviceMarkers {
 				CreateElement("td.value", value)
 			));
 		}
-		result.appendChild(CreateElement("table.device-property-table", ...info_list));
+		params_container.appendChild(CreateElement("table.device-property-table", ...info_list));
 		
-		result.appendChild(CreateElement("p.device-notes",
+		params_container.appendChild(CreateElement("p.device-notes",
 			CreateElement("em", device_info.other)
 		));
+		
+		// ----------------------------------
 		
 		// TODO: Allow the user to change the reading type
 		let chart_device_data = new DeviceReadingDisplay(Config, device_info.id, "PM25");
 		
-		result.appendChild(chart_device_data.display);
+		data_container.appendChild(chart_device_data.display);
+		
+		// ----------------------------------
 		
 		return result;
 	}
