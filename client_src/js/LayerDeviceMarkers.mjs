@@ -123,8 +123,10 @@ class LayerDeviceMarkers {
 		// ----------------------------------
 		
 		// TODO: Allow the user to change the reading type
-		let chart_device_data = new DeviceReadingDisplay(Config, device_info.id, "PM25");
-		
+		let chart_device_data = new DeviceReadingDisplay(Config, device_info.id);
+		chart_device_data.setup("PM25").then(() => 
+			console.info("[layer/markers] Device chart setup complete!")
+		);
 		data_container.appendChild(chart_device_data.display);
 		
 		// ----------------------------------

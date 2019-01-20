@@ -13,31 +13,56 @@ import Postify from './Helpers/Postify.mjs';
 
 
 class DeviceReadingDisplay {
-	constructor(in_config, in_device_id, in_reading_type) {
+	constructor(in_config, in_device_id) {
 		this.config = in_config;
-		/** @type {int} */
+		/** The ID of the device to display a graph for. @type {int} */
 		this.device_id = in_device_id;
-		// TODO: Allow the user to change this
-		/** @type {Object} */
-		this.reading_type = in_reading_type;
-		
-		this.setup_display();
+		/** The current reading type to display a graph for. @type {Object} */
+		this.reading_type = null;
 	}
 	
-	async setup_display() {
+	async setup(default_reading_type) {
+		// Create the display element first, as we need it to be immediately available for inclusion in the popup window
+		
 		/** @type {HTMLElement} */
 		this.display = CreateElement("div.chart-device-data",
 			CreateElement("canvas.canvas-chart"),
 			CreateElement("ul.reading-types")
 		);
 		
+		await this.fetch_reading_types();
+		this.reading_type = this.reading_types.find((type) => type.id == default_reading_type);
+		
+		let reading_type_list = this.display.querySelector(".reading-types");
+		for(let reading_type of this.reading_types) {
+			let new_element = CreateElement("li", reading_type.friendly_text);
+			new_element.dataset.id = reading_type.id;
+			reading_type_list.appendChild(new_element);
+		}
+		
+		// ----------------------------------------------------
+		
+		let data = null;
+		try {
+			data = await this.get_data();
+		} catch(error) {
+			// TODO: Display a nice error message here instead of an alert()
+			alert(error);
+			console.error(error);
+			return false;
+		}
+		
+		this.setup_chart(data);
+	}
+	
+	setup_chart(data) {
 		this.chart = new Chart(
 			this.display.querySelector("canvas").getContext("2d"), {
 				type: "line",
 				data: {
 					datasets: [{
 						label: this.reading_type.friendly_text,
-						data: await this.get_data
+						data
 					}]
 				},
 				options: {
@@ -52,8 +77,9 @@ class DeviceReadingDisplay {
 			action: "device-data",
 			"device-id": this.device_id,
 			"reading-type": this.reading_type.id,
-			start: (new Date()).toISOString(),
-			end: new Date(new Date - 60*60*24),
+			// Need to work in milliseconds here, not seconds
+			start: new Date(new Date - 1000*60*60*24).toISOString(),
+			end: (new Date()).toISOString(),
 			"average-seconds": 3600
 		})));
 		
@@ -61,6 +87,10 @@ class DeviceReadingDisplay {
 			x: new Date(data_point.datetime),
 			y: data_point.value
 		}});
+	}
+	
+	async fetch_reading_types() {
+		this.reading_types = JSON.parse(await GetFromUrl(`${this.config.api_root}?action=list-reading-types`));
 	}
 }
 
