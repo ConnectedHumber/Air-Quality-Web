@@ -1,4 +1,5 @@
 import os from 'os';
+import path from 'path';
 
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -7,6 +8,7 @@ import { terser } from "rollup-plugin-terser";
 
 import postcss_import from 'postcss-import';
 import postcss_url from 'postcss-url';
+import postcss_copy from 'postcss-copy';
 
 export default {
 	input: 'client_src/js/index.mjs',
@@ -45,10 +47,16 @@ export default {
 		postcss({
 			plugins: [
 				postcss_import({}),
-				postcss_url({
-					url: "copy",
-					assetPath: "resources"
+				postcss_copy({
+					dest: "app",
+					template: "resources/[name].[ext]"
 				})
+				// postcss_url(),
+				// postcss_url({
+				// 	url: "copy",
+				// 	basePath: path.resolve("."),
+				// 	assetPath: "resources"
+				// })
 			],
 			// Save it to a .css file - we'll reference it ourselves thank you 
 			// very much
@@ -57,11 +65,11 @@ export default {
 			//minimize: true, // Causes an error at the moment for some reason
 		}),
 		
-		terser({
-			numWorkers: os.cpus().length,
-			compress: {
-				ecma: 6
-			}
-		})
+		// terser({
+		// 	numWorkers: os.cpus().length,
+		// 	compress: {
+		// 		ecma: 6
+		// 	}
+		// })
 	]
 };
