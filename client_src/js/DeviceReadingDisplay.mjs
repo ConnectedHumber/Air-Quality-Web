@@ -25,20 +25,28 @@ class DeviceReadingDisplay {
 			borderColor: "hsla(0, 0%, 50%, 1)",
 			backgroundColor: "hsla(0, 0%, 65%, 0.5)"
 		};
-		this.reading_type_colours = {
+		this.reading_type_defs = {
 			"PM10": {
+				suggestedMin: 0,
+				suggestedMax: 110,
 				borderColor: "hsla(0, 82%, 56%, 1)",
 				backgroundColor: "hsla(14, 94%, 71%, 0.57)"
 			},
 			"PM25": {
+				suggestedMin: 0,
+				suggestedMax: 75,
 				borderColor: "hsla(33, 70%, 51%, 1)",
 				backgroundColor: "hsla(28, 77%, 58%, 0.63)"
 			},
 			"temperature": {
+				suggestedMin: -5,
+				suggestedMax: 40,
 				borderColor: "hsla(0, 77%, 45%, 1)",
 				backgroundColor: "hsla(0, 61%, 58%, 0.59)"
 			},
 			"humidity": {
+				suggestedMin: 0,
+				suggestedMax: 100,
 				borderColor: "hsla(184, 69%, 40%, 1)",
 				backgroundColor: "hsla(188, 53%, 46%, 0.58)"
 			},
@@ -61,13 +69,16 @@ class DeviceReadingDisplay {
 		await this.fetch_reading_types();
 		this.reading_type = this.reading_types.find((type) => type.id == default_reading_type);
 		
+		// Create the reading type buttons
 		let reading_type_list = this.display.querySelector(".reading-types");
 		for(let reading_type of this.reading_types) {
 			let new_element = CreateElement("li",
 				CreateElement("button", reading_type.friendly_text)
 			);
+			let button = new_element.querySelector("button");
 			if(reading_type.id == this.reading_type.id)
-				new_element.querySelector("button").classList.add("selected");
+				button.classList.add("selected");
+			button.addEventListener("click", this.switch_graph_type_handler.bind(this));
 			
 			new_element.dataset.id = reading_type.id;
 			reading_type_list.appendChild(new_element);
@@ -75,6 +86,7 @@ class DeviceReadingDisplay {
 		
 		// ----------------------------------------------------
 		
+		// Setup the chart itself
 		this.setup_chart();
 	}
 	
@@ -101,6 +113,7 @@ class DeviceReadingDisplay {
 						}
 					}],
 					yAxes: [{
+						ticks: { },
 						scaleLabel: {
 							display: true,
 							labelString: "Value"
@@ -144,10 +157,21 @@ class DeviceReadingDisplay {
 	}
 	
 	async switch_graph_type_handler(event) {
+		let old_reading_type = this.reading_type;
 		// Figure out what the new reading type is
-		this.reading_type = this.reading_types.find((type) => type.id == event.target.dataset.id);
+		this.reading_type = this.reading_types.find((type) => type.id == event.target.parentNode.dataset.id);
+		
+		console.log("[marker/device-graph] Reading type is now", this.reading_type);
 		
 		await this.update_chart();
+		
+		// If we get to here, we updated the chart without error
+		
+		// Update the button list to highlight the newly-selected reading type
+		// Remove the selected class from the old one
+		event.target.parentNode.parentNode.querySelector(`[data-id=${old_reading_type.id}] button`).classList.remove("selected");
+		// Add the selected class to the new one
+		event.target.classList.add("selected");
 	}
 	
 	async update_chart() {
@@ -159,14 +183,24 @@ class DeviceReadingDisplay {
 			data: await this.get_data()
 		};
 		
-		// Update the colour
-		if(typeof this.reading_type_colours[this.reading_type.id] !== "undefined") {
-			new_data_obj.borderColor = this.reading_type_colours[this.reading_type.id].borderColor;
-			new_data_obj.backgroundColor = this.reading_type_colours[this.reading_type.id].backgroundColor;
+		// Update the colour & suggested min/max values
+		let def = this.reading_type_defs[this.reading_type.id],
+			y_axis = this.chart.options.scales.yAxes[0];
+		if(typeof def !== "undefined") {
+			new_data_obj.borderColor = def.borderColor;
+			new_data_obj.backgroundColor = def.backgroundColor;
 		}
 		else {
 			new_data_obj.borderColor = this.default_colours.borderColor;
 			new_data_obj.backgroundColor = this.default_colours.backgroundColor;
+		}
+		if(typeof def !== "undefined" && typeof def.suggestedMin !== "undefined") {
+			y_axis.ticks.suggestedMin = def.suggestedMin;
+			y_axis.ticks.suggestedMax = def.suggestedMax;
+		}
+		else {
+			delete y_axis.ticks.suggestedMin;
+			delete y_axis.ticks.suggestedMax;
 		}
 		
 		this.chart.data.datasets.push(new_data_obj);
