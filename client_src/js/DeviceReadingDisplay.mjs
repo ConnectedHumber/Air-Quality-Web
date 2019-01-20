@@ -20,6 +20,29 @@ class DeviceReadingDisplay {
 		this.device_id = in_device_id;
 		/** The current reading type to display a graph for. @type {Object} */
 		this.reading_type = null;
+		
+		this.reading_type_colours = {
+			"PM10": {
+				borderColor: "hsla(0, 82%, 56%, 1)",
+				backgroundColor: "hsla(14, 94%, 71%, 0.57)"
+			},
+			"PM25": {
+				borderColor: "hsla(33, 70%, 51%, 1)",
+				backgroundColor: "hsla(28, 77%, 58%, 0.63)"
+			},
+			"temperature": {
+				borderColor: "hsla(0, 77%, 45%, 1)",
+				backgroundColor: "hsla(0, 61%, 58%, 0.59)"
+			},
+			"humidity": {
+				borderColor: "hsla(184, 69%, 40%, 1)",
+				backgroundColor: "hsla(188, 53%, 46%, 0.58)"
+			},
+			"pressure": {
+				borderColor: "hsla(258, 67%, 40%, 1)",
+				backgroundColor: "hsla(249, 56%, 40%, 0.66)"
+			}
+		}
 	}
 	
 	async setup(default_reading_type) {
@@ -69,8 +92,9 @@ class DeviceReadingDisplay {
 				data: {
 					labels: data.map((point) => point.t),
 					datasets: [{
-						borderColor: "hsl(184, 69%, 40%)",
-						backgroundColor: "hsla(188, 53%, 46%, 0.58)",
+						borderColor: this.reading_type_colours[this.reading_type.id].borderColor,
+						backgroundColor: this.reading_type_colours[this.reading_type.id].backgroundColor,
+						
 						label: this.reading_type.friendly_text,
 						data
 					}]
