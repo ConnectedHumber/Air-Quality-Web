@@ -30,6 +30,9 @@ class MapManager {
 			attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
 		}).addTo(this.map);
 		
+		this.map.attributionControl.addAttribution("Data: <a href='https://connectedhumber.org/'>Connected Humber</a>");
+		this.map.attributionControl.addAttribution("<a href='https://github.com/ConnectedHumber/Air-Quality-Web/'>Air Quality Web</a> by <a href='https://starbeamrainbowlabs.com/'>Starbeamrainbowlabs</a>");
+		
 		// Add the device markers
 		console.info("[map] Loading device markers....");
 		this.setup_device_markers().then(() => {
