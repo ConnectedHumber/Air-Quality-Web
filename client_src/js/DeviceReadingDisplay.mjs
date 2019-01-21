@@ -39,8 +39,8 @@ class DeviceReadingDisplay {
 				backgroundColor: "hsla(28, 77%, 58%, 0.63)"
 			},
 			"temperature": {
-				suggestedMin: -5,
-				suggestedMax: 40,
+				suggestedMin: 0,
+				suggestedMax: 20,
 				borderColor: "hsla(0, 77%, 45%, 1)",
 				backgroundColor: "hsla(0, 61%, 58%, 0.59)"
 			},
