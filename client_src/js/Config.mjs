@@ -2,7 +2,7 @@
 
 export default {
 	version: "__VERSION__",
-	buid_date: new Date("__BUILD_DATE__"),
+	build_date: new Date("__BUILD_DATE__"),
 	// The url of api.php. Can be relative.
 	api_root: "../api.php",
 	// The default location to show on the map when loading the page.

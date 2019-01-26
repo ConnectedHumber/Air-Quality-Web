@@ -1,6 +1,7 @@
 "use strict";
 
 import SmartSettings from 'smartsettings';
+import NanoModal from 'nanomodal';
 
 import Config from './Config.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
@@ -34,7 +35,6 @@ class UI {
 				}).bind(this)
 			},
 			{
-				// TODO: Add a setting for the different reading types here
 				type: "select",
 				name: "Reading Type",
 				items: this.reading_types.map((type) => type.friendly_text),
@@ -43,6 +43,15 @@ class UI {
 					
 					this.map_manager.heatmap.update_reading_type(new_type);
 				}).bind(this)
+			},
+			{
+				type: "button",
+				name: `${Config.version}, built ${Config.build_date.toDateString()}`,
+				callback: (async (_event) => {
+					NanoModal(
+						await GetFromUrl(`${Config.api_root}?action=changelog`)
+					).show();
+				})
 			}
 		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.id == "PM25"));

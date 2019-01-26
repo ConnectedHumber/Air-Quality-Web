@@ -1,0 +1,5 @@
+.nanoModal {
+	max-width: 50vw;
+	max-height: 70vh;
+	overflow-y: scroll;
+}

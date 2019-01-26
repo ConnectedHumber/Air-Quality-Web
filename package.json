@@ -24,6 +24,7 @@
     "leaflet-timedimension": "^1.1.0",
     "leaflet.markercluster": "^1.4.1",
     "moment": "^2.23.0",
+    "nanomodal": "^5.1.1",
     "smartsettings": "^1.2.3"
   },
   "devDependencies": {
