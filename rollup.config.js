@@ -1,10 +1,12 @@
 import os from 'os';
 import path from 'path';
+import fs from 'fs';
 
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import postcss from 'rollup-plugin-postcss';
 import { terser } from "rollup-plugin-terser";
+import replace from 'rollup-plugin-replace';
 
 import postcss_import from 'postcss-import';
 import postcss_copy from 'postcss-copy';
@@ -31,6 +33,15 @@ let plugins = [
 
 		// not all files you want to resolve are .js files
 		extensions: ['.mjs', '.js', '.jsx', '.json'], // Default: [ '.mjs', '.js', '.json', '.node' ]
+	}),
+	
+	
+	replace({
+		exclude: 'node_modules/**',
+		values: {
+			"__BUILD_DATE__": () => new Date().toISOString(),
+			"__VERSION__": fs.readFileSync("version", "utf8").trim()
+		}
 	}),
 	
 	commonjs({

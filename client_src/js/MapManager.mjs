@@ -11,7 +11,7 @@ import UI from './UI.mjs';
 
 class MapManager {
 	constructor() {
-		
+		console.log(Config);
 	}
 	
 	setup() {
