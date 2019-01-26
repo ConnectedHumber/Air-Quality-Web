@@ -94,9 +94,18 @@ class LayerDeviceMarkers {
 			// Filter out properties we're handling specially
 			if(["id", "name", "other"].includes(property)) continue;
 			
+			
 			// Ensure the property is a string - giving special handling to 
 			// some property values
 			let value = device_info[property];
+			
+			// Filter out undefined properties
+			if(typeof value == "undefined" || value === null) {
+				value = "(not specified)";
+			}
+			
+			
+			// If the value isn't a string, but is still 'truthy'
 			if(typeof value != "string") {
 				switch(property) {
 					case "location":
@@ -117,7 +126,7 @@ class LayerDeviceMarkers {
 		params_container.appendChild(CreateElement("table.device-property-table", ...info_list));
 		
 		params_container.appendChild(CreateElement("p.device-notes",
-			CreateElement("em", device_info.other)
+			CreateElement("em", device_info.other || "")
 		));
 		
 		// ----------------------------------
