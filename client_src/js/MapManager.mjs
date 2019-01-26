@@ -4,8 +4,6 @@
 import L from 'leaflet';
 import 'leaflet-fullscreen';
 
-import GetFromUrl from './Helpers/GetFromUrl.mjs';
-
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
 import LayerHeatmap from './LayerHeatmap.mjs';

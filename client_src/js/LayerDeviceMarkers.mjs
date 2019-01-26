@@ -47,7 +47,7 @@ class LayerDeviceMarkers {
 		// Create the popup
 		let popup = L.popup({
 			className: "popup-device",
-			maxWidth: 720,
+			maxWidth: 640,
 			autoPanPadding: L.point(100, 100)
 		}).setContent("&#x231b; Loading..."); // TODO: Display a nice loading animation here
 		marker.on("popupopen", this.marker_popup_open_handler.bind(this, device.id));
@@ -81,10 +81,22 @@ class LayerDeviceMarkers {
 		));
 		result.querySelector(".device-name").dataset.id = device_info.id;
 		
+		
+		// ----------------------------------
+		
+		result.appendChild(CreateElement("ul.tabs"));
+		let tabs = result.querySelector(".tabs");
+		tabs.innerHTML = `<li><a href="#tab-info">Info</a></li>
+		<li><a href="#tab-data">Data</a></li>`;
+		tabs.addEventListener("click", (event) => {
+			tabs.querySelectorAll("a").forEach((el) => el.classList.remove("selected"));
+			event.target.classList.add("selected");
+		})
+		
 		// ----------------------------------
 		
 		let data_container = CreateElement("div.device-data",
-			CreateElement("div.device-params")
+			CreateElement("div.device-params.tab-content#tab-info")
 		);
 		result.appendChild(data_container);
 		let params_container = data_container.querySelector(".device-params");
@@ -136,6 +148,8 @@ class LayerDeviceMarkers {
 		chart_device_data.setup("PM25").then(() => 
 			console.info("[layer/markers] Device chart setup complete!")
 		);
+		chart_device_data.display.classList.add("tab-content");
+		chart_device_data.display.setAttribute("id", "tab-data");
 		data_container.appendChild(chart_device_data.display);
 		
 		// ----------------------------------

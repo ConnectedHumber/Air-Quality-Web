@@ -5,6 +5,8 @@
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.css";
 @import "../../node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css";
 
+@import "./popup.css";
+
 /** Ensure that some assets are copied that aren't by default **/
 .non-existent {
     background: url(../../node_modules/leaflet/dist/images/marker-icon-2x.png),
@@ -48,40 +50,6 @@ main {
 .sms-panel {
     top: initial !important; bottom: 0;
     z-index: 100 !important;
-}
-
-h2.device-name { text-align: center; }
-.device-name::after {
-    content: "#" attr(data-id);
-    float: right; margin-right: 1em;
-    
-    font-size: 80%;
-    color: hsl(230, 45%, 65%);
-}
-
-.device-data {
-    display: flex;
-    flex-direction: row;
-}
-
-.device-property-table {
-    border-collapse: collapse;
-}
-.device-property-table tr:nth-child(odd) {
-    background: hsla(222, 100%, 70%, 0.25);
-}
-.device-property-table th {
-    padding-right: 2em;
-}
-.device-property-table td:nth-child(2) {
-    border-left: 0.2em solid hsl(222, 100%, 59%);
-    padding-left: 0.5em;
-}
-
-.reading-types {
-    display: flex;
-    flex-direction: row;
-    list-style-type: none;
 }
 
 button.selected {

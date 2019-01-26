@@ -1,0 +1,70 @@
+.leaflet-popup-content {
+	width: auto !important;
+}
+
+h2.device-name { text-align: center; }
+.device-name::after {
+    content: "#" attr(data-id);
+    float: right; margin-right: 1em;
+    
+    font-size: 80%;
+    color: hsl(230, 45%, 65%);
+}
+
+.tabs {
+	list-style-type: none;
+	margin: 0; padding: 0;
+	
+	display: flex;
+	flex-direction: row;
+}
+.tabs li {
+	flex: 1;
+	
+	text-align: center;
+	font-size: 120%;
+}
+.tabs li a {
+	display: inline-block; width: 100%;
+	box-sizing: border-box;
+	padding: 0.45em;
+	
+	opacity: 0.5;
+	background: hsla(252, 82%, 66%, 0.53);
+	border-bottom: 0;
+	border-radius: 0.25em 0.25em 0 0;
+	
+	color: hsl(252, 100%, 59%);
+	text-decoration: none;
+}
+.tabs li a.selected { opacity: 1; }
+
+/* Default */
+.tab-content { display: none; }
+/* Override if target is set */
+.tab-content:target { display: block !important; }
+
+.device-data {
+    display: flex;
+    flex-direction: row;
+}
+
+.device-property-table {
+    border-collapse: collapse;
+}
+.device-property-table tr:nth-child(odd) {
+    background: hsla(222, 100%, 70%, 0.25);
+}
+.device-property-table th {
+    padding-right: 2em;
+}
+.device-property-table td:nth-child(2) {
+    border-left: 0.2em solid hsl(222, 100%, 59%);
+    padding-left: 0.5em;
+}
+
+.reading-types {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+}
