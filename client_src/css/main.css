@@ -52,6 +52,7 @@ main {
     z-index: 100 !important;
 }
 
+button { cursor: pointer; }
 button.selected {
     font-weight: bolder;
 }

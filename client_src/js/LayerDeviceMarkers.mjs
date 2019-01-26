@@ -84,6 +84,9 @@ class LayerDeviceMarkers {
 		
 		// ----------------------------------
 		
+		// Select a tab by default
+		window.location = "#tab-data";
+		
 		result.appendChild(CreateElement("ul.tabs"));
 		let tabs = result.querySelector(".tabs");
 		tabs.innerHTML = `<li><a href="#tab-info">Info</a></li>

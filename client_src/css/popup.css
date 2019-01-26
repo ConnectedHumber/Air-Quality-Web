@@ -15,11 +15,15 @@ h2.device-name { text-align: center; }
 	list-style-type: none;
 	margin: 0; padding: 0;
 	
+	min-width: 40em;
+	
 	display: flex;
 	flex-direction: row;
 }
 .tabs li {
 	flex: 1;
+	
+	padding: 0 0.25em;
 	
 	text-align: center;
 	font-size: 120%;
@@ -31,8 +35,7 @@ h2.device-name { text-align: center; }
 	
 	opacity: 0.5;
 	background: hsla(252, 82%, 66%, 0.53);
-	border-bottom: 0;
-	border-radius: 0.25em 0.25em 0 0;
+	border-radius: 0.25em;
 	
 	color: hsl(252, 100%, 59%);
 	text-decoration: none;
@@ -45,9 +48,13 @@ h2.device-name { text-align: center; }
 .tab-content:target { display: block !important; }
 
 .device-data {
-    display: flex;
-    flex-direction: row;
+	display: flex; justify-content: center;
+	
+    min-height: 20em;
+	padding-top: 1em;
 }
+
+.device-params { margin: 0 auto; }
 
 .device-property-table {
     border-collapse: collapse;
@@ -64,7 +71,18 @@ h2.device-name { text-align: center; }
 }
 
 .reading-types {
+	list-style-type: none;
+	padding: 0;
+	
     display: flex;
     flex-direction: row;
-    list-style-type: none;
+}
+.reading-types button {
+	margin: 0.25em;
+	
+	background: hsla(252, 82%, 66%, 0.53);
+	border-radius: 0.25em;
+	border: none;
+	
+	color: hsl(252, 100%, 59%);
 }
