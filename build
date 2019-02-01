@@ -94,7 +94,7 @@ function task_setup-dev {
 
 function task_database {
 	task_begin "Connecting to the database";
-	
+	set-title "Database";
 	ssh -TN "${database_host}" -L 3306:localhost:3306 &
 	ssh_pid=$!;
 	sleep 1;
@@ -143,6 +143,8 @@ function task_client {
 }
 
 function task_client-watch {
+	set-title "Client Watcher";
+	
 	echo -e "Watching for changes.";
 	while :; do # : = infinite loop
 		# Wait for an update
