@@ -47,14 +47,9 @@ h2.device-name { text-align: center; }
 	color: hsl(252, 100%, 59%);
 	text-decoration: none;
 }
-.tabs li.active a { opacity: 1; }
+.tabs li a.active { opacity: 1; }
 
-/* Default */
-.tab-content { display: none; }
-/* Override if target is set */
-.tab-content:target { display: block !important; }
-
-.device-data {
+.tab-panes {
 	display: flex; justify-content: center;
 	
 	min-height: 20em;
