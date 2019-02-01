@@ -46,6 +46,13 @@ class UI {
 			},
 			{
 				type: "button",
+				name: "Report bug",
+				callback: ((_event) => {
+					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/issues/new", "_blank");
+				})
+			},
+			{
+				type: "button",
 				name: `${Config.version}, built ${Config.build_date.toDateString()}`,
 				callback: (async (_event) => {
 					NanoModal(
