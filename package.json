@@ -25,7 +25,8 @@
     "leaflet.markercluster": "^1.4.1",
     "moment": "^2.23.0",
     "nanomodal": "^5.1.1",
-    "smartsettings": "^1.2.3"
+    "smartsettings": "^1.2.3",
+    "tabs": "^0.2.0"
   },
   "devDependencies": {
     "@types/chart.js": "^2.7.42",

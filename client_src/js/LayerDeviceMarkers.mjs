@@ -5,6 +5,7 @@ import 'leaflet.markercluster';
 // import CreateElement from 'dom-create-element-query-selector';
 // We're using the git repo for now until an update is released, and rollup doesn't like that apparently
 import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
+import tabs from 'tabs';
 
 import Config from './Config.mjs';
 import DeviceReadingDisplay from './DeviceReadingDisplay.mjs';
@@ -87,22 +88,21 @@ class LayerDeviceMarkers {
 		// Select a tab by default
 		window.location = "#tab-data";
 		
-		result.appendChild(CreateElement("ul.tabs"));
-		let tabs = result.querySelector(".tabs");
-		tabs.innerHTML = `<li><a href="#tab-info">Info</a></li>
-		<li><a href="#tab-data">Data</a></li>`;
-		tabs.addEventListener("click", (event) => {
-			tabs.querySelectorAll("a").forEach((el) => el.classList.remove("selected"));
-			event.target.classList.add("selected");
-		})
+		let tabContainer = CreateElement("div.tab-container",
+			CreateElement("ul.tabs",
+				CreateElement("li", CreateElement("a.tab.active", "Info")),
+				CreateElement("li", CreateElement("a.tab", "Data"))
+			),
+			CreateElement("div.tab-panes",
+				CreateElement("div.device-params.tab-pane.active")
+				// The tab pane for the graph is added dynamically below
+			)
+		);
+		result.appendChild(tabContainer);
 		
 		// ----------------------------------
 		
-		let data_container = CreateElement("div.device-data",
-			CreateElement("div.device-params.tab-content#tab-info")
-		);
-		result.appendChild(data_container);
-		let params_container = data_container.querySelector(".device-params");
+		let params_container = tabContainer.querySelector(".device-params");
 		
 		let info_list = [];
 		for(let property in device_info) {
@@ -114,11 +114,8 @@ class LayerDeviceMarkers {
 			// some property values
 			let value = device_info[property];
 			
-			// Filter out undefined properties
-			if(typeof value == "undefined" || value === null) {
+			if(typeof value == "undefined" || value === null)
 				value = "(not specified)";
-			}
-			
 			
 			// If the value isn't a string, but is still 'truthy'
 			if(typeof value != "string") {
@@ -126,9 +123,7 @@ class LayerDeviceMarkers {
 					case "location":
 						value = `(${value[0]}, ${value[1]})`;
 						break;
-					default:
-						value = value.toString();
-						break;
+					default: value = value.toString(); break;
 				}
 			}
 			
@@ -138,7 +133,9 @@ class LayerDeviceMarkers {
 				CreateElement("td.value", value)
 			));
 		}
-		params_container.appendChild(CreateElement("table.device-property-table", ...info_list));
+		params_container.appendChild(
+			CreateElement("table.device-property-table", ...info_list)
+		);
 		
 		params_container.appendChild(CreateElement("p.device-notes",
 			CreateElement("em", device_info.other || "")
@@ -146,14 +143,15 @@ class LayerDeviceMarkers {
 		
 		// ----------------------------------
 		
-		// TODO: Allow the user to change the reading type
 		let chart_device_data = new DeviceReadingDisplay(Config, device_info.id);
 		chart_device_data.setup("PM25").then(() => 
 			console.info("[layer/markers] Device chart setup complete!")
 		);
-		chart_device_data.display.classList.add("tab-content");
-		chart_device_data.display.setAttribute("id", "tab-data");
-		data_container.appendChild(chart_device_data.display);
+		chart_device_data.display.classList.add("tab-pane");
+		tabContainer.querySelector(".tab-panes").appendChild(chart_device_data.display);
+		
+		
+		tabs(tabContainer);
 		
 		// ----------------------------------
 		
