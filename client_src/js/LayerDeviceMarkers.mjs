@@ -90,11 +90,11 @@ class LayerDeviceMarkers {
 		
 		let tabContainer = CreateElement("div.tab-container",
 			CreateElement("ul.tabs",
-				CreateElement("li", CreateElement("a.tab.active", "Info")),
-				CreateElement("li", CreateElement("a.tab", "Data"))
+				CreateElement("li", CreateElement("a.tab", "Info")),
+				CreateElement("li", CreateElement("a.tab.active", "Data"))
 			),
 			CreateElement("div.tab-panes",
-				CreateElement("div.device-params.tab-pane.active")
+				CreateElement("div.device-params.tab-pane")
 				// The tab pane for the graph is added dynamically below
 			)
 		);
@@ -147,7 +147,7 @@ class LayerDeviceMarkers {
 		chart_device_data.setup("PM25").then(() => 
 			console.info("[layer/markers] Device chart setup complete!")
 		);
-		chart_device_data.display.classList.add("tab-pane");
+		chart_device_data.display.classList.add("tab-pane", "active");
 		tabContainer.querySelector(".tab-panes").appendChild(chart_device_data.display);
 		
 		
