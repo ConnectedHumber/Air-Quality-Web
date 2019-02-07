@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.3.1 - 7th February 2019
+ - [API] Added `device-id` parameter to the `list-reading-types` action.
+
 ## v0.3.0 - 1st February 2019
  - Installed a library to fix bugs in the device marker tabbing system
  - Add _rudimentary_ mobile device support. Note that this is not a priority until the design of the interface for desktop has been worked out.
