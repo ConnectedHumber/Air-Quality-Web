@@ -117,6 +117,15 @@ Parameter			| Type		| Meaning
 `end`				| datetime  | The ending datetime.
 `average-seconds`	| int		| Optional. If specified, readings will be grouped into lumps of this many seconds and averaged. For example a value of 3600 (1 hour) will return 1 data point per hour, with the value of each point an average of all the readings for that hour.
 
+### changelog
+> Gets the changelog as a fragment of HTML.
+
+_No parameters are currently supported by this action._
+
+```
+https://example.com/path/to/api.php?action=changelog
+```
+
 
 ## Notes
  - Readings are taken every 6 minutes as standard.
