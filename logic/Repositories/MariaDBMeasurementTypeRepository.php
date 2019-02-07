@@ -19,12 +19,16 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 	 */
 	private $database;
 	
-	/** Function that gets a static variable by it's name. Useful in preparing SQL queries. */
+	/** Functions that get a static variable by it's name. Useful in preparing SQL queries. */
 	private $get_static;
+	private $get_static_extra;
 	
 	function __construct(\AirQuality\Database $in_database) {
 		$this->database = $in_database;
 		$this->get_static = function($name) { return self::$$name; };
+		$this->get_static_extra = function($class_name, $name) {
+			return $class_name::$$name;
+		};
 	}
 	
 	public function is_valid_type(string $type_name) : bool {
@@ -48,6 +52,25 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 		$s = $this->get_static;
 		return $this->database->query(
 			"SELECT * FROM {$s("table_name")}"
+		)->fetchAll();
+	}
+	
+	public function get_types_by_device($device_id) {
+		$s = $this->get_static;
+		$o = $this->get_static_extra;
+		return $this->database->query(
+			"SELECT
+				{$s("table_name")}.*,
+				COUNT({$s("table_name")}.{$s("column_id")}) AS count
+			FROM {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}
+			JOIN {$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")} ON
+				{$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_id")} = {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}.{$o(MariaDBMeasurementDataRepository::class, "column_values_reading_id")}
+			JOIN {$s("table_name")} ON
+				{$s("table_name")}.{$s("column_id")} = {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}.{$o(MariaDBMeasurementDataRepository::class, "column_values_reading_type")}
+			WHERE {$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_device_id")} = :device_id
+			GROUP BY {$s("table_name")}.{$s("column_id")};", [
+				"device_id" => $device_id
+			]
 		)->fetchAll();
 	}
 }

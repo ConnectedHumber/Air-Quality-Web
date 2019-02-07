@@ -87,10 +87,14 @@ Examples:
 ### list-reading-types
 > Lists the different types of readings that can be specified.
 
-_No parameters are currently supported by this action._
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`device-id`         | int		| Optional. If specified, this filters the list of measurement types to list only those reported by the device with the specified id.
 
 ```
 https://example.com/path/to/api.php?action=list-reading-types
+https://example.com/path/to/api.php?action=list-reading-types&device-id=22
+https://example.com/path/to/api.php?action=list-reading-types&device-id=54
 ```
 
 

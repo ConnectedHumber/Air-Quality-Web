@@ -32,9 +32,14 @@ class ListReadingTypes implements IAction {
 		$start_handle = microtime(true);
 		
 		// 1: Parse & validate parameters
+		$device_id = !empty($_GET["device-id"]) ? intval($_GET["device-id"]) : null;
 		
 		// 1: Pull data from database
-		$data = $this->types_repo->get_all_types();
+		$data = null;
+		if(!is_int($device_id))
+			$data = $this->types_repo->get_all_types();
+		else
+			$data = $this->types_repo->get_types_by_device($device_id);
 		
 		// 1.5: Validate data from database
 		if(empty($data)) {

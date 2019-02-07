@@ -22,4 +22,10 @@ interface IMeasurementTypeRepository {
 	 * @return	array	All the measurement types currently known.
 	 */
     public function get_all_types();
+	
+	/**
+	 * Gets the all the measurement types ever reported by a given device id.
+	 * @return	string[]	A list of device ids.
+	 */
+	public function get_types_by_device(int $device_id);
 }
