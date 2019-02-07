@@ -1,7 +1,10 @@
 # Changelog
 
 ## v0.3.1 - 7th February 2019
- - [API] Added `device-id` parameter to the `list-reading-types` action.
+ - Hidden measurement types in the device graph if a device hasn't reported any readings of that type
+
+### API Backend
+ - Added `device-id` parameter to the `list-reading-types` action.
 
 ## v0.3.0 - 1st February 2019
  - Installed a library to fix bugs in the device marker tabbing system

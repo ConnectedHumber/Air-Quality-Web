@@ -153,7 +153,7 @@ class DeviceReadingDisplay {
 	}
 	
 	async fetch_reading_types() {
-		this.reading_types = JSON.parse(await GetFromUrl(`${this.config.api_root}?action=list-reading-types`));
+		this.reading_types = JSON.parse(await GetFromUrl(`${this.config.api_root}?action=list-reading-types&device-id=${this.device_id}`));
 	}
 	
 	async switch_graph_type_handler(event) {
