@@ -2,6 +2,7 @@
 
 ## v0.3.2 - 10th February 2019
  - Bugfix: Default to something sensible when opening the device graph in certain cases
+ - Add new quick time buttons below device graph to change displayed time window
 
 ## v0.3.1 - 7th February 2019
  - Hidden measurement types in the device graph if a device hasn't reported any readings of that type
