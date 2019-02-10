@@ -68,6 +68,9 @@ class DeviceReadingDisplay {
 		
 		await this.fetch_reading_types();
 		this.reading_type = this.reading_types.find((type) => type.id == default_reading_type);
+		// Default to the 1st reading type if we can't find the default
+		if(typeof this.reading_type == "undefined")
+			this.reading_type = this.reading_types[0].id;
 		
 		// Create the reading type buttons
 		let reading_type_list = this.display.querySelector(".reading-types");
