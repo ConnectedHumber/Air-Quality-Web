@@ -57,3 +57,5 @@ button, a { cursor: pointer; }
 button.selected {
     font-weight: bolder;
 }
+
+.working { cursor: progress; }

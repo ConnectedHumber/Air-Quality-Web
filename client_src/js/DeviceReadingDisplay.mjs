@@ -10,6 +10,7 @@ import moment from 'moment';
 import Chart from '../../node_modules/chart.js/dist/Chart.bundle.min.js';
 
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
+import GetContainingElement from './Helpers/GetContainingElement.mjs';
 import Postify from './Helpers/Postify.mjs';
 
 
@@ -68,7 +69,7 @@ class DeviceReadingDisplay {
 		// Create the display element first, as we need it to be immediately available for inclusion in the popup window
 		
 		/** @type {HTMLElement} */
-		this.display = CreateElement("div.chart-device-data",
+		this.display = CreateElement("div.chart-device-data.working",
 			CreateElement("canvas.canvas-chart"),
 			CreateElement("ul.reading-types.button-array"),
 			CreateElement("ul.quick-time-selector.button-array",
@@ -111,7 +112,9 @@ class DeviceReadingDisplay {
 		// ----------------------------------------------------
 		
 		// Setup the chart itself
-		this.setup_chart();
+		await this.setup_chart();
+		
+		this.display.classList.remove("working");
 	}
 	
 	async timelength_button_click_handler(event) {
@@ -125,16 +128,20 @@ class DeviceReadingDisplay {
 		this.start_time = moment().subtract(time_length, time_unit);
 		this.end_time = moment();
 		
+		let popup_container = GetContainingElement(event.target, "div");
 		
+		popup_container.classList.add("working");
 		
 		await this.update_chart();
 		
 		// Show the new button to be selected
 		this.display.querySelectorAll(".quick-time-selector button").forEach((button) => button.classList.remove("selected"));
 		event.target.classList.add("selected");
+		
+		popup_container.classList.remove("working");
 	}
 	
-	setup_chart() {
+	async setup_chart() {
 		this.chart = new Chart(this.display.querySelector("canvas").getContext("2d"), {
 			type: "line",
 			data: {
@@ -167,7 +174,7 @@ class DeviceReadingDisplay {
 			}
 		});
 		
-		this.update_chart();
+		await this.update_chart();
 	}
 	
 	async get_data() {
@@ -210,6 +217,9 @@ class DeviceReadingDisplay {
 		
 		console.log("[marker/device-graph] Reading type is now", this.reading_type);
 		
+		let popup_container = GetContainingElement(event.target, "div");
+		popup_container.classList.add("working");
+		
 		// Update the button list to highlight the newly-selected reading type, but only if we managed to update the chart successfully
 		if(await this.update_chart()) {
 			// Remove the selected class from the old one(s?)
@@ -219,6 +229,8 @@ class DeviceReadingDisplay {
 			// Add the selected class to the new one
 			event.target.classList.add("selected");
 		}
+		
+		popup_container.classList.remove("working");
 	}
 	
 	async update_chart() {
