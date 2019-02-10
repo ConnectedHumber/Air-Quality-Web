@@ -21,6 +21,13 @@ class DeviceReadingDisplay {
 		/** The current reading type to display a graph for. @type {Object} */
 		this.reading_type = null;
 		
+		// The number of points to display at a time.
+		this.points_resolution = 50;
+		
+		this.start_time = moment().subtract(1, "days");
+		this.end_time = moment();
+		
+		
 		this.default_colours = {
 			borderColor: "hsla(0, 0%, 50%, 1)",
 			backgroundColor: "hsla(0, 0%, 65%, 0.5)"
@@ -54,7 +61,7 @@ class DeviceReadingDisplay {
 				borderColor: "hsla(258, 67%, 40%, 1)",
 				backgroundColor: "hsla(249, 56%, 40%, 0.66)"
 			}
-		}
+		};
 	}
 	
 	async setup(default_reading_type) {
@@ -63,8 +70,18 @@ class DeviceReadingDisplay {
 		/** @type {HTMLElement} */
 		this.display = CreateElement("div.chart-device-data",
 			CreateElement("canvas.canvas-chart"),
-			CreateElement("ul.reading-types")
+			CreateElement("ul.reading-types.button-array"),
+			CreateElement("ul.quick-time-selector.button-array",
+				CreateElement("li", CreateElement("button[data-timelength=1h]", "1 hour")),
+				CreateElement("li", CreateElement("button[data-timelength=6h]", "6 hours")),
+				CreateElement("li", CreateElement("button[data-timelength=1d].selected", "1 day")),
+				CreateElement("li", CreateElement("button[data-timelength=1w]", "1 week")),
+				CreateElement("li", CreateElement("button[data-timelength=1M]", "1 month")),
+				CreateElement("li", CreateElement("button[data-timelength=3M]", "3 months")),
+				CreateElement("li", CreateElement("button[data-timelength=1y]", "1 year"))
+			)
 		);
+		
 		
 		await this.fetch_reading_types();
 		this.reading_type = this.reading_types.find((type) => type.id == default_reading_type);
@@ -87,10 +104,34 @@ class DeviceReadingDisplay {
 			reading_type_list.appendChild(new_element);
 		}
 		
+		this.display.querySelector(".quick-time-selector")
+			.addEventListener("click", (this.timelength_button_click_handler).bind(this));
+		
+		
 		// ----------------------------------------------------
 		
 		// Setup the chart itself
 		this.setup_chart();
+	}
+	
+	async timelength_button_click_handler(event) {
+		let timelength = event.target.dataset.timelength;
+		if(typeof timelength == "undefined")
+			return;
+		
+		let time_unit = timelength.replace(/[0-9]+/g, "");
+		let time_length = timelength.replace(/[^0-9]+/g, "");
+		
+		this.start_time = moment().subtract(time_length, time_unit);
+		this.end_time = moment();
+		
+		
+		
+		await this.update_chart();
+		
+		// Show the new button to be selected
+		this.display.querySelectorAll(".quick-time-selector button").forEach((button) => button.classList.remove("selected"));
+		event.target.classList.add("selected");
 	}
 	
 	setup_chart() {
@@ -131,14 +172,17 @@ class DeviceReadingDisplay {
 	
 	async get_data() {
 		let new_data = null;
+		// Dividing by 1000: ms -> s
+		let average_seconds = (this.end_time.diff(this.start_time) / 1000) / this.points_resolution;
+		console.info("Requesting data with start", this.start_time.toString(), ", end", this.end_time.toString(), ", average-seconds", average_seconds);
 		try {
 			new_data = JSON.parse(await GetFromUrl(`${this.config.api_root}?` + Postify({
 				action: "device-data",
 				"device-id": this.device_id,
 				"reading-type": this.reading_type.id,
-				start: moment().subtract(1, "days").toISOString(),
-				end: moment().toISOString(),
-				"average-seconds": 3600
+				start: this.start_time.toISOString(),
+				end: this.end_time.toISOString(),
+				"average-seconds": average_seconds
 			})));
 		} catch(error) {
 			// TODO: Display a nice error message here instead of an alert()
@@ -148,6 +192,7 @@ class DeviceReadingDisplay {
 		}
 		
 		console.log("[marker/popup/device-graph] Fetched data:", new_data);
+		console.log("[marker/popup/device-graph] Point count:", new_data.length);
 		
 		return new_data.map((data_point) => { return {
 			t: moment(data_point.datetime),
