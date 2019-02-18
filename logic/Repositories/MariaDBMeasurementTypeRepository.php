@@ -9,6 +9,7 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 	public static $table_name = "reading_value_types";
 	
 	public static $column_id = "id";
+	public static $column_short_description = "short_descr";
 	public static $column_friendly_text = "friendly_text";
 	
 	// ------------------------------------------------------------------------
@@ -31,19 +32,37 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 		};
 	}
 	
-	public function is_valid_type(string $type_name) : bool {
+	public function is_valid_type(int $id) : bool {
 		$s = $this->get_static;
 		return !empty($this->database->query(
-			"SELECT {$s("column_id")} FROM {$s("table_name")};"
+			"SELECT {$s("column_id")} FROM {$s("table_name")} WHERE {$s("column_id")} = :id;", [
+				"id" => $id
+			]
 		)->fetchColumn());
 	}
-	public function get_friendly_name(string $type_name) : string {
+	
+	public function get_id(string $short_descr) : int {
+		$s = $this->get_static;
+		
+		$result = $this->database->query(
+			"SELECT {$s("column_id")} FROM {$s("table_name")} WHERE {$s("column_short_description")} = :short_descr", [
+				"short_descr" => $short_descr
+			]
+		)->fetchColumn();
+		
+		if($result == false)
+			return null;
+		
+		return $result;
+	}
+	
+	public function get_friendly_name(int $id) : string {
 		// TODO: Cache results here? Maybe https://packagist.org/packages/thumbtack/querycache will be of some use
 		
 		$s = $this->get_static;
 		return $this->database->query(
-			"SELECT {$s("column_friendly_text")} FROM {$s("table_name")} WHERE $this->column_id = :type_name;", [
-				"type_name" => $type_name
+			"SELECT {$s("column_friendly_text")} FROM {$s("table_name")} WHERE $this->column_id = :id;", [
+				"id" => $id
 			]
 		)->fetchColumn();
 	}

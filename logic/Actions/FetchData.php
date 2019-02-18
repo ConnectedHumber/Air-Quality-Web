@@ -49,7 +49,9 @@ class FetchData implements IAction {
 		$this->validator->is_max_length("reading_type", 256);
 		$this->validator->run();
 		
-		if(!$this->type_repo->is_valid_type($_GET["reading_type"])) {
+		$measurement_type_id = $this->type_repo->get_id($_GET["reading_type"]);
+		
+		if($measurement_type_id == null) {
 			$this->sender->send_error_plain(
 				400, "Error: That reading type is invalid.", [
 					[ "x-time-taken", PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
