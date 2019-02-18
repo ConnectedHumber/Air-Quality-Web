@@ -49,7 +49,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 		};
 	}
 	
-	public function get_readings_by_date(\DateTime $datetime, string $reading_type) {
+	public function get_readings_by_date(\DateTime $datetime, int $type_id) {
 		$s = $this->get_static;
 		$o = $this->get_static_extra;
 		return $this->database->query(
@@ -88,7 +88,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				", [
 				// The database likes strings, not PHP DateTime() instances
 				"datetime" => $datetime->format(\DateTime::ISO8601),
-				"reading_type" => $reading_type,
+				"reading_type" => $type_id,
 				"max_reading_timediff" => $this->settings->get("data.max_reading_timediff")
 			]
 		)->fetchAll();
@@ -113,7 +113,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 		)->fetch();
 	}
 	
-	public function get_readings_by_device(int $device_id, string $reading_type, \DateTime $start, \DateTime $end, int $average_seconds = 1) {
+	public function get_readings_by_device(int $device_id, int $type_id, \DateTime $start, \DateTime $end, int $average_seconds = 1) {
 		if($average_seconds < 1)
 			throw new Exception("Error: average_seconds must be greater than 1, but '$average_seconds' was specified.");
 		$s = $this->get_static;
@@ -146,7 +146,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
 			)) / :average_seconds);", [
 				"device_id" => $device_id,
-				"reading_type" => $reading_type,
+				"reading_type" => $type_id,
 				"start_datetime" => $start->format(\DateTime::ISO8601),
 				"end_datetime" => $end->format(\DateTime::ISO8601),
 				"average_seconds" => $average_seconds

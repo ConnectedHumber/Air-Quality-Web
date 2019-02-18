@@ -63,7 +63,7 @@ class FetchData implements IAction {
 		// 2: Pull data from database
 		$data = $this->measurement_repo->get_readings_by_date(
 			new \DateTime($_GET["datetime"]),
-			$_GET["reading_type"]
+			$measurement_type_id
 		);
 		
 		// 2.5: Validate data from database
