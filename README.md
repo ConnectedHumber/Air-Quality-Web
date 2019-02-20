@@ -27,7 +27,9 @@ The client-side code requires building. Currently, no pre-built versions are ava
 ### Building From Source
 The build script ensures that everything it does will not go outside the current directory (i.e. all dependencies are installed locally).
 
-To build from source, start off by running the `setup` and `setup-dev` build commands like this:
+To build from source, start off by cloning this repository.
+
+Then run the `setup` and `setup-dev` build commands from the root of the repository like this:
 
 ```bash
 ./build setup setup-dev
