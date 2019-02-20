@@ -193,7 +193,10 @@ class DeviceReadingDisplay {
 			})));
 		} catch(error) {
 			// TODO: Display a nice error message here instead of an alert()
-			alert(error);
+			// Wrap it in an Error instance if needed
+			if(typeof error == "string")
+				error = new Error(error.length == 0 ? "An unknown error has ocurred. It's probably on the server." : error);
+			alert(error.message);
 			console.error(error);
 			return null;
 		}
