@@ -16,10 +16,16 @@ lantern_path="./lantern-build-engine";
 ###
 
 # Put any custom settings here.
+
+# Client-side build output
 build_output_folder="./app";
 
+# Database settings for ssh port forwarding task
 database_host="db.connectedhumber.org";
 database_name="aq_db";
+
+# Minimum major version of npm
+min_npm_version_major="6";
 
 ###############################################################################
 
@@ -60,6 +66,11 @@ function task_setup {
 	check_command node true;
 	check_command composer true;
 	check_command npm true;
+	
+	npm_version_major="$(npm --version | head -c 1)";
+	if [[ "${npm_version_major}" -lt "${min_npm_version_major}" ]]; then
+		echo "${FRED}${HC}Error: Your version of npm is too far out of date. You're running version $(npm --version), but version 6+ is required.";
+	fi
 	task_end $?;
 	
 	task_begin "Initialising submodules";
