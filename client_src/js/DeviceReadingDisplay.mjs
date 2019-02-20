@@ -249,7 +249,7 @@ class DeviceReadingDisplay {
 		if(new_data_obj.data == null) return false;
 		
 		// Update the colour & suggested min/max values
-		let def = this.reading_type_defs[this.reading_type.id],
+		let def = this.reading_type_defs[this.reading_type.short_descr],
 			y_axis = this.chart.options.scales.yAxes[0];
 		if(typeof def !== "undefined") {
 			new_data_obj.borderColor = def.borderColor;
