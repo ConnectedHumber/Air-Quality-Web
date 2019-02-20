@@ -41,7 +41,7 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 		)->fetchColumn());
 	}
 	
-	public function get_id(string $short_descr) : int {
+	public function get_id(string $short_descr) {
 		$s = $this->get_static;
 		
 		$result = $this->database->query(

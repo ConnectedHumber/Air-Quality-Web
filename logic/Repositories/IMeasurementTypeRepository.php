@@ -13,9 +13,9 @@ interface IMeasurementTypeRepository {
 	/**
 	 * Get the id associated with the given short description.
 	 * @param	string	$short_descr	The short description to convert.
-	 * @return	int		The id associated with the specified short description.
+	 * @return	int|null				The id associated with the specified short description.
 	 */
-	public function get_id(string $short_descr) : int;
+	public function get_id(string $short_descr);
 	
 	/**
 	 * Gets the friendly name for the specified type name.

@@ -69,7 +69,9 @@ class DeviceData implements IAction {
 			return false;
 		}
 		
-		if(!$this->type_repo->is_valid_type($_GET["reading-type"])) {
+		$reading_type_id = $this->type_repo->get_id($_GET["reading-type"]);
+		
+		if($reading_type_id == null) {
 			$this->sender->send_error_plain(
 				400, "Error: That reading type is invalid.", [
 					[ "x-time-taken", PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
@@ -81,7 +83,7 @@ class DeviceData implements IAction {
 		// 2: Pull data from database
 		$data = $this->measurement_repo->get_readings_by_device(
 			intval($_GET["device-id"]),
-			$_GET["reading-type"],
+			$reading_type_id,
 			new \DateTime($_GET["start"]),
 			new \DateTime($_GET["end"]),
 			!empty($_GET["average-seconds"]) ? intval($_GET["average-seconds"]) : 1
