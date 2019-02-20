@@ -43,6 +43,15 @@ This will initialise any git submodules and install both the server-side and cli
 
 For development purposes, the `client-watch` command is available.
 
+In production, you probably want to do this instead:
+
+```bash
+NODE_ENV=production ./build client
+```
+
+This will take longer, as it causes the build system to additionally minify the client code, saving a significant amount of bandwidth and speeding up loading times.
+
+
 ### Configuration
 Some configuration must be done before the application is ready for use. The first time `api.php` is called from a browser, it will create a new blank configuration file at `data/settings.toml`, if it doesn't already exist. See the `settings.default.toml` file in this repository for a list of configurable settings, but do **not** edit `settings.default.toml`! Instead, enter your configuration details into `data/settings.toml`, which overrides `settings.default.toml`. In particular, you'll probably want to change the settings under the `[database]` header - but ensure you give the entire file a careful read.
 
