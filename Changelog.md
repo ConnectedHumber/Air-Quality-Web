@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.3.3 - 20th February 2019
+ - Updated to use new database structure
+
 ## v0.3.2 - 10th February 2019
  - Bugfix: Default to something sensible when opening the device graph in certain cases
  - Add new quick time buttons below device graph to change displayed time window

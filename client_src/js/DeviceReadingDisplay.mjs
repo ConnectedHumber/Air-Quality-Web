@@ -196,6 +196,7 @@ class DeviceReadingDisplay {
 			// Wrap it in an Error instance if needed
 			if(typeof error == "string")
 				error = new Error(error.length == 0 ? "An unknown error has ocurred. It's probably on the server." : error);
+			
 			alert(error.message);
 			console.error(error);
 			return null;
