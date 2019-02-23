@@ -24,6 +24,15 @@ In order to run this program, you'll need the following:
 ## Getting Started
 The client-side code requires building. Currently, no pre-built versions are available (though these can be provided upon request), so this must be done from source. A build script is available, however, which automates the process - as explained below.
 
+### System Requirements
+ - PHP-enabled web server (Nginx is recommended, but Apache works too)
+ - MariaDB database with the appropriate table structure pre-loaded
+ - PHP 7+
+ - Node.JS (preferably 10+) + npm 6+ (for installing & building the client-side app code)
+ - [Composer](https://getcomposer.org/) (for installing server-side dependencies)
+ - PHP modules:
+     - `pdo-mysql` (for the database connection)
+
 ### Building From Source
 The build script ensures that everything it does will not go outside the current directory (i.e. all dependencies are installed locally).
 
