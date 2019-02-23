@@ -62,11 +62,18 @@ This will take longer, as it causes the build system to additionally minify the 
 
 
 ### Configuration
+#### Web server
+Configure your php-enabled web server to:
+ - Serve the root directory of this repository in PHP
+ - Block access to the `data` directory (created on first page load)
+
+#### Application
 Some configuration must be done before the application is ready for use.
 
 The first time `api.php` is called from a browser, it will create a new blank configuration file at `data/settings.toml`, if it doesn't already exist. See the `settings.default.toml` file in this repository for a list of configurable settings, but do **not** edit `settings.default.toml`!
 
 Instead, enter your configuration details into `data/settings.toml`, which overrides `settings.default.toml`. In particular, you'll probably want to change the settings under the `[database]` header - but ensure you give the entire file a careful read.
+
 
 ## API
 The server-side API is accessed through `api.php`, and supports a number of GET parameters. The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
