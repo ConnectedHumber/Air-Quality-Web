@@ -64,8 +64,10 @@ This will take longer, as it causes the build system to additionally minify the 
 ### Configuration
 #### Web server
 Configure your php-enabled web server to:
- - Serve the root directory of this repository in PHP
- - Block access to the `data` directory (created on first page load)
+ - ...serve the root directory of this repository in PHP
+ - ...block access to the `data` directory (created on first page load)
+ - ...be able to write to the repository root (technically only the `data` directory requires write access)
+     - Example: `sudo chown -R www-data:www-data path/to/repository_root`
 
 #### Application
 Some configuration must be done before the application is ready for use.
