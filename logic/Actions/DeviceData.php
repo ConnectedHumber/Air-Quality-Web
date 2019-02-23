@@ -94,7 +94,7 @@ class DeviceData implements IAction {
 			http_response_code(404);
 			header("content-type: text/plain");
 			header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null));
-			echo("Error: No data has been recorded from the device id or it doesn't exist.");
+			echo("Error: No data has been recorded from the device id for that measurement type in the selected time scale or it doesn't exist.");
 			return false;
 		}
 		
