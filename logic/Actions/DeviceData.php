@@ -119,9 +119,8 @@ class DeviceData implements IAction {
 				break;
 			case "csv":
 				$response_type = "text/csv";
-				$response_suggested_filename .= ".json";
+				$response_suggested_filename .= ".csv";
 				$response = ResponseEncoder::encode_csv($data);
-				
 				break;
 		}
 		

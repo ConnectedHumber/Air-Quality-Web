@@ -5,6 +5,7 @@
      - `device-data`
      - `list-devices`
      - `list-reading-types`
+     - `fetch-data`
 
 ## v0.3.3 - 20th February 2019
  - Updated to use new database structure

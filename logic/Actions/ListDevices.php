@@ -66,10 +66,12 @@ class ListDevices implements IAction {
 		switch($format) {
 			case "json":
 				$response_type = "application/json";
+				$response_suggested_filename .= ".json";
 				$response = json_encode($data);
 				break;
 			case "csv":
 				$response_type = "text/csv";
+				$response_suggested_filename .= ".csv";
 				$response = ResponseEncoder::encode_csv($data);
 				break;
 		}

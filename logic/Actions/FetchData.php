@@ -3,6 +3,7 @@
 namespace AirQuality\Actions;
 
 use \SBRL\TomlConfig;
+use \SBRL\ResponseEncoder;
 use \AirQuality\Repositories\IMeasurementDataRepository;
 use \AirQuality\Repositories\IMeasurementTypeRepository;
 use \AirQuality\ApiResponseSender;
@@ -47,8 +48,11 @@ class FetchData implements IAction {
 		$this->validator->is_datetime("datetime");
 		$this->validator->exists("reading_type");
 		$this->validator->is_max_length("reading_type", 256);
+		if(!empty($_GET["format"]))
+			$this->validator->is_preset_value("format", ["json", "csv"], 406);
 		$this->validator->run();
 		
+		$format = $_GET["format"] ?? "json";
 		$measurement_type_id = $this->type_repo->get_id($_GET["reading_type"]);
 		
 		if($measurement_type_id == null) {
@@ -60,24 +64,42 @@ class FetchData implements IAction {
 			return false;
 		}
 		
+		
 		// 2: Pull data from database
 		$data = $this->measurement_repo->get_readings_by_date(
 			new \DateTime($_GET["datetime"]),
 			$measurement_type_id
 		);
 		
+		
 		// 2.5: Validate data from database
 		if(empty($data)) {
-			http_response_code(404);
-			header("content-type: text/plain");
-			header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null));
-			echo("Error: No data could be found for that timestamp.");
+			$this->sender->send_error_plain(404,
+				"Error: No data could be found for that timestamp.",
+				[ PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+			);
 			return false;
 		}
 		
+		
 		// 3: Serialise data
 		$start_encode = microtime(true);
-		$response = json_encode($data);
+		$response_type = "application/octet-stream";
+		$response_suggested_filename = "data-" . date(\DateTime::ATOM) . "";
+		$response = null;
+		switch($format) {
+			case "json":
+				$response_type = "application/json";
+				$response_suggested_filename .= ".json";
+				$response = json_encode($data);
+				break;
+			case "csv":
+				$response_type = "text/csv";
+				$response_suggested_filename .= ".csv";
+				$response = ResponseEncoder::encode_csv($data);
+				break;
+		}
+		
 		
 		// 4: Send response
 		
@@ -86,8 +108,9 @@ class FetchData implements IAction {
 			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age"));
 		}
 		
+		header("content-type: $response_type");
 		header("content-length: " . strlen($response));
-		header("content-type: application/json");
+		header("content-disposition: inline; filename=$response_suggested_filename");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);
 		return true;

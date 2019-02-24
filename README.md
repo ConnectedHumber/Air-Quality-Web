@@ -87,6 +87,7 @@ Parameter			| Type		| Meaning
 --------------------|-----------|---------------------
 `datetime`			| date/time	| Required. Specifies the date and time for which readings are desired.
 `reading_type`		| string	| Required. Specifies the type of reading desired.
+`format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
 Examples:
 
