@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.4 - 24th February 2019 (unreleased)
+## v0.4 - 24th February 2019
  - [API] Added new `format` GET parameter to the following actions:
      - `device-data`
      - `list-devices`
