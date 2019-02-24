@@ -3,6 +3,7 @@
 namespace AirQuality\Actions;
 
 use \SBRL\TomlConfig;
+use \SBRL\ResponseEncoder;
 use \AirQuality\Repositories\IMeasurementDataRepository;
 use \AirQuality\Repositories\IMeasurementTypeRepository;
 use \AirQuality\ApiResponseSender;
@@ -117,17 +118,10 @@ class DeviceData implements IAction {
 				$response = json_encode($data);
 				break;
 			case "csv":
-				$result = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
-				fputcsv($result, array_keys($data[0]));
-				foreach($data as $row)
-					fputcsv($result, array_values($row));
-				rewind($result);
-				
 				$response_type = "text/csv";
 				$response_suggested_filename .= ".json";
-				$response = \stream_get_contents($result);
+				$response = ResponseEncoder::encode_csv($data);
 				
-				fclose($result);
 				break;
 		}
 		
@@ -135,7 +129,7 @@ class DeviceData implements IAction {
 		// 4: Send response
 		header("content-length: " . strlen($response));
 		header("content-type: $response_type");
-		header("content-disposition: inline; filename=data.csv");
+		header("content-disposition: inline; filename=$response_suggested_filename");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);
 		return true;

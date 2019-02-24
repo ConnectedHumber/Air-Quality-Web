@@ -123,6 +123,7 @@ Examples:
 Parameter			| Type		| Meaning
 --------------------|-----------|---------------------
 `device-id`         | int		| Optional. If specified, this filters the list of measurement types to list only those reported by the device with the specified id.
+`format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
 ```
 https://example.com/path/to/api.php?action=list-reading-types
@@ -153,7 +154,7 @@ Parameter			| Type		| Meaning
 `start`				| datetime  | The starting datetime.
 `end`				| datetime  | The ending datetime.
 `average-seconds`	| int		| Optional. If specified, readings will be grouped into lumps of this many seconds and averaged. For example a value of 3600 (1 hour) will return 1 data point per hour, with the value of each point an average of all the readings for that hour.
-`format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`
+`format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
 
 ### changelog
