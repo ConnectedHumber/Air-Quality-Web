@@ -66,6 +66,9 @@ class DeviceReadingDisplay {
 	}
 	
 	async setup(default_reading_type) {
+		// 1: Display window HTML
+		// ----------------------------------------------------
+		
 		// Create the display element first, as we need it to be immediately available for inclusion in the popup window
 		
 		/** @type {HTMLElement} */
@@ -80,12 +83,24 @@ class DeviceReadingDisplay {
 				CreateElement("li", CreateElement("button[data-timelength=1M]", "1 month")),
 				CreateElement("li", CreateElement("button[data-timelength=3M]", "3 months")),
 				CreateElement("li", CreateElement("button[data-timelength=1y]", "1 year"))
+			),
+			CreateElement("ul.adv-time-selector.button-array",
+				CreateElement("li", CreateElement("button.timeinterval.prev[title=Previous Time Interval]", "«")),
+				CreateElement("li", CreateElement("input.time-start-date[type=date]")),
+				CreateElement("li", CreateElement("input.time-start-time[type=time]")),
+				CreateElement("li", "—"),
+				CreateElement("li", CreateElement("input.time-end-date[type=date]")),
+				CreateElement("li", CreateElement("input.time-end-time[type=time]")),
+				CreateElement("li", CreateElement("button.timeinterval.next[title=Next Time Interval]", "»"))
 			)
 		);
 		
 		
-		await this.fetch_reading_types();
-		this.reading_type = this.reading_types.find((type) => type.id == default_reading_type);
+		// 2: Measurement type buttons
+		// ----------------------------------------------------
+		
+		this.reading_types = await this.fetch_reading_types();
+		this.reading_type = this.reading_types.find((type) => type.short_descr == default_reading_type);
 		// Default to the 1st reading type if we can't find the default
 		if(typeof this.reading_type == "undefined")
 			this.reading_type = this.reading_types[0];
@@ -105,16 +120,81 @@ class DeviceReadingDisplay {
 			reading_type_list.appendChild(new_element);
 		}
 		
+		
+		// 2.5: Advanced time picker
+		// ----------------------------------------------------
+		this.set_adv_timepicker_ui(this.start_time, this.end_time);
+		
+		
+		// 3: Event listeners
+		// ----------------------------------------------------
+		
 		this.display.querySelector(".quick-time-selector")
 			.addEventListener("click", (this.timelength_button_click_handler).bind(this));
+		this.display.querySelector(".timeinterval.prev")
+			.addEventListener("click", this.timeinterval_button_click_handler.bind(this));
+		this.display.querySelector(".timeinterval.next")
+			.addEventListener("click", this.timeinterval_button_click_handler.bind(this));
+		
+		this.display.querySelectorAll(".adv-time-selector input").forEach(((el) => {
+			el.addEventListener("input", this.adv_timepicker_ui_click_handler.bind(this));
+		}).bind(this));
 		
 		
+		// 4: Chart and ending tasks
 		// ----------------------------------------------------
 		
 		// Setup the chart itself
 		await this.setup_chart();
 		
 		this.display.classList.remove("working");
+	}
+	
+	/**
+	 * Updates the advanced time picker UI with the specified start and end dates.
+	 * The supplied start & end datetimes should Moment.js instances.
+	 * @param	{moment}	start_time	The start datetime to display.
+	 * @param	{moment}	end_time	The end datetime to display.
+	 */
+	set_adv_timepicker_ui(start_time, end_time) {
+		this.display.querySelector(".time-start-date").value = start_time.format("YYYY-MM-DD");
+		this.display.querySelector(".time-start-time").value = start_time.format("HH:mm");
+		
+		this.display.querySelector(".time-end-date").value = end_time.format("YYYY-MM-DD");
+		this.display.querySelector(".time-end-time").value = end_time.format("HH:mm");
+	}
+	
+	/**
+	 * Handles events from advanced time picker UI elements.
+	 */
+	async adv_timepicker_ui_click_handler() {
+		let el_start_date = this.display.querySelector("input.time-start-date"),
+			el_start_time = this.display.querySelector("input.time-start-time"),
+			el_end_date = this.display.querySelector("input.time-end-date"),
+			el_end_time = this.display.querySelector("input.time-end-time");
+		
+		this.start_time = moment(`${el_start_date.value} ${el_start_time.value}`);
+		this.end_time = moment(`${el_end_date.value} ${el_end_time.value}`);
+		
+		await this.update_chart();
+	}
+	
+	async timeinterval_button_click_handler(event) {
+		let diff_seconds = this.end_time.diff(this.start_time) / 1000;
+		if(event.target.classList.contains("prev")) {
+			this.start_time.subtract(diff_seconds, "seconds");
+			this.end_time.subtract(diff_seconds, "seconds");
+		}
+		else if(event.target.classList.contains("next")) {
+			this.start_time.add(diff_seconds, "seconds");
+			this.end_time.add(diff_seconds, "seconds");
+		}
+		else {
+			throw new Error("Error: Failed to adjust time interval, as we couldn't tell which direction to go in.");
+		}
+		
+		this.set_adv_timepicker_ui(this.start_time, this.end_time);
+		await this.update_chart();
 	}
 	
 	async timelength_button_click_handler(event) {
@@ -127,6 +207,8 @@ class DeviceReadingDisplay {
 		
 		this.start_time = moment().subtract(time_length, time_unit);
 		this.end_time = moment();
+		
+		this.set_adv_timepicker_ui(this.start_time, this.end_time);
 		
 		let popup_container = GetContainingElement(event.target, "div");
 		
@@ -212,7 +294,7 @@ class DeviceReadingDisplay {
 	}
 	
 	async fetch_reading_types() {
-		this.reading_types = JSON.parse(await GetFromUrl(`${this.config.api_root}?action=list-reading-types&device-id=${this.device_id}`));
+		return JSON.parse(await GetFromUrl(`${this.config.api_root}?action=list-reading-types&device-id=${this.device_id}`));
 	}
 	
 	async switch_graph_type_handler(event) {

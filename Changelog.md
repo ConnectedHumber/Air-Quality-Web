@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5 - 24th February 2019
+ - Add advanced date/time picker interface to the device graph.
+
 ## v0.4 - 24th February 2019
  - [API] Added new `format` GET parameter to the following actions:
      - `device-data`
