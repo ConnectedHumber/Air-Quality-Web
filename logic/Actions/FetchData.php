@@ -104,7 +104,7 @@ class FetchData implements IAction {
 		// 4: Send response
 		
 		// Send a cache-control header, but only in production mode
-		if($this->settings->get("env.mode") == "production") {
+		if($this->settings->get("env.mode") == "production" && $_GET["datetime"] !== "now") {
 			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age"));
 		}
 		
