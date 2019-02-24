@@ -49,7 +49,13 @@ class DeviceData implements IAction {
 		$this->validator->is_max_length("reading-type", 256);
 		$this->validator->is_datetime("start");
 		$this->validator->is_datetime("end");
+		if(!empty($_GET["format"]))
+			$this->validator->is_preset_value("format", ["json", "csv"], 406);
+		
 		$this->validator->run();
+		
+		$format = $_GET["format"] ?? "json";
+		
 		
 		if(new \DateTime($_GET["start"]) > new \DateTime($_GET["end"])) {
 			$this->sender->send_error_plain(
@@ -101,12 +107,35 @@ class DeviceData implements IAction {
 		
 		// 3: Serialise data
 		$start_encode = microtime(true);
-		$response = json_encode($data);
+		$response_type = "application/octet-stream";
+		$response_suggested_filename = "data-" . date(\DateTime::ATOM) . "";
+		$response = null;
+		switch($format) {
+			case "json":
+				$response_type = "application/json";
+				$response_suggested_filename .= ".json";
+				$response = json_encode($data);
+				break;
+			case "csv":
+				$result = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
+				fputcsv($result, array_keys($data[0]));
+				foreach($data as $row)
+					fputcsv($result, array_values($row));
+				rewind($result);
+				
+				$response_type = "text/csv";
+				$response_suggested_filename .= ".json";
+				$response = \stream_get_contents($result);
+				
+				fclose($result);
+				break;
+		}
 		
 		
 		// 4: Send response
 		header("content-length: " . strlen($response));
-		header("content-type: application/json");
+		header("content-type: $response_type");
+		header("content-disposition: inline; filename=data.csv");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);
 		return true;

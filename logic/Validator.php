@@ -42,6 +42,16 @@ class Validator {
 			"Error: The field $key is too long - it must be a maximum of $max_length characters."
 		);
 	}
+	public function is_preset_value(string $key, array $values, int $error_code) {
+		$this->add_test(
+			$key,
+			function($data) use ($values) {
+				return in_array($data, $values);
+			},
+			$error_code,
+			"Error: The value for the field $key is not valid. Valid values: " . implode(", ", $values) . "."
+		);
+	}
 	
 	public function are_equal($key_a, $key_b, $message) {
 		$key_b_data = $this->target_data[$key_b];
