@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.4 - 24th February 2019 (unreleased)
+ - [API] Added new `format` GET parameter to `device-data` action.
+
 ## v0.3.3 - 20th February 2019
  - Updated to use new database structure
 
