@@ -3,6 +3,7 @@
 namespace AirQuality\Actions;
 
 use \SBRL\TomlConfig;
+use \SBRL\ResponseEncoder;
 use \AirQuality\Repositories\IDeviceRepository;
 use \AirQuality\ApiResponseSender;
 
@@ -34,21 +35,44 @@ class ListDevices implements IAction {
 		// 1: Parse & validate parameters
 		$only_with_location = !empty($_GET["only-with-location"]);
 		
-		// 1: Pull data from database
+		$format = $_GET["format"] ?? "json";
+		if(!in_array($format, ["json", "csv"])) {
+			$this->sender->send_error_plain(406,
+				"Error: The format '$format' isn't recognised. Valid formats: " . implode(", ", $format) . "."
+			);
+			exit;
+		}
+		
+		
+		// 2: Pull data from database
 		$data = $this->device_repo->get_all_devices($only_with_location);
 		
-		// 1.5: Validate data from database
+		
+		// 2.5: Validate data from database
 		if(empty($data)) {
-			http_response_code(404);
-			header("content-type: text/plain");
-			header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null));
-			echo("Error: No devices are currently present in the system.");
+			$this->sender->send_error_plain(404,
+				"Error: No devices are currently present in the system.",
+				[ "x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+			);
 			return false;
 		}
 		
+		
 		// 3: Serialise data
 		$start_encode = microtime(true);
-		$response = json_encode($data);
+		$response = null;
+		$response_type = "application/octet-stream";
+		$response_suggested_filename = "data-" . date(\DateTime::ATOM) . "";
+		switch($format) {
+			case "json":
+				$response_type = "application/json";
+				$response = json_encode($data);
+				break;
+			case "csv":
+				$response_type = "text/csv";
+				$response = ResponseEncoder::encode_csv($data);
+				break;
+		}
 		
 		// 4: Send response
 		
@@ -56,7 +80,8 @@ class ListDevices implements IAction {
 		// TODO: Investigate adding a short-term (~10mins?) cache-control header here
 		
 		header("content-length: " . strlen($response));
-		header("content-type: application/json");
+		header("content-type: $response_type");
+		header("content-disposition: inline; filename=$response_suggested_filename");
 		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
 		echo($response);
 		return true;

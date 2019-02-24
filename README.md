@@ -100,6 +100,7 @@ https://example.com/path/to/api.php?action=fetch-data&datetime=2019-01-03%2007:5
 Parameter			| Type		| Meaning
 --------------------|-----------|---------------------
 `only-with-location`| bool		| Optional. If present only devices with a defined location will be returned. Useful for getting a list of devices to place on a map.
+`format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
 Examples:
 

@@ -3,6 +3,7 @@
 ## v0.4 - 24th February 2019 (unreleased)
  - [API] Added new `format` GET parameter to the following actions:
      - `device-data`
+     - `list-devices`
      - `list-reading-types`
 
 ## v0.3.3 - 20th February 2019

@@ -34,12 +34,13 @@ class ListReadingTypes implements IAction {
 		
 		// 1: Parse & validate parameters
 		$device_id = !empty($_GET["device-id"]) ? intval($_GET["device-id"]) : null;
+		
 		$format = $_GET["format"] ?? "json";
 		if(!in_array($format, ["json", "csv"])) {
 			$this->sender->send_error_plain(406,
 				"Error: The format '$format' isn't recognised. Valid formats: " . implode(", ", $format) . "."
 			);
-			exit;
+			return false;
 		}
 		
 		// 1: Pull data from database
