@@ -85,7 +85,7 @@ The server-side API is accessed through `api.php`, and supports a number of GET 
 
 Parameter			| Type		| Meaning
 --------------------|-----------|---------------------
-`datetime`			| date/time	| Required. Specifies the date and time for which readings are desired.
+`datetime`			| date/time	| Required. Specifies the date and time for which readings are desired. For current data use the special keyword `now`.
 `reading_type`		| string	| Required. Specifies the type of reading desired.
 `format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
@@ -93,6 +93,7 @@ Examples:
 
 ```
 https://example.com/path/to/api.php?action=fetch-data&datetime=2019-01-03%2007:52:10&reading_type=PM10
+https://example.com/path/to/api.php?action=fetch-data&datetime=now&reading_type=PM10
 ```
 
 ### list-devices
