@@ -229,7 +229,7 @@ class DeviceReadingDisplay {
 			data: {
 				// We need to define an initial dataset here because otherwise
 				// Chart.js gets confused 'cause it has nothing to animate from
-				labels: [],
+				// labels: [],
 				datasets: []
 			},
 			options: {
@@ -353,7 +353,7 @@ class DeviceReadingDisplay {
 		this.chart.data.datasets.push(new_data_obj);
 		
 		// Update the x axis labels
-		this.chart.data.labels = new_data_obj.data.map((point) => point.t);
+		// this.chart.data.labels = new_data_obj.data.map((point) => point.t);
 		
 		// Update the chart
 		this.chart.update();
