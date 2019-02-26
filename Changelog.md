@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.1 - 26th February 2019
+ - Fixed issue with non-linear sensor reading reports ([#15](https://github.com/ConnectedHumber/Air-Quality-Web/issues/15))
+
 ## v0.5 - 24th February 2019
  - Add advanced date/time picker interface to the device graph.
 
