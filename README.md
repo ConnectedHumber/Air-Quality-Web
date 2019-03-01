@@ -80,6 +80,18 @@ Instead, enter your configuration details into `data/settings.toml`, which overr
 ## API
 The server-side API is accessed through `api.php`, and supports a number of GET parameters. The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
 
+### version
+> Returns the version of the application.
+
+_No parameters are currently supported by this action._
+
+Examples:
+
+```
+https://example.com/path/to/api.php?action=version
+```
+
+
 ### fetch-data
 > Fetches air quality data from the system for a specific data type at a specific date and time.
 

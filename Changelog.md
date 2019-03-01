@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.2 - 1st March 2019
+ - [API] Added `version` action
+
 ## v0.5.1 - 26th February 2019
  - Fixed issue with non-linear sensor reading reports ([#15](https://github.com/ConnectedHumber/Air-Quality-Web/issues/15))
 
