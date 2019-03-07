@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.3 - 7th March 2019
+ - Tweak x axis labels
+ - Build script: Improve first-time setup experience
+
 ## v0.5.2 - 1st March 2019
  - [API] Added `version` action
 
