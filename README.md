@@ -25,7 +25,9 @@ In order to run this program, you'll need the following:
 The client-side code requires building. Currently, no pre-built versions are available (though these can be provided upon request), so this must be done from source. A build script is available, however, which automates the process - as explained below.
 
 ### System Requirements
- - PHP-enabled web server (Nginx is recommended, but Apache works too)
+ - PHP-enabled web server
+     - _Nginx_ + _PHP-FPM_ is recommended
+     - Apache works too
  - MariaDB database with the appropriate table structure pre-loaded
  - PHP 7+
  - Node.JS (preferably 10+) + npm 6+ (for installing & building the client-side app code)
@@ -33,52 +35,100 @@ The client-side code requires building. Currently, no pre-built versions are ava
  - PHP modules:
      - `pdo-mysql` (for the database connection)
 
-### Building From Source
-The build script ensures that everything it does will not go outside the current directory (i.e. all dependencies are installed locally).
+### Installation
+1. Start by cloning this repository:
 
-To build from source, start off by cloning this repository.
+```bash
+git clone https://github.com/ConnectedHumber/Air-Quality-Web.git
+```
 
-Then run the `setup` and `setup-dev` build commands from the root of the repository like this:
+
+2. Change the ownership to allow your web server user to access the created directory. Usually, the web server will be running under the `www-data` user:
+
+```bash
+sudo chown -R www-data:www-data path/to/Air-Quality-Web
+```
+
+
+3. `cd` into the root of the cloned repository. Then install the dependencies (these are installed locally):
 
 ```bash
 ./build setup setup-dev
 ```
 
-This will initialise any git submodules and install both the server-side and client-side dependencies. Once done, all you need to do is build the client-side code:
+
+4. Build the client-side application:
 
 ```bash
+# For development, run this:
 ./build client
+# For production, run this:
+NODE_ENV=production ./build client
+# If you're actively working on the codebase and need to auto-recompile on every change, run this:
+./build client-watch
 ```
 
-For development purposes, the `client-watch` command is available.
 
-In production, you probably want to do this instead:
+5. Edit `data/settings.toml` to enter your database credentials.
+
+You can edit other settings here too. See `settings.default.toml` for the settings you can change, but do **not** edit `settings.default.toml`! Edit `data/settings.toml` instead. You'll probably want to give the entire default settings file a careful read.
+
+
+6. Configure your web server to serve the root of the repository you've cloned if you haven't already. Skip this step if you cloned the repository into a directory that your web server already serves.
+
+
+7. Disallow public access to the private `data`  directory.
+
+In Nginx:
+
+```nginx
+# put this inside the "server {  }" block:
+location ^~ /path/to/data/directory {
+    deny all;
+}
+```
+
+In Apache:
+
+```htaccess
+# Create a file with this content inside the data/ directory
+Require all denied
+```
+
+
+8. Test the application with an API call. If this returns valid JSON, then you've set it up correctly
+
+```
+http://example.com/path/to/Air-Quality-Web/api.php?action=list-devices
+```
+
+
+9. (Optional) Setup HTTPS:
 
 ```bash
-NODE_ENV=production ./build client
+sudo apt install certbot
+# On Nginx:
+sudo certbot --nginx --domain example.com
+# On Apache:
+sudo certbot --apache --domain example.com
 ```
-
-This will take longer, as it causes the build system to additionally minify the client code, saving a significant amount of bandwidth and speeding up loading times.
-
-
-### Configuration
-#### Web server
-Configure your php-enabled web server to:
- - ...serve the root directory of this repository in PHP
- - ...block access to the `data` directory (created on first page load)
- - ...be able to write to the repository root (technically only the `data` directory requires write access)
-     - Example: `sudo chown -R www-data:www-data path/to/repository_root`
-
-#### Application
-Some configuration must be done before the application is ready for use.
-
-The first time `api.php` is called from a browser, it will create a new blank configuration file at `data/settings.toml`, if it doesn't already exist. See the `settings.default.toml` file in this repository for a list of configurable settings, but do **not** edit `settings.default.toml`!
-
-Instead, enter your configuration details into `data/settings.toml`, which overrides `settings.default.toml`. In particular, you'll probably want to change the settings under the `[database]` header - but ensure you give the entire file a careful read.
 
 
 ## API
 The server-side API is accessed through `api.php`, and supports a number of GET parameters. The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
+
+### version
+> Returns the version of the application.
+
+_No parameters are currently supported by this action._
+
+Examples:
+
+
+```
+https://example.com/path/to/api.php?action=version
+```
+
 
 ### fetch-data
 > Fetches air quality data from the system for a specific data type at a specific date and time.

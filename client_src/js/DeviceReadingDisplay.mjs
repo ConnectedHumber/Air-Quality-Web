@@ -12,6 +12,7 @@ import Chart from '../../node_modules/chart.js/dist/Chart.bundle.min.js';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import GetContainingElement from './Helpers/GetContainingElement.mjs';
 import Postify from './Helpers/Postify.mjs';
+import { human_duration_unit } from './Helpers/DateHelper.mjs';
 
 
 class DeviceReadingDisplay {
@@ -238,7 +239,7 @@ class DeviceReadingDisplay {
 						type: "time",
 						time: {
 							format: "YYYY-MM-DD HH:mm",
-							tooltipFormat: 'll HH:mm'
+							tooltipFormat: 'll HH:mm',
 						},
 						scaleLabel: {
 							display: true,
@@ -354,7 +355,8 @@ class DeviceReadingDisplay {
 		
 		// Update the x axis labels
 		// this.chart.data.labels = new_data_obj.data.map((point) => point.t);
-		
+		this.chart.options.scales.xAxes[0].time.unit = human_duration_unit(this.end_time.diff(this.start_time));
+		console.log(`New unit: ${this.chart.options.scales.xAxes[0].time.unit}`);
 		// Update the chart
 		this.chart.update();
 		
