@@ -82,7 +82,8 @@ You can edit other settings here too. See `settings.default.toml` for the settin
 In Nginx:
 
 ```nginx
-# put this inside the "server {  }" block:
+# Put this inside the "server {  }" website definition block:
+# The "server {  }" block can usually be found somewhere in /etc/nginx on Linux machines, and may have a "server_name" directive specifying the domain name it's serving if multiple websites are configured.
 location ^~ /path/to/data/directory {
     deny all;
 }
@@ -91,7 +92,7 @@ location ^~ /path/to/data/directory {
 In Apache:
 
 ```htaccess
-# Create a file with this content inside the data/ directory
+# Create a file called ".htaccess" with this content inside the data/ directory
 Require all denied
 ```
 
