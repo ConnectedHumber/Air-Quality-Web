@@ -43,21 +43,14 @@ git clone https://github.com/ConnectedHumber/Air-Quality-Web.git
 ```
 
 
-2. Change the ownership to allow your web server user to access the created directory. Usually, the web server will be running under the `www-data` user:
-
-```bash
-sudo chown -R www-data:www-data path/to/Air-Quality-Web
-```
-
-
-3. `cd` into the root of the cloned repository. Then install the dependencies (these are installed locally):
+2. `cd` into the root of the cloned repository. Then install the dependencies (these are installed locally):
 
 ```bash
 ./build setup setup-dev
 ```
 
 
-4. Build the client-side application:
+3. Build the client-side application:
 
 ```bash
 # For development, run this:
@@ -66,6 +59,12 @@ sudo chown -R www-data:www-data path/to/Air-Quality-Web
 NODE_ENV=production ./build client
 # If you're actively working on the codebase and need to auto-recompile on every change, run this:
 ./build client-watch
+```
+
+4. Change the ownership to allow your web server user to access the created directory. Usually, the web server will be running under the `www-data` user:
+
+```bash
+sudo chown -R www-data:www-data path/to/Air-Quality-Web
 ```
 
 
