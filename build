@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 # Make sure the current directory is the location of this script to simplify matters
 cd "$(dirname $(readlink -f $0))";
+
+if [ ! -d "${PWD}/.git" ]; then
+	echo -e "\033[1m\033[31mError: The .git folder does not appear to exist. Please ensure you clone this repository with git, like this:\n\n\tgit clone https://github.com/ConnectedHumber/Air-Quality-Web.git\n\033[0m";
+	exit 1;
+fi
 ################
 ### Settings ###
 ################
@@ -66,6 +71,10 @@ function task_setup {
 	check_command node true;
 	check_command composer true;
 	check_command npm true;
+	
+	if [ ! -w "${PWD}" ]; then
+		task_end 1 "${HC}${FRED}Error: Can't write to the repository directory! This usually you have a permission error of some kind. Try using sudo to run this build command as the user that owns this cloned repository.";
+	fi
 	
 	npm_version_major="$(npm --version | head -c 1)";
 	if [[ "${npm_version_major}" -lt "${min_npm_version_major}" ]]; then
