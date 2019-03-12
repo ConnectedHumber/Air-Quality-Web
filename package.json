@@ -1,45 +1,55 @@
 {
-  "name": "air-quality-mapper",
-  "version": "0.1.0",
-  "description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
-  "main": "index.mjs",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface.git"
-  },
-  "author": "Starbeamrainbowlabs",
-  "license": "MPL-2.0",
-  "bugs": {
-    "url": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface/issues"
-  },
-  "homepage": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface#readme",
-  "dependencies": {
-    "chart.js": "^2.7.3",
-    "dom-create-element-query-selector": "github:hekigan/dom-create-element-query-selector",
-    "leaflet": "^1.4.0",
-    "leaflet-fullscreen": "^1.0.2",
-    "leaflet-timedimension": "^1.1.0",
-    "leaflet.markercluster": "^1.4.1",
-    "moment": "^2.24.0",
-    "nanomodal": "^5.1.1",
-    "smartsettings": "^1.2.3",
-    "tabs": "^0.2.0"
-  },
-  "devDependencies": {
-    "@types/chart.js": "^2.7.48",
-    "@types/leaflet": "^1.4.3",
-    "@types/leaflet-fullscreen": "^1.0.4",
-    "leaflet-heatmap": "^1.0.0",
-    "postcss-copy": "^7.1.0",
-    "postcss-import": "^12.0.1",
-    "rollup": "^1.6.0",
-    "rollup-plugin-commonjs": "^9.2.1",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-terser": "^4.0.4"
-  }
+	"name": "air-quality-mapper",
+	"version": "0.1.0",
+	"description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
+	"main": "index.mjs",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface.git"
+	},
+	"author": "Starbeamrainbowlabs",
+	"license": "MPL-2.0",
+	"bugs": {
+		"url": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface/issues"
+	},
+	"homepage": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface#readme",
+	"dependencies": {
+		"chart.js": "^2.7.3",
+		"dom-create-element-query-selector": "github:hekigan/dom-create-element-query-selector",
+		"leaflet": "^1.4.0",
+		"leaflet-fullscreen": "^1.0.2",
+		"leaflet-timedimension": "^1.1.0",
+		"leaflet.markercluster": "^1.4.1",
+		"moment": "^2.24.0",
+		"nanomodal": "^5.1.1",
+		"smartsettings": "^1.2.3",
+		"tabs": "^0.2.0"
+	},
+	"devDependencies": {
+		"@types/chart.js": "^2.7.48",
+		"@types/leaflet": "^1.4.3",
+		"@types/leaflet-fullscreen": "^1.0.4",
+		"docpress": "^0.7.6",
+		"leaflet-heatmap": "^1.0.0",
+		"postcss-copy": "^7.1.0",
+		"postcss-import": "^12.0.1",
+		"rollup": "^1.6.0",
+		"rollup-plugin-commonjs": "^9.2.1",
+		"rollup-plugin-node-resolve": "^4.0.1",
+		"rollup-plugin-postcss": "^2.0.3",
+		"rollup-plugin-replace": "^2.1.0",
+		"rollup-plugin-terser": "^4.0.4"
+	},
+	"docpress": {
+		"github": "ConnectedHumber/Air-Quality-Web",
+		"markdown": {
+			"xhtmlOut": true
+		},
+		"css": [
+			"docs/theme.css"
+		]
+	}
 }
