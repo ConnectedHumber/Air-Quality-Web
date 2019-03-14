@@ -13,6 +13,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public static $column_owner_id = "owner_id";
 	public static $column_lat = "device_latitude";
 	public static $column_long = "device_longitude";
+	public static $column_altitude = "device_altitude";
 	
 	public static $table_name_type = "device_types";
 	public static $column_type_id = "device_type";
@@ -51,7 +52,8 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			{$s("column_device_id")} AS id,
 			{$s("column_device_name")} AS name,
 			{$s("column_lat")} AS latitude,
-			{$s("column_long")} AS longitude
+			{$s("column_long")} AS longitude,
+			{$s("column_altitude")} AS altitude
 		FROM {$s("table_name")}";
 		
 		if($only_with_location)
@@ -73,6 +75,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				{$s("table_name")}.{$s("column_device_name")} AS name,
 				{$s("table_name")}.{$s("column_lat")} AS latitude,
 				{$s("table_name")}.{$s("column_long")} AS longitude,
+				{$s("table_name")}.{$s("column_altitude")} AS altitude,
 				{$s("table_name_type")}.*
 			FROM {$s("table_name")}
 			JOIN {$s("table_name_type")} ON
