@@ -53,7 +53,8 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			{$s("column_device_name")} AS name,
 			{$s("column_lat")} AS latitude,
 			{$s("column_long")} AS longitude,
-			{$s("column_altitude")} AS altitude
+			{$s("column_altitude")} AS altitude,
+			{$s("column_device_type")} AS type_id
 		FROM {$s("table_name")}";
 		
 		if($only_with_location)
