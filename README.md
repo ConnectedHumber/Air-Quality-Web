@@ -11,6 +11,10 @@ The client-side browser application is powered by [Leaflet](https://leafletjs.co
 
 Note that this project is _not_ responsible for entering data into the database. This project's purpose is simply to display the data.
 
+## Documentation
+Documentation has moved! You can view it here:
+
+ - https://aq.connectedhumber.org/__nightdocs/00-Welcome.html
 
 
 ## Notes
