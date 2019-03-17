@@ -54,7 +54,9 @@ if [[ "$#" -lt 1 ]]; then
 	echo -e "    ${CACTION}dev-server${RS}       - Start a development server";
 	echo -e "    ${CACTION}dev-server-stop${RS}  - Stop the currently running development server";
 	echo -e "    ${CACTION}client${RS}           - Build the client web app";
-	echo -e "    ${CACTION}client-watch${RS} - Watch for changes to the client code & rebuild automatically";
+	echo -e "    ${CACTION}client-watch${RS}     - Watch for changes to the client code & rebuild automatically";
+	echo -e "    ${CACTION}docs${RS}             - Render the documentation";
+	echo -e "    ${CACTION}ci${RS}               - Perform CI tasks";
 	echo -e "";
 	
 	exit 1;
@@ -62,7 +64,15 @@ fi
 
 ###############################################################################
 
-function task_setup {
+
+
+# ███████ ███████ ████████ ██    ██ ██████
+# ██      ██         ██    ██    ██ ██   ██
+# ███████ █████      ██    ██    ██ ██████
+#      ██ ██         ██    ██    ██ ██
+# ███████ ███████    ██     ██████  ██
+
+task_setup() {
 	stage_begin "Setting up";
 	
 	task_begin "Checking environment";
@@ -112,7 +122,7 @@ function task_setup {
 	stage_end $?;
 }
 
-function task_setup-dev {
+task_setup-dev() {
 	task_begin "Checking environment";
 	check_command mysql true optional;
 	task_end $?;
@@ -126,7 +136,14 @@ function task_setup-dev {
 	task_end $?;
 }
 
-function task_database {
+
+# ██████  ███████ ██    ██
+# ██   ██ ██      ██    ██
+# ██   ██ █████   ██    ██
+# ██   ██ ██       ██  ██
+# ██████  ███████   ████
+
+task_database() {
 	task_begin "Connecting to the database";
 	set-title "Database";
 	ssh -TN "${database_host}" -L 3306:localhost:3306 &
@@ -138,7 +155,7 @@ function task_database {
 	task_end $?;
 }
 
-function task_dev-server {
+task_dev-server() {
 	task_begin "Starting development server";
 	php -S [::1]:40482 &
 	exit_code=$?;
@@ -147,7 +164,7 @@ function task_dev-server {
 	sleep 1;
 }
 
-function task_dev-server-stop {
+task_dev-server-stop() {
 	task_begin "Stopping development server";
 	
 	kill "$(cat /tmp/micro-lantern-dev-server.pid)";
@@ -157,7 +174,13 @@ function task_dev-server-stop {
 }
 
 
-function task_client {
+#  ██████ ██      ██ ███████ ███    ██ ████████
+# ██      ██      ██ ██      ████   ██    ██
+# ██      ██      ██ █████   ██ ██  ██    ██
+# ██      ██      ██ ██      ██  ██ ██    ██
+#  ██████ ███████ ██ ███████ ██   ████    ██
+
+task_client() {
 	task_begin "Packaging Javascript";
 	node_modules/rollup/bin/rollup --sourcemap --config rollup.config.js;
 	task_end $? "Error: rollup packing failed!";
@@ -172,7 +195,7 @@ function task_client {
 	# task_end $?;
 }
 
-function task_client-watch {
+task_client-watch() {
 	set-title "Client Watcher";
 	
 	echo -e "Watching for changes.";
@@ -188,6 +211,30 @@ function task_client-watch {
 		stage_end $?;
 	done
 }
+
+
+# ██████   ██████   ██████ ███████
+# ██   ██ ██    ██ ██      ██
+# ██   ██ ██    ██ ██      ███████
+# ██   ██ ██    ██ ██           ██
+# ██████   ██████   ██████ ███████
+
+task_docs() {
+	task_begin "Rendering docs";
+	node_modules/.bin/nightdocs --config nightdocs.toml;
+	task_end $?;
+}
+
+
+#  ██████ ██
+# ██      ██
+# ██      ██
+# ██      ██
+#  ██████ ██
+task_ci() {
+	tasks_run setup setup-dev client docs;
+}
+
 
 #########################################################################
 
