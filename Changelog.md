@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.4 - 14th March 2019
+ - [API] Added device altitude information to `list-devices` and `device-info` actions
+ - [API] Added device type id property to `list-devices` action
+
 ## v0.5.3 - 7th March 2019
  - Tweak x axis labels
  - Build script: Improve first-time setup experience
