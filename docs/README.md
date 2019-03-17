@@ -1,4 +1,4 @@
-# Documentation
+# Air Quality Web
 
  * [Welcome!](./00-Welcome.md)
  * [Production Instance](https://aq.connectedhumber.org/app/)

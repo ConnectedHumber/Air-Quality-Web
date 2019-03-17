@@ -1,4 +1,4 @@
-# Air Quality Web
+# Welcome!
 
 > The Web Interface for the _Monitair_ project.
 
