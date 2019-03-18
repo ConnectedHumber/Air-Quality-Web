@@ -19,6 +19,7 @@
 	"dependencies": {
 		"chart.js": "^2.7.3",
 		"dom-create-element-query-selector": "github:hekigan/dom-create-element-query-selector",
+		"iso8601-js-period": "^0.2.1",
 		"leaflet": "^1.4.0",
 		"leaflet-fullscreen": "^1.0.2",
 		"leaflet-timedimension": "^1.1.0",

@@ -3,6 +3,8 @@
 // Import leaflet, but some plugins require it to have the variable name 'L' :-/
 import L from 'leaflet';
 import 'leaflet-fullscreen';
+import 'iso8601-js-period';
+import '../../node_modules/leaflet-timedimension/dist/leaflet.timedimension.src.withlog.js';
 
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
@@ -17,7 +19,12 @@ class MapManager {
 	setup() {
 		// Create the map
 		this.map = L.map("map", {
-			fullscreenControl: true
+			fullscreenControl: true,
+			timeDimension: true,
+			timeDimensionOptions: {
+				timeInterval: `2019-01-01/${(new Date()).toISOString().split("T")[0]}`,
+				period: "PT6M" // 6 minutes, in ISO 8601 Durations format: https://en.wikipedia.org/wiki/ISO_8601#Durations
+			}
 		});
 		this.map.setView(Config.default_location, Config.default_zoom);
 		
@@ -28,8 +35,14 @@ class MapManager {
 			attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap contributors</a>"
 		}).addTo(this.map);
 		
+		// Add the attribution
 		this.map.attributionControl.addAttribution("Data: <a href='https://connectedhumber.org/'>Connected Humber</a>");
 		this.map.attributionControl.addAttribution("<a href='https://github.com/ConnectedHumber/Air-Quality-Web/'>Air Quality Web</a> by <a href='https://starbeamrainbowlabs.com/'>Starbeamrainbowlabs</a>");
+		
+		// Add the time dimension
+		this.layer_time = L.timeDimension()
+			.addTo(this.map);
+		this.layer_time.on("timeloading", console.log);
 		
 		// Add the device markers
 		console.info("[map] Loading device markers....");
