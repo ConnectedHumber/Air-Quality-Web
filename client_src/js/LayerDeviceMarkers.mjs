@@ -16,7 +16,9 @@ class LayerDeviceMarkers {
 		this.map = in_map;
 		
 		// Create a new clustering layer
-		this.layer = L.markerClusterGroup();
+		this.layer = L.markerClusterGroup({
+			zoomToBoundsOnClick: false
+		});
 	}
 	
 	async setup() {
