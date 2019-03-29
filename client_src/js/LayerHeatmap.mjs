@@ -104,9 +104,9 @@ class LayerHeatmap {
 	
 	async update_data(datetime, reading_type) {
 		if(!(datetime instanceof Date))
-			throw new Exception("Error: 'datetime' must be an instance of Date.");
+			throw new Error("Error: 'datetime' must be an instance of Date.");
 		if(typeof reading_type != "string")
-			throw new Exception("Error: 'reading_type' must be a string.");
+			throw new Error("Error: 'reading_type' must be a string.");
 		
 		this.datetime = datetime;
 		this.reading_type = reading_type;
