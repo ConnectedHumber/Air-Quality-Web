@@ -76,7 +76,7 @@ task_download-composer() {
 	if [ -f "${cache_dir}/composer" ]; then
 		return 0;
 	fi
-	[ ! -d "${cache_dir}" ] || mkdir "${cache_dir}";
+	[ ! -d "${cache_dir}" ] && mkdir "${cache_dir}";
 	
 	
 	task_begin "Downloading composer"; 
