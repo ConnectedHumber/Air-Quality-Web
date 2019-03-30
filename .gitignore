@@ -1,4 +1,5 @@
 *.backup
+.cache/
 app/
 data/
 __nightdocs/

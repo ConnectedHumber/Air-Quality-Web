@@ -23,6 +23,7 @@ lantern_path="./lantern-build-engine";
 # Put any custom settings here.
 
 # Client-side build output
+cache_dir="./.cache";
 build_output_folder="./app";
 
 # Database settings for ssh port forwarding task
@@ -71,6 +72,17 @@ fi
 #      ██ ██         ██    ██    ██ ██
 # ███████ ███████    ██     ██████  ██
 
+task_download-composer() {
+	if [ -f "${cache_dir}/composer" ]; then
+		return 0;
+	fi
+	
+	task_begin "Downloading composer"; 
+	curl "https://getcomposer.org/composer.phar" -o "${cache_dir}/composer"; exit_code=$?;
+	chmod +x "${cache_dir}/composer";
+	task_end ${exit_code};
+}
+
 task_setup() {
 	stage_begin "Setting up";
 	
@@ -78,7 +90,6 @@ task_setup() {
 	check_command git true;
 	check_command php true;
 	check_command node true;
-	check_command composer true;
 	check_command npm true;
 	
 	if [ ! -w "${PWD}" ]; then
@@ -100,8 +111,10 @@ task_setup() {
 	npm install --production;
 	task_end $?;
 	
+	tasks_run download-composer;
+	
 	task_begin "Installing server dependencies";
-	composer install --no-dev;
+	"${cache_dir}/composer" install --no-dev;
 	task_end $?;
 	
 	if [ ! -d "./data" ]; then
@@ -131,7 +144,7 @@ task_setup-dev() {
 	task_end $?;
 	
 	task_begin "Installing server development dependencies";
-	composer install;
+	"${cache_dir}/composer" install;
 	task_end $?;
 }
 
