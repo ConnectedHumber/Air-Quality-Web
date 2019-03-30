@@ -76,6 +76,8 @@ task_download-composer() {
 	if [ -f "${cache_dir}/composer" ]; then
 		return 0;
 	fi
+	[ ! -d "${cache_dir}" ] || mkdir "${cache_dir}";
+	
 	
 	task_begin "Downloading composer"; 
 	curl "https://getcomposer.org/composer.phar" -o "${cache_dir}/composer"; exit_code=$?;
