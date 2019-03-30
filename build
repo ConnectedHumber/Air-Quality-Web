@@ -246,7 +246,8 @@ task_docs() {
 # ██      ██
 #  ██████ ██
 task_ci() {
-	tasks_run setup setup-dev client docs;
+	tasks_run setup setup-dev
+	NODE_ENV="production" tasks_run client docs;
 }
 
 
