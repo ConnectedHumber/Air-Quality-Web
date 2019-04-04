@@ -86,6 +86,15 @@ task_download-composer() {
 	task_end ${exit_code};
 }
 
+check_php_module() {
+	module_name="$1";
+	subtask_begin "Checking for ${module_name} PHP module";
+	if [[ "$(php -m | grep -i pdo_mysql | wc -l)" -eq "0" ]]; then
+		subtask_end 1 "Error: The php_mysql PHP module is not installed.";
+	fi
+	subtask_end 0;
+}
+
 task_setup() {
 	stage_begin "Setting up";
 	
@@ -94,6 +103,8 @@ task_setup() {
 	check_command php true;
 	check_command node true;
 	check_command npm true;
+	
+	check_php_module pdo_mysql;
 	
 	if [ ! -w "${PWD}" ]; then
 		task_end 1 "${HC}${FRED}Error: Can't write to the repository directory! This usually you have a permission error of some kind. Try using sudo to run this build command as the user that owns this cloned repository.";
