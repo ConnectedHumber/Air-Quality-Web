@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.5
+ - [Build] Use local version of composer
+ - [Build] Check for `pdo_mysql` PHP module
+
 ## v0.5.4 - 14th March 2019
  - [API] Added device altitude information to `list-devices` and `device-info` actions
  - [API] Added device type id property to `list-devices` action
