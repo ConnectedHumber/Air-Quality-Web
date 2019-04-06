@@ -68,7 +68,7 @@ Pin-Priority: 750
 ```
 
 ### Step 3
-``sudo apt update`
+`sudo apt update`
 
 **NOTE: You may need to change the version number in the following command as time goes by:-**
 
