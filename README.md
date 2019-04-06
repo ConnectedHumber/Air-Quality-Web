@@ -16,6 +16,13 @@ Documentation has moved! You can view it here:
 
  - https://aq.connectedhumber.org/__nightdocs/00-Welcome.html
 
+## Branches
+ - `master`
+     - The default branch
+     - Should always be stable
+ - `dev`
+     - The development branch
+     - May not always be stable.
 
 ## Notes
  - Readings are taken every 6 minutes as standard.
