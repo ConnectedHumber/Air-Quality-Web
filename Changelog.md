@@ -1,6 +1,9 @@
 # Changelog
 
-## v0.5.5
+## v0.5.6 - 6th April 2019
+ - Add new [Raspberry Pi Installation Instructions](https://aq.connectedhumber.org/__nightdocs/50-Raspberry-Pi-Installation-Instructions.html) from @BNNorman
+
+## v0.5.5 - 5th April 2019
  - [Build] Use local version of composer
  - [Build] Check for `pdo_mysql` PHP module
 
