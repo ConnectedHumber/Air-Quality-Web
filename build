@@ -249,6 +249,10 @@ task_docs() {
 	task_begin "Rendering docs";
 	execute node_modules/.bin/nightdocs --config nightdocs.toml;
 	task_end $?;
+	
+	task_begin "Copying images";
+	cp -r docs/images/ __nightdocs/;
+	task_end $?;
 }
 
 
