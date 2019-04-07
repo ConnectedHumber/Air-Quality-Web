@@ -294,15 +294,15 @@ task_deploy() {
 	task_begin "Preparing upload";
 	
 	subtask_begin "Creating temporary directory";
-	temp_dir="$(mktemp -d --suffix "-rhinoreminds-upload")";
+	temp_dir="$(mktemp -d --suffix "-air-quality-upload")";
 	subtask_end $? "Error: Failed to create temporary directory";
 	
 	subtask_begin "Unpacking release files";
 	execute tar -xf "${ARCHIVE}/Air-Quality-Web.tar.gz" -C "${temp_dir}";
 	subtask_end $? "Failed to unpack release files";
-	
+	rm -r "${temp_dir}/data"; # Delete the default data directory - there's one on the server already
 	# Define the directory whose contents we want to upload
-	source_upload_dir="${temp_dir}/RhinoReminds-Release";
+	source_upload_dir="${temp_dir}/";
 	
 	task_end $?;
 	
