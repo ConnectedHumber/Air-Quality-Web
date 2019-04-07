@@ -312,7 +312,6 @@ task_deploy() {
 	# Acquire an exclusive project-wide lock so that we only upload stuff one-at-a-time
 	exec 9<"${WORKSPACE}";
 	flock --exclusive 9;
-	# We have an extra : before the @ here to avoid the password prompt
 	
 	# Actions:
 	# 1. Connect to remote server
@@ -322,9 +321,10 @@ task_deploy() {
 	# 5. Delete old directory
 	(
 		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\" -p \"${deploy_ssh_port}\" -o \"PasswordAuthentication=no\"'";
+		# We have an extra : before the @ here to avoid the password prompt
 		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}";
 		
-		echo "mirror -R -P 3 -r \"${source_upload_dir}\" \"${deploy_root_dir}/www-new\""
+		echo "mirror -R -P 3 -r \"${source_upload_dir}\" \"${deploy_root_dir}/www-new\"";
 		echo "ln -s \"${deploy_root_dir}/data\" \"${deploy_root_dir}/www-new/data\"";
 		
 		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
