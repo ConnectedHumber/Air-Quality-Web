@@ -321,7 +321,7 @@ task_deploy() {
 	# 4. Swap in new directory
 	# 5. Delete old directory
 	lftp << SFTPCOMMANDS
-set sftp:connect-program 'ssh -x -i "${SSH_KEY_PATH}" -p ${deploy_ssh_port} -o "PasswordAuthentication=no"';
+set sftp:connect-program 'ssh -x -i "${SSH_KEY_PATH}" -p "${deploy_ssh_port}" -o "PasswordAuthentication=no"';
 connect sftp://${deploy_ssh_user}:@${deploy_ssh_host};
 
 mirror -R -P 3 -r ${source_upload_dir}/* "${deploy_root_dir}/www-new";
