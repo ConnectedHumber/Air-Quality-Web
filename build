@@ -320,19 +320,17 @@ task_deploy() {
 	# 3. Create data dir symlink
 	# 4. Swap in new directory
 	# 5. Delete old directory
-	lftp << SFTPCOMMANDS
-set sftp:connect-program 'ssh -x -i "${SSH_KEY_PATH}" -p "${deploy_ssh_port}" -o "PasswordAuthentication=no"';
-connect sftp://${deploy_ssh_user}:@${deploy_ssh_host};
-
-glob mirror -R -P 3 -r ${source_upload_dir}/* "${deploy_root_dir}/www-new";
-ln -s "${deploy_root_dir}/data" "${deploy_root_dir}/www-new/data";
-
-mv "${deploy_root_dir}/www" "${deploy_root_dir}/www-old";
-mv "${deploy_root_dir}/www-new" "${deploy_root_dir}/www";
-rm -r "${deploy_root_dir}/www-old";
-bye
-SFTPCOMMANDS
-
+	(
+		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\" -p \"${deploy_ssh_port}\" -o \"PasswordAuthentication=no\"'";
+		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}";
+		echo "glob mirror -R -P 3 -r \"${source_upload_dir}\" \"${deploy_root_dir}/www-new\""
+		echo "ln -s \"${deploy_root_dir}/data\" \"${deploy_root_dir}/www-new/data\"";
+		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
+		echo "mv \"${deploy_root_dir}/www-new\" \"${deploy_root_dir}/www\"";
+		echo "rm -r \"${deploy_root_dir}/www-old\"";
+		echo "bye";
+	) | tee | lftp
+	
 	exec 9>&- # Close file descriptor 9 and release the lock
 	
 	task_end $? "Failed to upload release";
