@@ -319,6 +319,8 @@ task_deploy() {
 	# 3. Create data dir symlink
 	# 4. Swap in new directory
 	# 5. Delete old directory
+	lftp_commands_filename="$(mktemp --suffix "-commands.lftp")";
+	
 	(
 		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\" -p \"${deploy_ssh_port}\" -o \"PasswordAuthentication=no\"'";
 		# We have an extra : before the @ here to avoid the password prompt
@@ -331,7 +333,10 @@ task_deploy() {
 		echo "mv \"${deploy_root_dir}/www-new\" \"${deploy_root_dir}/www\"";
 		echo "rm -r \"${deploy_root_dir}/www-old\"";
 		echo "bye";
-	) | tee | lftp
+	) >"${lftp_commands_filename}";
+	
+	execute lftp --version;
+	execute lftp -f "${lftp_commands_filename}";
 	
 	exec 9>&- # Close file descriptor 9 and release the lock
 	
