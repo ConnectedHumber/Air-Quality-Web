@@ -306,6 +306,7 @@ task_deploy() {
 	
 	task_end $?;
 	
+	
 	task_begin "Uploading release";
 	
 	# Acquire an exclusive project-wide lock so that we only upload stuff one-at-a-time
@@ -335,6 +336,7 @@ SFTPCOMMANDS
 	exec 9>&- # Close file descriptor 9 and release the lock
 	
 	task_end $? "Failed to upload release";
+	
 	
 	task_begin "Cleaning up";
 	execute rm -r "${temp_dir}";
