@@ -328,7 +328,7 @@ task_deploy() {
 		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}:${deploy_ssh_port}";
 		
 		echo "mirror -R -P 3 \"${source_upload_dir}\" \"${deploy_root_dir}/www-new\"";
-		echo "ln -s \"../${deploy_root_dir}/data\" \"${deploy_root_dir}/www-new/data\"";
+		echo "ln -s \"../data\" \"${deploy_root_dir}/www-new/data\"";
 		
 		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
 		echo "mv \"${deploy_root_dir}/www-new\" \"${deploy_root_dir}/www\"";
@@ -338,10 +338,10 @@ task_deploy() {
 	
 	execute lftp --version;
 	execute lftp -f "${lftp_commands_filename}";
-	
+	exit_code=$?
 	exec 9>&- # Close file descriptor 9 and release the lock
 	
-	task_end $? "Failed to upload release";
+	task_end "${exit_code}" "Failed to upload release";
 	
 	
 	task_begin "Cleaning up";
