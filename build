@@ -288,7 +288,8 @@ task_archive() {
 task_deploy() {
 	stage_begin "Deploying to ${deploy_ssh_host}....";
 	if [ "${SSH_KEY_PATH}" == "" ]; then
-		stage_end 1 "Error: Can't find the SSH key as the environment variable SSH_KEY_PATH isn't set.";
+		echo "${FRED}${HC}Error: Can't find the SSH key as the environment variable SSH_KEY_PATH isn't set.${RS}" >&2;
+		stage_end 1;
 	fi
 	
 	task_begin "Preparing upload";
@@ -322,7 +323,7 @@ task_deploy() {
 	lftp_commands_filename="$(mktemp --suffix "-commands.lftp")";
 	
 	(
-		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\" -o \"PasswordAuthentication=no\"'";
+		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\"'";
 		# We have an extra : before the @ here to avoid the password prompt
 		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}:${deploy_ssh_port}";
 		
