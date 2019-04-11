@@ -322,9 +322,9 @@ task_deploy() {
 	lftp_commands_filename="$(mktemp --suffix "-commands.lftp")";
 	
 	(
-		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\" -p \"${deploy_ssh_port}\" -o \"PasswordAuthentication=no\"'";
+		echo "set sftp:connect-program 'ssh -x -i \"${SSH_KEY_PATH}\" -o \"PasswordAuthentication=no\"'";
 		# We have an extra : before the @ here to avoid the password prompt
-		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}";
+		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}:${deploy_ssh_port}";
 		
 		echo "mirror -R -P 3 -r \"${source_upload_dir}\" \"${deploy_root_dir}/www-new\"";
 		echo "ln -s \"${deploy_root_dir}/data\" \"${deploy_root_dir}/www-new/data\"";
