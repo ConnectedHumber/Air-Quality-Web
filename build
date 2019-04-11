@@ -292,6 +292,7 @@ task_deploy() {
 		stage_end 1;
 	fi
 	
+	
 	task_begin "Preparing upload";
 	
 	subtask_begin "Creating temporary directory";
@@ -309,7 +310,6 @@ task_deploy() {
 	
 	
 	task_begin "Uploading release";
-	
 	# Acquire an exclusive project-wide lock so that we only upload stuff one-at-a-time
 	exec 9<"${WORKSPACE}";
 	flock --exclusive 9;
@@ -347,6 +347,7 @@ task_deploy() {
 	task_begin "Cleaning up";
 	execute rm -r "${temp_dir}";
 	task_end $?;
+	
 	
 	stage_end $? "Failed to deploy to ${deploy_ssh_host}.";
 }
