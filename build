@@ -337,6 +337,7 @@ task_deploy() {
 	) >"${lftp_commands_filename}";
 	
 	execute lftp --version;
+	execute cat "${lftp_commands_filename}";
 	execute lftp -f "${lftp_commands_filename}";
 	exit_code=$?
 	exec 9>&- # Close file descriptor 9 and release the lock
