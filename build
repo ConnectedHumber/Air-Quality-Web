@@ -348,7 +348,6 @@ SFTPCOMMANDS
 		# We have an extra : before the @ here to avoid the password prompt
 		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}:${deploy_ssh_port}";
 		
-		echo "mirror -R \"${source_upload_dir}\" \"${deploy_root_dir}/www-new\"";
 		echo "ln -s \"../data\" \"${deploy_root_dir}/www-new/data\"";
 		
 		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
