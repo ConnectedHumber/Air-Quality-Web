@@ -323,10 +323,10 @@ task_deploy() {
 	find -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
 	subtask_end $?;
 	
+	task_end $?;
+	
 	# Define the directory whose contents we want to upload
 	source_upload_dir="${temp_dir}/";
-	
-	task_end $?;
 	
 	task_begin "Acquiring upload lock";
 	# Acquire an exclusive project-wide lock so that we only upload stuff one-at-a-time
