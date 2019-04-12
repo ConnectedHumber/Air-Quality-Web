@@ -312,7 +312,7 @@ task_deploy() {
 	subtask_end $? "Error: Failed to create temporary directory";
 	
 	subtask_begin "Unpacking release files";
-	execute tar -hxf "${ARCHIVE}/Air-Quality-Web.tar.gz" -C "${temp_dir}";
+	execute tar -xf "${ARCHIVE}/Air-Quality-Web.tar.gz" -C "${temp_dir}";
 	subtask_end $? "Failed to unpack release files";
 	
 	subtask_begin "Removing data directory";
@@ -320,7 +320,7 @@ task_deploy() {
 	subtask_end $?;
 	
 	subtask_begin "Unwinding symlinks";
-	find -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
+	find "${temp_dir}" -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
 	subtask_end $?;
 	
 	task_end $?;
