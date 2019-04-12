@@ -314,7 +314,15 @@ task_deploy() {
 	subtask_begin "Unpacking release files";
 	execute tar -hxf "${ARCHIVE}/Air-Quality-Web.tar.gz" -C "${temp_dir}";
 	subtask_end $? "Failed to unpack release files";
+	
+	subtask_begin "Removing data directory";
 	rm -r "${temp_dir}/data"; # Delete the default data directory - there's one on the server already
+	subtask_end $?;
+	
+	subtask_begin "Unwinding symlinks";
+	find -type l -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
+	subtask_end $?;
+	
 	# Define the directory whose contents we want to upload
 	source_upload_dir="${temp_dir}/";
 	
