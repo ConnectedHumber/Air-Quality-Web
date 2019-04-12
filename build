@@ -320,12 +320,21 @@ task_deploy() {
 	
 	task_end $?;
 	
-	
-	task_begin "Uploading release";
+	task_begin "Acquiring upload lock";
 	# Acquire an exclusive project-wide lock so that we only upload stuff one-at-a-time
 	exec 9<"${WORKSPACE}";
 	flock --exclusive 9;
+	task_end $? "Failed to acquire lock!";
 	
+	task_begin "Uploading release";
+	sftp -i "${SSH_KEY_PATH}" -P "${deploy_ssh_port}" -o PasswordAuthentication=no "${deploy_ssh_user}@${deploy_ssh_host}" << SFTPCOMMANDS
+mkdir ${deploy_root_dir}/www-new
+put -r ${source_upload_dir}/* ${deploy_root_dir}/www-new
+bye
+SFTPCOMMANDS
+	task_end $?;
+	
+	task_begin "Making release live";
 	# Actions:
 	# 1. Connect to remote server
 	# 2. Upload new files
@@ -348,13 +357,16 @@ task_deploy() {
 		echo "bye";
 	) >"${lftp_commands_filename}";
 	
+	
 	execute lftp --version;
 	execute cat "${lftp_commands_filename}";
 	execute lftp -f "${lftp_commands_filename}";
 	exit_code=$?
-	exec 9>&- # Close file descriptor 9 and release the lock
+	task_end "${exit_code}" "Failed to make release live";
 	
-	task_end "${exit_code}" "Failed to upload release";
+	task_begin "Releasing lock";
+	exec 9>&- # Close file descriptor 9 and release the lock
+	task_end $?;
 	
 	
 	task_begin "Cleaning up";
