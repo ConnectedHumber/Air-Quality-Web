@@ -281,7 +281,7 @@ task_ci() {
 
 task_archive() {
 	task_begin "Preparing to archive";
-	archive mv vendor vendor.bak;
+	execute mv vendor vendor.bak;
 	execute "${cache_dir}/composer" install --no-dev;
 	task_end $?;
 	
