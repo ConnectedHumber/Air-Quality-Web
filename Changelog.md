@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6 - 13th April
+ - [Build] Continuous Deployment is now active! More time for development, less time manually updating the server.
+     - The way the server is configured has completely changed, so please [report any issues](https://github.com/ConnectedHumber/Air-Quality-Web/issues/new) you encounter
+
 ## v0.5.6 - 6th April 2019
  - Add new [Raspberry Pi Installation Instructions](https://aq.connectedhumber.org/__nightdocs/50-Raspberry-Pi-Installation-Instructions.html) from @BNNorman
 
