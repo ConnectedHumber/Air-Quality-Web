@@ -7,6 +7,10 @@ import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
 
 class LayerHeatmap {
+	/**
+	 * Creates a new heatmap manager wrapper class fort he given map.
+	 * @param	{L.Map}	in_map	The leaflet map to attach to.
+	 */
 	constructor(in_map) {
 		this.map = in_map;
 		
@@ -77,8 +81,14 @@ class LayerHeatmap {
 				}
 			}
 		};
+		
+		this.reading_cache = new Map();
 	}
 	
+	/**
+	 * Re-creates the heatmap overlay layer.
+	 * Needed sometimes internally to work around an annoying bug.
+	 */
 	recreate_overlay() {
 		if(typeof this.heatmap != "undefined")
 			this.layer.removeLayer(this.heatmap);
@@ -86,6 +96,10 @@ class LayerHeatmap {
 		this.layer.addLayer(this.heatmap);
 	}
 	
+	/**
+	 * Sets the display data to the given array of data points.
+	 * @param {object[]} readings_list The array of data points to display.
+	 */
 	set_data(readings_list) {
 		let data_object = {
 			max: 0,
@@ -102,6 +116,13 @@ class LayerHeatmap {
 		this.heatmap.setData(data_object);
 	}
 	
+	/**
+	 * Updates the heatmap with data for the specified datetime & reading type,
+	 * fetching new data if necessary.
+	 * @param	{Date}		datetime		The datetime to display.
+	 * @param	{string}	reading_type	The reading type to display data for.
+	 * @return	{Promise}	A promise that resolves when the operation is completed.
+	 */
 	async update_data(datetime, reading_type) {
 		if(!(datetime instanceof Date))
 			throw new Exception("Error: 'datetime' must be an instance of Date.");
@@ -123,13 +144,42 @@ class LayerHeatmap {
 		}
 		
 		try {
-			this.set_data(JSON.parse(await GetFromUrl(
-				`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(this.datetime.toISOString())}&reading_type=${encodeURIComponent(this.reading_type)}`
-			)));
+			this.set_data(await this.fetch_data(this.datetime, this.reading_type));
 		} catch(error) {
 			console.log(error);
 			alert(error);
 		}
+	}
+	
+	/**
+	 * Fetches & decodes data for the given datetime and the current reading type.
+	 * @param	{Date}		datetime		The Date to fetch data for.
+	 * @param	{string}	reading_type	The reading type code to fetch data for.
+	 * @return	{Promise}	The requested data array, as the return value of a promise
+	 */
+	async fetch_data(datetime, reading_type) {
+		let cache_key = Symbol.for(`${reading_type}|${datetime.toISOString()}`);
+		let result = this.reading_cache.get(cache_key);
+		
+		if(typeof result == "undefined") {
+			result = JSON.parse(await GetFromUrl(
+				`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(datetime.toISOString())}&reading_type=${encodeURIComponent(reading_type)}`
+			));
+			this.reading_cache.set(cache_key, result);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Whether the reading cache contains data for the given datetime & reading type.
+	 * @param	{Date}		datetime		The datetime to check.
+	 * @param	{string}	reading_type	The reading type code to check.
+	 * @return	{Boolean}	Whether the reading cache contains data for the requested datetime & reading type.
+	 */
+	is_data_cached(datetime, reading_type) {
+		let cache_key = Symbol.for(`${reading_type}|${datetime.toISOString()}`);
+		return this.reading_cache.has(cache_key);
 	}
 	
 	
@@ -137,12 +187,6 @@ class LayerHeatmap {
 		await this.update_data(
 			this.datetime,
 			reading_type
-		);
-	}
-	async update_datetime(datetime) {
-		await this.update_data(
-			datetime,
-			this.reading_type
 		);
 	}
 }

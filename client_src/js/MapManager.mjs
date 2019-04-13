@@ -9,6 +9,7 @@ import '../../node_modules/leaflet-timedimension/dist/leaflet.timedimension.src.
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
 import LayerHeatmap from './LayerHeatmap.mjs';
+import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
 import UI from './UI.mjs';
 
 class MapManager {
@@ -39,10 +40,6 @@ class MapManager {
 		this.map.attributionControl.addAttribution("Data: <a href='https://connectedhumber.org/'>Connected Humber</a>");
 		this.map.attributionControl.addAttribution("<a href='https://github.com/ConnectedHumber/Air-Quality-Web/'>Air Quality Web</a> by <a href='https://starbeamrainbowlabs.com/'>Starbeamrainbowlabs</a>");
 		
-		// Add the time dimension
-		this.layer_time = L.timeDimension()
-			.addTo(this.map);
-		this.layer_time.on("timeloading", console.log);
 		
 		// Add the device markers
 		console.info("[map] Loading device markers....");
@@ -55,12 +52,49 @@ class MapManager {
 		
 		// Add the heatmap
 		console.info("[map] Loading heatmap....");
-		this.setup_heatmap().then(() => {
-			console.info("[map] Heatmap loaded successfully.");
-		});
+		this.setup_heatmap()
+			.then(() => console.info("[map] Heatmap loaded successfully."))
+			// ...and the time dimension
+			.then(this.setup_time_dimension.bind(this))
+			.then(() => console.info("[map] Time dimension initialised."));
 		
 		this.ui = new UI(Config, this);
 		this.ui.setup().then(() => console.log("[map] Settings initialised."));
+	}
+	
+	setup_time_dimension() {
+		this.layer_time = new L.TimeDimension({
+			period: "PT1H", // 1 hour
+			timeInterval: `2019-01-01T12:00:00Z/${new Date().toISOString()}`
+		});
+		//this.layer_time.on("timeloading", console.log.bind(null, "timeloading"));
+		
+		this.layer_time_player = new L.TimeDimension.Player({
+			transitionTime: 100,
+			loop: false,
+			startOver: true,
+			buffer: 10 // Default: 5
+		}, this.layer_time);
+		
+		this.layer_time_control = new L.Control.TimeDimension({
+			player: this.layer_time_player,
+			timeDimension: this.layer_time,
+			position: "bottomright",
+			autoplay: false,
+			minSpeed: 1, 
+			speedStep: 0.25,
+			maxSpeed: 15,
+			timeSliderDragUpdate: true
+		});
+		
+		this.map.addControl(this.layer_time_control);
+		
+		// Create the time dimension <---> heatmap glue object
+		this.layer_heatmap_glue = new LayerHeatmapGlue(
+			this.layer_time,
+			this.heatmap
+		);
+		this.layer_heatmap_glue.attachTo(this.map);
 	}
 	
 	async setup_device_markers() {
