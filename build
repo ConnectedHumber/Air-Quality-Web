@@ -272,7 +272,10 @@ task_ci() {
 	tasks_run setup setup-dev
 	NODE_ENV="production" tasks_run client docs archive;
 	
-	if [ "${GIT_REF_NAME}" == "refs/heads/master" ]; then
+	latest_commit="$(git log -n 1 --pretty=format:"%H")";
+	current_commit="$(git rev-parse HEAD)";
+	
+	if [ "${GIT_REF_NAME}" == "refs/heads/master" ] && [ "${latest_commit}" == "${current_commit}" ]; then
 		tasks_run deploy;
 	else
 		echo "Not deploying, as this build wasn't on the master branch.";
