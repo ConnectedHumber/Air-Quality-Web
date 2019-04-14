@@ -1,5 +1,5 @@
 import os from 'os';
-import path from 'path';
+// import path from 'pasth';
 import fs from 'fs';
 
 import resolve from 'rollup-plugin-node-resolve';
