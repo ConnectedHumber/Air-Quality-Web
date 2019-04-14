@@ -158,17 +158,48 @@ class LayerHeatmap {
 	 * @return	{Promise}	The requested data array, as the return value of a promise
 	 */
 	async fetch_data(datetime, reading_type) {
-		let cache_key = Symbol.for(`${reading_type}|${datetime.toISOString()}`);
+		let cache_key = `${reading_type}|${datetime.toISOString()}`;
 		let result = this.reading_cache.get(cache_key);
 		
 		if(typeof result == "undefined") {
 			result = JSON.parse(await GetFromUrl(
 				`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(datetime.toISOString())}&reading_type=${encodeURIComponent(reading_type)}`
 			));
-			this.reading_cache.set(cache_key, result);
+			this.prune_cache(100);
+			this.reading_cache.set(cache_key, { data: result, inserted: new Date() });
 		}
+		else
+			result = result.data;
 		
 		return result;
+	}
+	
+	/**
+	 * Prunes the reading cache, leaving at most newest_count items behind.
+	 * The items inserted first are deleted first.
+	 * @param  {Number} newest_count The numebr of items to leave behind in the cache.
+	 * @returns {Number}	The number of items deleted from the cache.
+	 */
+	prune_cache(newest_count) {
+		let items = [];
+		for(let next_key of this.reading_cache) {
+			let cache_item = this.reading_cache.get(next_key);
+			if(typeof cache_item == "undefined") {
+				this.reading_cache.delete(cache_item);
+				continue;
+			}
+			items.push({
+				key: next_key,
+				date: cache_item.inserted
+			});
+		}
+		items.sort((a, b) => a.date - b.date);
+		let deleted = 0;
+		for(let i = 0; i < items.length - newest_count; i++) {
+			this.reading_cache.delete(this.items[i].key);
+			deleted++;
+		}
+		return deleted;
 	}
 	
 	/**
