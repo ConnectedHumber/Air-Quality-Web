@@ -70,7 +70,7 @@ class MapManager {
 		//this.layer_time.on("timeloading", console.log.bind(null, "timeloading"));
 		
 		this.layer_time_player = new L.TimeDimension.Player({
-			transitionTime: 100,
+			transitionTime: 500,
 			loop: false,
 			startOver: true,
 			buffer: 10 // Default: 5
@@ -84,7 +84,7 @@ class MapManager {
 			minSpeed: 1, 
 			speedStep: 0.25,
 			maxSpeed: 15,
-			timeSliderDragUpdate: true
+			timeSliderDragUpdate: false
 		});
 		
 		this.map.addControl(this.layer_time_control);
