@@ -63,6 +63,10 @@ class MapManager {
 	}
 	
 	setup_time_dimension() {
+		// Ensure terser doesn't tree-shake  iso8601-js-period
+		if(nezasa.iso8601.period)
+			console.debug("iso8601-js-period is loaded.");
+		
 		this.layer_time = new L.TimeDimension({
 			period: "PT1H", // 1 hour
 			timeInterval: `2019-01-01T12:00:00Z/${new Date().toISOString()}`
