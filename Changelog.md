@@ -1,6 +1,9 @@
 # Changelog
 
-## v0.6 - 13th April
+## v0.7 - 14th April 2019
+ - Added experimental heatmap time slider!
+
+## v0.6 - 13th April 2019
  - [Build] Continuous Deployment is now active! More time for development, less time manually updating the server.
      - The way the server is configured has completely changed, so please [report any issues](https://github.com/ConnectedHumber/Air-Quality-Web/issues/new) you encounter
 
