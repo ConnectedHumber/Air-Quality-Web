@@ -12,8 +12,9 @@ import DeviceReadingDisplay from './DeviceReadingDisplay.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
 class LayerDeviceMarkers {
-	constructor(in_map) {
+	constructor(in_map, in_device_data) {
 		this.map = in_map;
+		this.device_data = in_device_data;
 		
 		// Create a new clustering layer
 		this.layer = L.markerClusterGroup({
@@ -22,14 +23,12 @@ class LayerDeviceMarkers {
 	}
 	
 	async setup() {
-		
-		// Fetch the device list
-		let device_list = JSON.parse(await GetFromUrl(
-			`${Config.api_root}?action=list-devices&only-with-location=yes`
-		));
-		
 		// Add a marker for each device
-		for (let device of device_list) {
+		for (let device of this.device_data.devices) {
+			// If the device doesn't have a location, we're not interested
+			// FUTURE: We might be able to displaymobile devices by adding additional logic here
+			if(typeof device.latitude != "number" || typeof device.longitude != "number")
+				continue;
 			this.add_device_marker(device);
 		}
 		

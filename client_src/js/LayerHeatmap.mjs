@@ -11,8 +11,9 @@ class LayerHeatmap {
 	 * Creates a new heatmap manager wrapper class fort he given map.
 	 * @param	{L.Map}	in_map	The leaflet map to attach to.
 	 */
-	constructor(in_map) {
+	constructor(in_map, in_device_data) {
 		this.map = in_map;
+		this.device_data = in_device_data;
 		
 		this.overlay_config = {
 			radius: Config.heatmap.blob_radius,
@@ -101,6 +102,13 @@ class LayerHeatmap {
 	 * @param {object[]} readings_list The array of data points to display.
 	 */
 	set_data(readings_list) {
+		// Substitute in the device locations
+		for(let reading of readings_list) {
+			let device_info = this.device_data.get_by_id(reading.device_id);
+			reading.latitude = device_info.latitude;
+			reading.longitude = device_info.longitude;
+		}
+		
 		let data_object = {
 			max: 0,
 			data: readings_list

@@ -9,6 +9,7 @@ import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
 import LayerHeatmap from './LayerHeatmap.mjs';
 import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
+import DeviceData from './DeviceData.mjs';
 import UI from './UI.mjs';
 
 class MapManager {
@@ -16,7 +17,7 @@ class MapManager {
 		console.log(Config);
 	}
 	
-	setup() {
+	async setup() {
 		// Create the map
 		this.map = L.map("map", {
 			fullscreenControl: true,
@@ -40,14 +41,16 @@ class MapManager {
 		this.map.attributionControl.addAttribution("<a href='https://github.com/ConnectedHumber/Air-Quality-Web/'>Air Quality Web</a> by <a href='https://starbeamrainbowlabs.com/'>Starbeamrainbowlabs</a>");
 		
 		
+		// Load the device information
+		this.device_data = new DeviceData();
+		await this.device_data.setup();
+		console.log("[map] Device data loaded");
+		
 		// Add the device markers
 		console.info("[map] Loading device markers....");
-		this.setup_device_markers().then(() => {
-			console.info("[map] Device markers loaded successfully.");
-			
-			// Display a layer controller
-			this.setup_layer_control();
-		});
+		this.setup_device_markers()
+			.then(() => console.info("[map] Device markers loaded successfully."))
+			.then(this.setup_layer_control.bind(this));
 		
 		// Add the heatmap
 		console.info("[map] Loading heatmap....");
@@ -59,6 +62,7 @@ class MapManager {
 		
 		this.ui = new UI(Config, this);
 		this.ui.setup().then(() => console.log("[map] Settings initialised."));
+		
 	}
 	
 	setup_time_dimension() {
@@ -97,12 +101,12 @@ class MapManager {
 	}
 	
 	async setup_device_markers() {
-		this.device_markers = new LayerDeviceMarkers(this.map);
+		this.device_markers = new LayerDeviceMarkers(this.map, this.device_data);
 		await this.device_markers.setup();
 	}
 	
 	async setup_heatmap() {
-		this.heatmap = new LayerHeatmap(this.map);
+		this.heatmap = new LayerHeatmap(this.map, this.device_data);
 		
 		// TODO: Use leaflet-timedimension here
 		// TODO: Allow configuration of the different reading types here
