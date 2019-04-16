@@ -101,10 +101,9 @@ class DeviceReadingDisplay {
 		// ----------------------------------------------------
 		
 		this.reading_types = await this.fetch_reading_types();
-		this.reading_type = this.reading_types.find((type) => type.short_descr == default_reading_type);
-		// Default to the 1st reading type if we can't find the default
-		if(typeof this.reading_type == "undefined")
-			this.reading_type = this.reading_types[0];
+		this.reading_type = this.reading_types.find((type) => type.short_descr == default_reading_type)
+			|| this.reading_types[0] // Default to the 1st reading type if we can't find the default
+			|| { short_descr: "NONE_PRESENT", friendly_text: "(none yet!)", id: -1, count: -1 }; // ...or a default object if there aren't any readings yet
 		
 		// Create the reading type buttons
 		let reading_type_list = this.display.querySelector(".reading-types");
@@ -261,6 +260,10 @@ class DeviceReadingDisplay {
 	}
 	
 	async get_data() {
+		// If there aren't any readings yet, then there's no point in requesting them
+		if(this.reading_type.id == -1)
+			return false;
+		
 		let new_data = null;
 		// Dividing by 1000: ms -> s
 		let average_seconds = (this.end_time.diff(this.start_time) / 1000) / this.points_resolution;
