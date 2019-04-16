@@ -62,18 +62,9 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
 					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
 				) AS datetime,
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_lat")},
-					{$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_lat")}
-				) AS latitude,
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_long")},
-					{$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_long")}
-				) AS longitude,
 				COUNT({$s("table_name_metadata")}.{$s("column_metadata_device_id")}) AS record_count
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON {$s("table_name_values")}.{$s("column_values_reading_id")} = {$s("table_name_metadata")}.id
-			JOIN {$o(MariaDBDeviceRepository::class, "table_name")} ON {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = {$o(MariaDBDeviceRepository::class, "table_name")}.{$o(MariaDBDeviceRepository::class, "column_device_id")}
 			WHERE ABS(TIME_TO_SEC(TIMEDIFF(
 				:datetime,
 				COALESCE(
