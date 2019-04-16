@@ -178,7 +178,7 @@ task_setup-dev() {
 
 task_database() {
 	task_begin "Connecting to the database";
-	set-title "Database";
+	set_title "Database";
 	ssh -TN "${database_host}" -L 3306:localhost:3306 &
 	ssh_pid=$!;
 	sleep 1;
@@ -229,7 +229,7 @@ task_client() {
 }
 
 task_client-watch() {
-	set-title "Client Watcher";
+	set_title "Client Watcher";
 	
 	echo -e "Watching for changes.";
 	while :; do # : = infinite loop
