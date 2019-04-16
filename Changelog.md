@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.7.1 - 16th April 2019
+ - [API] `list-reading-types` no longer returns an error if a device hasn't submitted any readings yet
+
 ## v0.7 - 14th April 2019
  - Added experimental heatmap time slider!
 

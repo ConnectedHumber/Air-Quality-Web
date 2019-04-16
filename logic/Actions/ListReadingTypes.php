@@ -52,11 +52,7 @@ class ListReadingTypes implements IAction {
 		
 		// 1.5: Validate data from database
 		if(empty($data)) {
-			http_response_code(404);
-			header("content-type: text/plain");
-			header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null));
-			echo("Error: No types are currently present in the system.");
-			return false;
+			header("x-notice: No reading types found for that request");
 		}
 		
 		// 3: Serialise data
