@@ -2,6 +2,7 @@
 	"name": "air-quality-mapper",
 	"version": "0.1.0",
 	"description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
+	"private": true,
 	"main": "index.mjs",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
