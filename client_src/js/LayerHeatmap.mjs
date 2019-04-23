@@ -5,7 +5,7 @@ import HeatmapOverlay from 'leaflet-heatmap';
 import Config from './Config.mjs';
 
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
-import RenderGradient from './Helpers/RenderGradient.mjs';
+import { RenderGradient } from './Helpers/GradientHelpers.mjs';
 
 
 class LayerHeatmap {
