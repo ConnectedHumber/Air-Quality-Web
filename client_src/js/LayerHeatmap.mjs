@@ -3,7 +3,9 @@
 import HeatmapOverlay from 'leaflet-heatmap';
 
 import Config from './Config.mjs';
+
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
+import RenderGradient from './Helpers/RenderGradient.mjs';
 
 
 class LayerHeatmap {
@@ -41,14 +43,31 @@ class LayerHeatmap {
 		// Custom configuration directives to apply based on the reading type displayed.
 		this.reading_type_configs = {
 			"PM25": {
-				// 0 to 35 low (green), 36 to 53 moderate (amber) 54 to 70 high (red) and above 71 (purple)
+				/*
+				 * Range	Midpoint	Name		Colour
+				 * 0 - 11	5.5			Low 1		#9CFF9C
+				 * 12 - 23	17.5		Low 2		#31FF00
+				 * 24 - 35	29.5		Low 3		#31CF00
+				 * 36 - 41	38.5		Moderate 1	#FFFF00
+				 * 42 - 47	44.5		Moderate 2	#FFCF00
+				 * 48 - 53	50.5		Moderate 3	#FF9A00
+				 * 54 - 58	56			High 1		#FF6464
+				 * 59 - 64	61.5		High 2		#FF0000
+				 * 65 - 70	67.5		High 3		#990000
+				 * 71+		n/a			Very high	#CE30FF
+				 */
 				max: 75,
 				gradient: {
-					"0": "hsla(111, 76%, 42%, 0.00)",
-					"0.233": "hsl(111, 76%, 42%)", // green
-					"0.593": "orange",
-					"0.827": "red",
-					"1": "purple"
+					"0": "#9CFF9C", "5.5": "#9CFF9C", // Low 1
+					"17.5": "#31FF00", // Low 2
+					"29.5": "#31CF00", // Low 3
+					"38.5": "#FFFF00", // Moderate 1
+					"44.5": "#FFCF00", // Moderate 2
+					"50.5": "#FF9A00", // Moderate 3
+					"56": "#FF6464", // High 1
+					"61.5": "#FF0000", // High 2
+					"67.5": "#990000", // High 3
+					"72.5": "#CE30FF", "75": "#CE30FF", // Very high
 				}
 			},
 			"PM10": {
@@ -143,7 +162,10 @@ class LayerHeatmap {
 		console.log("[map/heatmap] Updating values to", this.reading_type, "@", this.datetime);
 		
 		if(typeof this.reading_type_configs[this.reading_type] != "undefined") {
-			this.overlay_config.gradient = this.reading_type_configs[this.reading_type].gradient;
+			this.overlay_config.gradient = RenderGradient(
+				this.reading_type_configs[this.reading_type].gradient,
+				this.reading_type_configs[this.reading_type].max
+			);
 			console.log("[map/heatmap] Gradient is now", this.overlay_config.gradient);
 			this.recreate_overlay();
 		}
