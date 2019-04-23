@@ -272,6 +272,13 @@ class LayerHeatmap {
 			reading_type
 		);
 	}
+	
+	async refresh_display() {
+		await this.update_data(
+			this.datetime,
+			this.reading_type
+		);
+	}
 }
 
 export default LayerHeatmap;

@@ -32,6 +32,7 @@ class UI {
 				],
 				callback: ((event) => {
 					this.map_manager.heatmap.overlay_config.radius = parseFloat(event.target.value);
+					this.map_manager.heatmap.refresh_display();
 				}).bind(this)
 			},
 			{
