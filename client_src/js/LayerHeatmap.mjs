@@ -28,13 +28,7 @@ class LayerHeatmap {
 			lngField: "longitude",
 			valueField: "value",
 			
-			gradient: {
-				// 0 to 35 low (green), 36 to 53 moderate (amber) 54 to 70 high (red) and above 71 (purple)
-				0.233: "green",
-				0.593: "orange",
-				0.827: "red",
-				1: "purple"
-			}
+			gradient: {  } // Automatically filled in further down
 		};
 		this.layer = new L.LayerGroup();
 		this.map.addLayer(this.layer);
@@ -71,33 +65,61 @@ class LayerHeatmap {
 				}
 			},
 			"PM10": {
-				// 0 to 50 low (green) 51 to75 moderate (amber) 76 to 100 high (red) and more than 100 very high (purple)
-				max: 100,
+				/*
+				 * Range	Midpoint	Name		Colour
+				 * 0-16		8			Low 1		#9CFF9C
+				 * 17-33	25			Low 2		#31FF00
+				 * 34-50	42			Low 3		#31CF00
+				 * 51-58	54.5		Moderate 1	#FFFF00
+				 * 59-66	62.5		Moderate 2	#FFCF00
+				 * 67-75	71			Moderate 3	#FF9A00
+				 * 76-83	79.5		High 1		#FF6464
+				 * 84-91	87.5		High 2		#FF0000
+				 * 92-100	96			High 3		#990000
+				 * 101		105.5		Very High	#CE30FF
+				 */
+				max: 110,
 				gradient: {
-					"0": "hsla(111, 76%, 42%, 0)",
-					"0.45": "hsl(111, 76%, 42%)", // green
-					"0.573": "orange",
-					"0.8": "red",
-					"1": "purple"
+					"0": "#9CFF9C", "8": "#9CFF9C", // Low 1
+					"25": "#31FF00", // Low 2
+					"42": "#31CF00", // Low 3
+					"54.5": "#FFFF00", // Moderate 1
+					"62.5": "#FFCF00", // Moderate 2
+					"71": "#FF9A00", // Moderate 3
+					"79.5": "#FF6464", // High 1
+					"87.5": "#FF0000", // High 2
+					"96": "#990000", // High 3
+					"105.5": "#CE30FF", "110": "#CE30FF", // Very high
 				}
 			},
 			"humidity": {
 				max: 100,
 				gradient: {
 					"0": "hsla(176, 77%, 40%, 0)",
-					"0.5": "hsl(176, 77%, 40%)",
-					"1": "blue"
+					"50": "hsl(176, 77%, 40%)",
+					"100": "blue"
 				}
 			},
 			"temperature": {
 				max: 40,
 				gradient: {
-					"-0.25": "blue",
-					"0.25": "cyan",
-					"0.375": "green",
-					"0.5": "yellow",
-					"0.75": "orange",
-					"1": "red"
+					"0": "blue",
+					"5": "cyan",
+					"15": "green",
+					"20": "yellow",
+					"30": "orange",
+					"40": "red"
+				}
+			},
+			"pressure": {
+				max: 1100,
+				gradient: {
+					"870": "purple",
+					"916": "red",
+					"962": "orange",
+					"1008": "yellow",
+					"1054": "green",
+					"1100": "#BFED91"
 				}
 			}
 		};

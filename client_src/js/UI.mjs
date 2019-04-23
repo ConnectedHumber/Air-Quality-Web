@@ -39,7 +39,7 @@ class UI {
 				name: "Reading Type",
 				items: this.reading_types.map((type) => type.friendly_text),
 				callback: ((event) => {
-					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).id;
+					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).short_descr;
 					
 					this.map_manager.heatmap.update_reading_type(new_type);
 				}).bind(this)

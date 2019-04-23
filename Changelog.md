@@ -1,5 +1,9 @@
 # Changelog
 
+# v0.8 - 23rd April 2019
+ - Update heatmap colours to match the [official DEFRA standards](https://uk-air.defra.gov.uk/air-pollution/daqi?view=more-info&pollutant=pm25#pollutant)
+ - Bugfix: Allow different reading types to be selected once more in the bottom-left
+
 ## v0.7.1 - 16th April 2019
  - [API] `list-reading-types` no longer returns an error if a device hasn't submitted any readings yet
  - [API] Remove device locations from `fetch-data` action to boost performance
