@@ -143,7 +143,7 @@ task_setup() {
 		mkdir "./data"; chmod 0700 "./data";
 		
 		echo -e "# -------[ Custom Settings File - Last updated $(date) ]-------" >"./data/settings.toml";
-		echo -e '[database]\nusername = "INSERT_DATABASE_USERNAME_HERE"\npassword = "INSERT_DATABASE_PASSWORD_HERE";' >>"./data/settings.toml";
+		echo -e '[database]\nusername = "INSERT_DATABASE_USERNAME_HERE"\npassword = "INSERT_DATABASE_PASSWORD_HERE"' >>"./data/settings.toml";
 		chmod 0600 "./data/settings.toml";
 		
 		echo -e "${HC}Don't forget to edit './data/settings.toml' to specify the database username and password${RS}";
