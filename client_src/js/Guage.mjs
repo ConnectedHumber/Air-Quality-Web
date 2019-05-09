@@ -46,8 +46,8 @@ class Guage {
 		// console.log(gradient_spec);
 		
 		let gradient = this.context.createLinearGradient(
-			0, guage_size.y,
-			0, guage_size.y + guage_size.height
+			0, guage_size.y + guage_size.height,
+			0, guage_size.y
 		);
 		for (let point in gradient_spec)
 			gradient.addColorStop(parseFloat(point), gradient_spec[point]);
@@ -67,7 +67,7 @@ class Guage {
 		this.context.lineWidth = 1.5 * pixel_ratio;
 		
 		for (let point in this.spec) {
-			let value = parseFloat(point) / this.max;
+			let value = 1 - (parseFloat(point) / this.max);
 			
 			let draw_x = guage_size.x + guage_size.width + 3;
 			let draw_y = guage_size.y + (value * guage_size.height);
