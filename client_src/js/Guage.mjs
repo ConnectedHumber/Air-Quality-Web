@@ -20,7 +20,7 @@ class Guage {
 	
 	render() {
 		let guage_size = {
-			x: this.canvas.width * 0.1,
+			x: this.canvas.width * 0.6,
 			y: this.canvas.height * 0.05,
 			width: this.canvas.width * 0.3,
 			height: this.canvas.height * 0.9
@@ -53,7 +53,10 @@ class Guage {
 			gradient.addColorStop(parseFloat(point), gradient_spec[point]);
 		
 		this.context.fillStyle = gradient;
-		this.context.fillRect(guage_size.x, guage_size.y, guage_size.width, guage_size.height);
+		this.context.fillRect(
+			guage_size.x, guage_size.y,
+			guage_size.width, guage_size.height
+		);
 		
 		this.context.restore();
 	}
@@ -69,15 +72,16 @@ class Guage {
 		for (let point in this.spec) {
 			let value = 1 - (parseFloat(point) / this.max);
 			
-			let draw_x = guage_size.x + guage_size.width + 3;
+			let text_width = this.context.measureText(point).width;
+			let draw_x = guage_size.x - 5 - text_width;
 			let draw_y = guage_size.y + (value * guage_size.height);
 			
 			// console.log(`Writing '${point}' to (${draw_x}, ${draw_y})`);
 			this.context.fillText(point, draw_x, draw_y);
 			
 			this.context.beginPath();
-			this.context.moveTo(guage_size.x, draw_y);
-			this.context.lineTo(draw_x, draw_y);
+			this.context.moveTo(guage_size.x + guage_size.width, draw_y);
+			this.context.lineTo(draw_x + text_width, draw_y);
 			this.context.stroke();
 		}
 		
