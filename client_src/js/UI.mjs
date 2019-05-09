@@ -6,6 +6,22 @@ import NanoModal from 'nanomodal';
 import Config from './Config.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
+async function show_changelog(only_if_changed) {
+	let current_version = `${Config.version}, built ${Config.build_date.toDateString()}`;
+	console.log(`[UI] Comparing current '${current_version}' to '${localStorage.getItem("last_seen_version")}'`);
+	if(only_if_changed && localStorage.getItem("last_seen_version") == current_version) {
+		console.log("[UI] Not showing changelog.");
+		return false;
+	}
+	
+	console.log("[UI] Showing changelog");
+	NanoModal(
+		await GetFromUrl(`${Config.api_root}?action=changelog`)
+	).show();
+	localStorage.setItem("last_seen_version", current_version);
+	return true;
+}
+
 class UI {
 	constructor(in_config, in_map_manager) {
 		this.config = in_config;
@@ -56,13 +72,13 @@ class UI {
 				type: "button",
 				name: `${Config.version}, built ${Config.build_date.toDateString()}`,
 				callback: (async (_event) => {
-					NanoModal(
-						await GetFromUrl(`${Config.api_root}?action=changelog`)
-					).show();
+					show_changelog(false);
 				})
 			}
 		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
+		
+		await show_changelog(true);
 	}
 }
 

@@ -72,8 +72,7 @@ class Guage {
 			let draw_x = guage_size.x + guage_size.width + 3;
 			let draw_y = guage_size.y + (value * guage_size.height);
 			
-			// this.context.fillStyle = "black";
-			console.log(`Writing '${point}' to (${draw_x}, ${draw_y})`);
+			// console.log(`Writing '${point}' to (${draw_x}, ${draw_y})`);
 			this.context.fillText(point, draw_x, draw_y);
 			
 			this.context.beginPath();
