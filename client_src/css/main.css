@@ -7,6 +7,7 @@
 
 @import "./nanomodal.css";
 @import "./popup.css";
+@import "./guage.css";
 
 /** Ensure that some assets are copied that aren't by default **/
 .non-existent {

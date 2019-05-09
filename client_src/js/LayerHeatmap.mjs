@@ -6,6 +6,7 @@ import Config from './Config.mjs';
 
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import { RenderGradient } from './Helpers/GradientHelpers.mjs';
+import Guage from './Guage.mjs';
 
 
 class LayerHeatmap {
@@ -124,6 +125,8 @@ class LayerHeatmap {
 			}
 		};
 		
+		this.guage = new Guage(document.getElementById("canvas-guage"));
+		
 		this.reading_cache = new Map();
 	}
 	
@@ -194,6 +197,12 @@ class LayerHeatmap {
 		else {
 			delete this.overlay_config.gradient;
 		}
+		
+		this.guage.set_spec(
+			this.reading_type_configs[this.reading_type].gradient,
+			this.reading_type_configs[this.reading_type].max
+		);
+		this.guage.render();
 		
 		try {
 			this.set_data(await this.fetch_data(this.datetime, this.reading_type));

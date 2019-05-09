@@ -1,0 +1,7 @@
+#canvas-guage {
+	position: absolute;
+	right: 0;
+	bottom: 3.5em;
+	
+	z-index: 10000;
+}
