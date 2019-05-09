@@ -2,6 +2,7 @@
 
 # v0.9 - 9th May 2019
  - Add heatmap gauge at the right-hand-side
+ - Display the changelog the first time a user loads the page after an update
 
 # v0.8 - 23rd April 2019
  - Update heatmap colours to match the [official DEFRA standards](https://uk-air.defra.gov.uk/air-pollution/daqi?view=more-info&pollutant=pm25#pollutant)
