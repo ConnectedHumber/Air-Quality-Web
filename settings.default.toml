@@ -26,7 +26,7 @@ password = "Define_in_custom_config_file"
 # Settings that control the router's behaviour
 
 # The default action to take if no action is specified
-default-action = "fetch-data"
+default-action = "index"
 
 [cache]
 # Settings that control how we request that appropriate API responses be cached.

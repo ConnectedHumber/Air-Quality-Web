@@ -1,5 +1,7 @@
 # API
-The server-side API is accessed through `api.php`, and supports a number of GET parameters. The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
+The server-side API is accessed through `api.php`, and supports a number of GET parameters. On the main production instance, this can be found [here](https://aq.connectedhumber.org/api.php).
+
+The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
 
 ## version
 > Returns the version of the application.

@@ -1,5 +1,8 @@
 # Changelog
 
+# v0.9.1 - 16th May 2019
+ - [API] Changed the default action. It now displays a helpful message by default instead of routing directly to `fetch-data`.
+
 # v0.9 - 9th May 2019
  - Add heatmap gauge at the right-hand-side
  - Display the changelog the first time a user loads the page after an update
