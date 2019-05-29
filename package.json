@@ -23,13 +23,12 @@
 		"iso8601-js-period": "^0.2.1",
 		"leaflet": "^1.4.0",
 		"leaflet-fullscreen": "^1.0.2",
-		"leaflet-timedimension": "^1.1.0",
 		"leaflet.markercluster": "^1.4.1",
-		"leaflet-heatmap": "^1.0.0",
 		"moment": "^2.24.0",
 		"nanomodal": "^5.1.1",
 		"smartsettings": "^1.2.3",
-		"tabs": "^0.2.0"
+		"tabs": "^0.2.0",
+		"xml-writer": "^1.7.0"
 	},
 	"devDependencies": {
 		"@types/chart.js": "^2.7.51",
