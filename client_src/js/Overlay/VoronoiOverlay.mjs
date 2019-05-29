@@ -61,7 +61,7 @@ class VoronoiOverlay {
 		
 		// TODO: Map the generated polygons back onto this.cells
 		
-		let svg = new SvgWriter();
+		this.svg = new SvgWriter();
 		
 		// TODO: Render the SVG here
 	}
