@@ -57,9 +57,17 @@ class VoronoiOverlay {
 			bounding_box
 		);
 		
-		console.log(VoronoiOverlay.diagram)
+		console.log(VoronoiOverlay.diagram);
+		
+		// TODO: Map the generated polygons back onto this.cells
 		
 		let svg = new SvgWriter();
+		
+		// TODO: Render the SVG here
+	}
+	
+	generate_overlay() {
+		// TODO: Generate the Leaflet SVGOverlay here
 	}
 }
 
