@@ -2,6 +2,7 @@
 
 import XMLWriter from 'xml-writer';
 
+import Rectangle from './Rectangle.mjs';
 import Vector2 from './Vector2.mjs';
 
 /*
@@ -11,8 +12,12 @@ import Vector2 from './Vector2.mjs';
  * @license MPL-2.0
  */
 class SvgWriter {
-	constructor(viewBox) {
-		// string outputFilename, string widthspec = "100%", string heightspec = "100%", Rectangle? rawViewBox = null
+	/**
+	 * @param	{String}	[widthspec="100%"]
+	 * @param	{String}	[heightspec="100%"]
+	 * @param	{Retangle}	[viewBox=null]
+	 */
+	constructor(widthspec = "100%", heightspec = "100%", viewBox = null) {
 		this.unitSuffix = "";
 		
 		// ----------------------------------

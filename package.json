@@ -28,6 +28,7 @@
 		"nanomodal": "^5.1.1",
 		"smartsettings": "^1.2.3",
 		"tabs": "^0.2.0",
+		"voronoi": "^1.0.0",
 		"xml-writer": "^1.7.0"
 	},
 	"devDependencies": {
