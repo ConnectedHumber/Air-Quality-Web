@@ -1,5 +1,8 @@
 # Changelog
 
+# v0.9.2 - 3rd June 2019
+ - [API] Updated the [API documentation](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html) with a quick reference of the available actions at the top.
+
 # v0.9.1 - 16th May 2019
  - [API] Changed the default action. It now displays a helpful message by default instead of routing directly to `fetch-data`.
 

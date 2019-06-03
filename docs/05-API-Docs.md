@@ -3,6 +3,19 @@ The server-side API is accessed through `api.php`, and supports a number of GET 
 
 The most important of these is the `action` parameter, Which determines what the API will do. The following values are supported:
 
+Action					| Meaning
+------------------------|----------------------------
+`version`				| Gets the version of _Air Quality Web_ that's currently running.
+`fetch-data`			| Fetches air quality data from the system for a specific data type at a specific date and time.
+`list-devices`			| Fetches a list of devices currently in the system.
+`device-info`			| Gets (lots of) information about a single device.
+`list-reading-types`	| Lists the different types of readings that can be specified.
+`device-data-bounds`	| Gets the start and end DateTime bounds for the data recorded for a specific device.
+`device-data`			| Gets data by device given a start and end time.
+`changelog`				| Gets the changelog as a fragment of HTML.
+
+These are explained in detail below:
+
 ## version
 > Returns the version of the application.
 
