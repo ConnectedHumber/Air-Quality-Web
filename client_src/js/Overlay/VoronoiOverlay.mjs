@@ -60,6 +60,12 @@ class VoronoiOverlay {
 		console.log(VoronoiOverlay.diagram);
 		
 		// TODO: Map the generated polygons back onto this.cells
+		for(let their_cell of VoronoiOverlay.diagram.cells) {
+			let our_cell = this.cells.find((el) => el.point.x == their_cell.site.x && el.point.y == their_cell.site.y);
+			our_cell.def = their_cell;
+		}
+		
+		console.log(this.cells);
 		
 		this.svg = new SvgWriter();
 		

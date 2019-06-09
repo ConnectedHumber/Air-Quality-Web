@@ -3,14 +3,18 @@
 // Import leaflet, but some plugins require it to have the variable name 'L' :-/
 import L from 'leaflet';
 import 'leaflet-fullscreen';
-import '../../node_modules/leaflet-timedimension/dist/leaflet.timedimension.src.withlog.js';
+// import '../../node_modules/leaflet-timedimension/dist/leaflet.timedimension.src.withlog.js';
 
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
-import LayerHeatmap from './LayerHeatmap.mjs';
-import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
+import VoronoiOverlay from './Overlay/VoronoiOverlay.mjs';
+// import LayerHeatmap from './LayerHeatmap.mjs';
+// import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
 import DeviceData from './DeviceData.mjs';
 import UI from './UI.mjs';
+
+import VoronoiCell from './Overlay/VoronoiCell.mjs';
+import Vector2 from './Helpers/Vector2.mjs';
 
 class MapManager {
 	constructor() {
@@ -53,16 +57,27 @@ class MapManager {
 			.then(this.setup_layer_control.bind(this));
 		
 		// Add the heatmap
-		console.info("[map] Loading heatmap....");
-		this.setup_heatmap()
-			.then(() => console.info("[map] Heatmap loaded successfully."))
-			// ...and the time dimension
-			.then(this.setup_time_dimension.bind(this))
-			.then(() => console.info("[map] Time dimension initialised."));
+		// console.info("[map] Loading heatmap....");
+		// this.setup_heatmap()
+		// 	.then(() => console.info("[map] Heatmap loaded successfully."))
+		// 	// ...and the time dimension
+		// 	.then(this.setup_time_dimension.bind(this))
+		// 	.then(() => console.info("[map] Time dimension initialised."));
 		
 		this.ui = new UI(Config, this);
 		this.ui.setup().then(() => console.log("[map] Settings initialised."));
-		
+		this.setup_overlay();
+	}
+	
+	setup_overlay() {
+		this.overlay = new VoronoiOverlay();
+		this.overlay.addCells(
+			new VoronoiCell(new Vector2(100, 100)),
+			new VoronoiCell(new Vector2(100, 200)),
+			new VoronoiCell(new Vector2(75, 100)),
+			new VoronoiCell(new Vector2(50, 50))
+		);
+		let svg = this.overlay.render();
 	}
 	
 	setup_time_dimension() {
@@ -121,7 +136,7 @@ class MapManager {
 		}, { // Overlay(s)
 			"Devices": this.device_markers.layer,
 			// TODO: Have 1 heatmap layer per reading type?
-			"Heatmap": this.heatmap.layer
+			// "Heatmap": this.heatmap.layer
 		}, { // Options
 			
 		});
