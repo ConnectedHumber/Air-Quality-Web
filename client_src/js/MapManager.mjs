@@ -72,12 +72,12 @@ class MapManager {
 	setup_overlay() {
 		this.overlay = new VoronoiOverlay();
 		this.overlay.addCells(
-			new VoronoiCell(new Vector2(100, 100)),
-			new VoronoiCell(new Vector2(100, 200)),
-			new VoronoiCell(new Vector2(75, 100)),
-			new VoronoiCell(new Vector2(50, 50))
+			new VoronoiCell(new Vector2(53.739429, -0.445607)),
+			new VoronoiCell(new Vector2(53.775879, -0.413569)),
+			new VoronoiCell(new Vector2(53.745144, -0.279373)),
+			new VoronoiCell(new Vector2(53.738222, -0.335983))
 		);
-		let svg = this.overlay.render();
+		this.overlay.add_to(this.map);
 	}
 	
 	setup_time_dimension() {

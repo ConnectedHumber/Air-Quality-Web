@@ -9,7 +9,7 @@ import Vector2 from '../Helpers/Vector2.mjs';
 class VoronoiCell {
 	constructor(in_point) {
 		this.point = in_point;
-		this.def = null;
+		this.polygon = null;
 	}
 }
 
