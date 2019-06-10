@@ -7,13 +7,12 @@ import 'leaflet-fullscreen';
 
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
-import VoronoiOverlay from './Overlay/VoronoiOverlay.mjs';
+import VoronoiManager from './Overlay/VoronoiManager.mjs';
 // import LayerHeatmap from './LayerHeatmap.mjs';
 // import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
 import DeviceData from './DeviceData.mjs';
 import UI from './UI.mjs';
 
-import VoronoiCell from './Overlay/VoronoiCell.mjs';
 import Vector2 from './Helpers/Vector2.mjs';
 
 class MapManager {
@@ -70,14 +69,7 @@ class MapManager {
 	}
 	
 	setup_overlay() {
-		this.overlay = new VoronoiOverlay();
-		this.overlay.addCells(
-			new VoronoiCell(new Vector2(53.739429, -0.445607)),
-			new VoronoiCell(new Vector2(53.775879, -0.413569)),
-			new VoronoiCell(new Vector2(53.745144, -0.279373)),
-			new VoronoiCell(new Vector2(53.738222, -0.335983))
-		);
-		this.overlay.add_to(this.map);
+		this.overlay = new VoronoiManager(this.device_data, this.map);
 	}
 	
 	setup_time_dimension() {

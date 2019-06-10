@@ -19,6 +19,10 @@ class VoronoiOverlay {
 		this.cells = [];
 	}
 	
+	/**
+	 * Adds a cell to the voronoi overlay.
+	 * @param {VoronoiCell} cells The cell to add. May be specified as many times as requires to add cells in bulk.
+	 */
 	addCells(...cells) {
 		this.cells.push(...cells);
 	}
@@ -37,14 +41,12 @@ class VoronoiOverlay {
 		}
 		
 		for(let cell of this.cells) {
-			if(!isNaN(cell.point.x)) {
-				if(cell.point.x < result.x_min) result.x_min = cell.point.x;
-				if(cell.point.x > result.x_max) result.x_max = cell.point.x;
-			}
-			if(!isNaN(cell.point.y)) {
-				if(cell.point.y < result.y_min) result.y_min = cell.point.y;
-				if(cell.point.y > result.y_max) result.y_max = cell.point.y;
-			}
+			// TODO: Remove this restriction
+			if(cell.point.x < 40) continue; // Exclude the freetown one for testing 'cause it's miles away
+			if(cell.point.x < result.x_min) result.x_min = cell.point.x;
+			if(cell.point.x > result.x_max) result.x_max = cell.point.x;
+			if(cell.point.y < result.y_min) result.y_min = cell.point.y;
+			if(cell.point.y > result.y_max) result.y_max = cell.point.y;
 		}
 		
 		result.x_min -= this.border.x;
@@ -83,7 +85,7 @@ class VoronoiOverlay {
 		
 		console.log(this.cells);
 		
-		this.svg = new SvgWriter(
+		let svg = new SvgWriter(
 			"100%", "100%",
 			bounding_box,
 			true
@@ -91,15 +93,18 @@ class VoronoiOverlay {
 		
 		// TODO: Render the SVG here
 		for(let cell of this.cells) {
-			this.svg.addPolygon(
-				`hsla(${(Math.random()*360).toFixed(2)}, 50%, 50%, 0.6)`,
-				cell.polygon
-			);
-			this.svg.addCircle(cell.point, 0.005, "red");
+			if(cell.polygon !== null) {
+				svg.addPolygon(
+					`hsla(${(Math.random()*360).toFixed(2)}, 50%, 50%, 0.6)`,
+					cell.polygon
+				);
+			}
+			svg.addCircle(cell.point, 0.005, "red");
 		}
 		
-		this.svg.complete();
-		return this.svg.toString();
+		svg.complete();
+		console.log(svg.toString());
+		return svg.toString();
 	}
 	
 	add_to(map) {
