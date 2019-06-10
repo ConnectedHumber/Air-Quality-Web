@@ -17,7 +17,8 @@ class LayerDeviceMarkers {
 		this.device_data = in_device_data;
 		
 		// Create a new clustering layer
-		this.layer = L.markerClusterGroup({
+		// this.layer = L.markerClusterGroup({
+		this.layer = L.layerGroup({
 			zoomToBoundsOnClick: false
 		});
 	}

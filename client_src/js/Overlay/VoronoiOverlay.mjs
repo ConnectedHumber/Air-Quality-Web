@@ -6,7 +6,7 @@ import { Delaunay } from 'd3-delaunay';
 import Vector2 from '../Helpers/Vector2.mjs';
 import Rectangle from '../Helpers/Rectangle.mjs';
 
-import SvgWriter from '../Helpers/SVGWriter.mjs';
+import SvgWriter from '../Helpers/SvgWriter.mjs';
 
 
 /**
@@ -42,7 +42,7 @@ class VoronoiOverlay {
 		
 		for(let cell of this.cells) {
 			// TODO: Remove this restriction
-			if(cell.point.x < 40) continue; // Exclude the freetown one for testing 'cause it's miles away
+			if(cell.point.y < 40) continue; // Exclude the freetown one for testing 'cause it's miles away
 			if(cell.point.x < result.x_min) result.x_min = cell.point.x;
 			if(cell.point.x > result.x_max) result.x_max = cell.point.x;
 			if(cell.point.y < result.y_min) result.y_min = cell.point.y;
@@ -112,8 +112,8 @@ class VoronoiOverlay {
 		this.layer = L.svgOverlay(
 			SvgWriter.string2element(this.render()),
 			L.latLngBounds(
-				L.latLng(bounds.TopLeft.x, bounds.TopLeft.y),
-				L.latLng(bounds.BottomRight.x, bounds.BottomRight.y)
+				L.latLng(bounds.TopLeft.y, bounds.TopLeft.x),
+				L.latLng(bounds.BottomRight.y, bounds.BottomRight.x)
 			)
 		);
 		this.layer.addTo(map);

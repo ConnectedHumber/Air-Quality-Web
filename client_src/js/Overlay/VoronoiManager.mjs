@@ -13,7 +13,7 @@ class VoronoiManager {
 			.filter((device) => typeof device.latitude == "number" &&
 				typeof device.longitude == "number")
 			.map((device) => 
-				new VoronoiCell(new Vector2(device.latitude, device.longitude))
+				new VoronoiCell(new Vector2(device.longitude, device.latitude))
 			));
 		this.overlay.add_to(map);
 	}
