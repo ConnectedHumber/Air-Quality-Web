@@ -99,7 +99,7 @@ class VoronoiOverlay {
 				},
 				"properties": {
 					// TODO: Replace this with an actual colour
-					"colour": `hsla(${(Math.random()*360).toFixed(2)}, 50%, 50%, 0.6)`
+					"colour": `hsl(${(Math.random()*360).toFixed(2)}, 50%, 50%)`
 				}
 			});
 		}

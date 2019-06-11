@@ -6,6 +6,8 @@ import VoronoiCell from './VoronoiCell.mjs';
 import Vector2 from '../Helpers/Vector2.mjs';
 
 class VoronoiManager {
+	get layer() { return this.overlay.layer; }
+	
 	constructor(in_device_data, map) {
 		this.device_data = in_device_data;
 		this.overlay = new VoronoiOverlay();

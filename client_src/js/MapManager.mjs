@@ -51,6 +51,7 @@ class MapManager {
 		console.info("[map] Loading device markers....");
 		this.setup_device_markers()
 			.then(() => console.info("[map] Device markers loaded successfully."))
+			.then(this.setup_overlay.bind(this))
 			.then(this.setup_layer_control.bind(this));
 		
 		// Add the heatmap
@@ -63,7 +64,6 @@ class MapManager {
 		
 		this.ui = new UI(Config, this);
 		this.ui.setup().then(() => console.log("[map] Settings initialised."));
-		this.setup_overlay();
 	}
 	
 	setup_overlay() {
@@ -126,7 +126,7 @@ class MapManager {
 		}, { // Overlay(s)
 			"Devices": this.device_markers.layer,
 			// TODO: Have 1 heatmap layer per reading type?
-			// "Heatmap": this.heatmap.layer
+			"Heatmap": this.overlay.layer
 		}, { // Options
 			
 		});
