@@ -77,7 +77,7 @@ class UI {
 		
 		
 		await show_changelog(true);
-		await this.tour.run();
+		await this.tour.run_once();
 	}
 }
 

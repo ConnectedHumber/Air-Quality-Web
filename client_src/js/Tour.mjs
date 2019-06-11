@@ -126,7 +126,7 @@ class Tour {
 	}
 	
 	run_once() {
-		if(!window.localStorage.has("completed_tour"))
+		if(window.localStorage.getItem("completed_tour") === null)
 			this.run();
 		
 		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
