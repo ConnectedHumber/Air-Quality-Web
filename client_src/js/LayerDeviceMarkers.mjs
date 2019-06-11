@@ -6,13 +6,16 @@ import 'leaflet.markercluster';
 // We're using the git repo for now until an update is released, and rollup doesn't like that apparently
 import CreateElement from '../../node_modules/dom-create-element-query-selector/src/index.js';
 import tabs from 'tabs';
+import Emitter from 'event-emitter-es6';
 
 import Config from './Config.mjs';
 import DeviceReadingDisplay from './DeviceReadingDisplay.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
-class LayerDeviceMarkers {
+class LayerDeviceMarkers extends Emitter {
 	constructor(in_map, in_device_data) {
+		super();
+		
 		this.map = in_map;
 		this.device_data = in_device_data;
 		
@@ -72,6 +75,8 @@ class LayerDeviceMarkers {
 		delete device_info.longitude;
 		
 		event.popup.setContent(this.render_device_info(device_info));
+		
+		this.emit("marker-popup-opened");
 	}
 	
 	render_device_info(device_info) {

@@ -6,6 +6,16 @@ import NanoModal from 'nanomodal';
 import Config from './Config.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
+import Tour from './Tour.mjs';
+
+function show_nanomodal(html) {
+	return new Promise((resolve, _reject) => {
+		let modal = NanoModal(html);
+		modal.onHide(resolve);
+		modal.show();
+	});
+}
+
 async function show_changelog(only_if_changed) {
 	let current_version = `${Config.version}, built ${Config.build_date.toDateString()}`;
 	console.log(`[UI] Comparing current '${current_version}' to '${localStorage.getItem("last_seen_version")}'`);
@@ -15,9 +25,8 @@ async function show_changelog(only_if_changed) {
 	}
 	
 	console.log("[UI] Showing changelog");
-	NanoModal(
-		await GetFromUrl(`${Config.api_root}?action=changelog`)
-	).show();
+	await show_nanomodal(await GetFromUrl(`${Config.api_root}?action=changelog`));
+	
 	localStorage.setItem("last_seen_version", current_version);
 	return true;
 }
@@ -29,6 +38,8 @@ class UI {
 		
 		this.ui_panel = new SmartSettings("Settings");
 		// this.ui_panel.watch((event) => console.log(event));
+		
+		this.tour = new Tour(this.map_manager);
 	}
 	
 	async setup() {
@@ -64,7 +75,9 @@ class UI {
 		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
 		
+		
 		await show_changelog(true);
+		await this.tour.run();
 	}
 }
 

@@ -63,7 +63,7 @@ class MapManager {
 		// 	.then(() => console.info("[map] Time dimension initialised."));
 		
 		this.ui = new UI(Config, this);
-		this.ui.setup().then(() => console.log("[map] Settings initialised."));
+		this.ui.setup().then(() => console.log("[map] UI setup complete."));
 	}
 	
 	async setup_overlay() {

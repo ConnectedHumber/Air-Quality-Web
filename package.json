@@ -1,6 +1,6 @@
 {
 	"name": "air-quality-mapper",
-	"version": "0.10",
+	"version": "0.10.0",
 	"description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
 	"private": true,
 	"main": "index.mjs",
@@ -22,6 +22,7 @@
 		"chroma-js": "^2.0.3",
 		"d3-delaunay": "^4.1.5",
 		"dom-create-element-query-selector": "github:hekigan/dom-create-element-query-selector",
+		"event-emitter-es6": "^1.1.5",
 		"iso8601-js-period": "^0.2.1",
 		"leaflet": "^1.5.1",
 		"leaflet-fullscreen": "^1.0.2",
@@ -37,6 +38,7 @@
 		"@types/chart.js": "^2.7.53",
 		"@types/chroma-js": "^1.4.1",
 		"@types/d3-delaunay": "^4.1.0",
+		"@types/event-emitter-es6": "^1.1.0",
 		"@types/leaflet": "^1.4.4",
 		"@types/leaflet-fullscreen": "^1.0.4",
 		"nightdocs": "^1.0.5",
