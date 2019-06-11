@@ -85,6 +85,8 @@ class VoronoiOverlay {
 		
 		console.log(this.cells);
 		
+		// TODO: Investigate GeoJSON. Maybe it could help us avoid the complexity of an SVGOverlay? It looks like we might be able to apply a custom colour to a GeoJSON polygon too: https://leafletjs.com/reference-1.5.0.html#geojson
+		
 		let svg = new SvgWriter(
 			"100%", "100%",
 			bounding_box,
