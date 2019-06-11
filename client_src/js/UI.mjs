@@ -38,20 +38,6 @@ class UI {
 		
 		this.ui_panel.loadConfig([
 			{
-				type: "range",
-				name: "Heatmap Blob Radius",
-				items: [
-					0.001,		// min
-					0.05,	// max
-					Config.heatmap.blob_radius,		// initial value
-					0.001	// step
-				],
-				callback: ((event) => {
-					this.map_manager.heatmap.overlay_config.radius = parseFloat(event.target.value);
-					this.map_manager.heatmap.refresh_display();
-				}).bind(this)
-			},
-			{
 				type: "select",
 				name: "Reading Type",
 				items: this.reading_types.map((type) => type.friendly_text),
