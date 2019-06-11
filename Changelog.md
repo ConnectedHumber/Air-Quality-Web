@@ -1,5 +1,8 @@
 # Changelog
 
+# v0.10
+ - Change heatmap into a voronoi diagram ([#30](https://github.com/ConnectedHumber/Air-Quality-Web/issues/30))
+
 # v0.9.2 - 3rd June 2019
  - [API] Updated the [API documentation](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html) with a quick reference of the available actions at the top.
 

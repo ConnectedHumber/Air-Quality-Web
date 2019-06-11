@@ -20,15 +20,15 @@ class VoronoiOverlay {
 	 * Sets the list of cells in the voronoi overlay.
 	 * @param {VoronoiCell[]} cells The cells to add, as an array.
 	 */
-	setCells(cells) {
+	set_cells(cells) {
 		this.cells.length = 0;
-		this.addCells(...cells);
+		this.add_cells(...cells);
 	}
 	/**
 	 * Adds a cell to the voronoi overlay.
 	 * @param {VoronoiCell} cells The cell to add. May be specified as many times as requires to add cells in bulk.
 	 */
-	addCells(...cells) {
+	add_cells(...cells) {
 		this.cells.push(...cells);
 	}
 	
@@ -99,23 +99,21 @@ class VoronoiOverlay {
 					"coordinates": [cell.polygon.map((point) => [point.x, point.y])],
 				},
 				"properties": {
-					// TODO: Replace this with an actual colour
-					"colour": `hsl(${(Math.random()*360).toFixed(2)}, 50%, 50%)`
+					"colour": cell.colour == null ? "hsl(0, 100%, 100%)" : cell.colour
 				}
 			});
 		}
 		return geojson;
 	}
 	
-	add_to(map) {
-		this.layer = L.geoJSON(this.render(), {
-			style: (feature) => { return { color: feature.properties.colour } }
+	generate_layer() {
+		return L.geoJSON(this.render(), {
+			// FUTURE: If we want to be even moar fanceh, we can check out https://leafletjs.com/reference-1.5.0.html#path
+			style: (feature) => { return {
+				color: feature.properties.colour,
+				fillOpacity: 0.4
+			} }
 		});
-		this.layer.addTo(map);
-	}
-	
-	generate_overlay() {
-		// TODO: Generate the Leaflet SVGOverlay here
 	}
 }
 

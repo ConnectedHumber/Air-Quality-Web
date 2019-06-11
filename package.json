@@ -35,6 +35,7 @@
 	},
 	"devDependencies": {
 		"@types/chart.js": "^2.7.53",
+		"@types/chroma-js": "^1.4.1",
 		"@types/d3-delaunay": "^4.1.0",
 		"@types/leaflet": "^1.4.4",
 		"@types/leaflet-fullscreen": "^1.0.4",

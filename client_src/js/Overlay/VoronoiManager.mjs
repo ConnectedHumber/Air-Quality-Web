@@ -14,24 +14,20 @@ import Vector2 from '../Helpers/Vector2.mjs';
 import GetFromUrl from '../Helpers/GetFromUrl.mjs';
 
 class VoronoiManager {
-	get layer() { return this.overlay.layer; }
 	
-	constructor(in_device_data, map) {
+	constructor(in_device_data, in_map) {
 		this.device_data = in_device_data;
+		this.map = in_map;
 		
-		this.setup_overlay(map);
+		this.layer = null;
+		
 		this.setup_guage();
+		this.setup_overlay();
 	}
 	
-	setup_overlay(map) {
+	setup_overlay() {
 		this.overlay = new VoronoiOverlay();
-		this.overlay.addCells(...this.device_data.devices
-			.filter((device) => typeof device.latitude == "number" &&
-				typeof device.longitude == "number")
-			.map((device) => 
-				new VoronoiCell(new Vector2(device.longitude, device.latitude))
-			));
-		this.overlay.add_to(map);
+		this.set_data(new Date(), "PM25"); // TODO: Make this customisable
 	}
 	
 	setup_guage() {
@@ -60,10 +56,18 @@ class VoronoiManager {
 					device.longitude,
 					device.latitude
 				),
+				// See https://gka.github.io/chroma.js/
 				this.spec.chroma(row.value).toString()
 			));
-			
 		}
+		
+		this.overlay.set_cells(result);
+		
+		if(this.layer !== null)
+			this.layer.remove(); // Remove the old layer if it exists
+		// Generate & add the new layer
+		this.layer = this.overlay.generate_layer();
+		this.layer.addTo(this.map);
 		
 		console.log(result);
 	}
