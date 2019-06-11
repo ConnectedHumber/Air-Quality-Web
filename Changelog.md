@@ -1,7 +1,8 @@
 # Changelog
 
 # v0.10.1
- - Remove heatmap blob radius ui setting
+ - Remove heatmap blob radius UI setting
+ - Add welcome tour, which shows the first time the page is loaded
 
 # v0.10
  - Change heatmap into a voronoi diagram ([#30](https://github.com/ConnectedHumber/Air-Quality-Web/issues/30))
