@@ -19,6 +19,7 @@
 	"homepage": "https://github.com/sbrl/ConnectedHumber-Air-Quality-Interface#readme",
 	"dependencies": {
 		"chart.js": "^2.8.0",
+		"chroma-js": "^2.0.3",
 		"d3-delaunay": "^4.1.5",
 		"dom-create-element-query-selector": "github:hekigan/dom-create-element-query-selector",
 		"iso8601-js-period": "^0.2.1",
