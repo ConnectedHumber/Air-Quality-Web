@@ -68,10 +68,13 @@ class MapManager {
 	
 	async setup_overlay() {
 		this.overlay = new VoronoiManager(this.device_data, this.map);
-		await this.overlay.set_data(new Date(), "PM25");
+		await this.overlay.setup();
+		// No need to do this here, as it does it automatically
+		// await this.overlay.set_data(new Date(), "PM25");
 	}
 	
 	setup_time_dimension() {
+		// FUTURE: Replace leaflet-time-dimension with our own solution that's got a better ui & saner API?
 		this.layer_time = new L.TimeDimension({
 			period: "PT1H", // 1 hour
 			timeInterval: `2019-01-01T12:00:00Z/${new Date().toISOString()}`
@@ -111,22 +114,13 @@ class MapManager {
 		await this.device_markers.setup();
 	}
 	
-	async setup_heatmap() {
-		this.heatmap = new LayerHeatmap(this.map, this.device_data);
-		
-		// TODO: Use leaflet-timedimension here
-		// TODO: Allow configuration of the different reading types here
-		
-		this.heatmap.update_data(new Date(new Date-10*60), "PM25");
-	}
-	
 	setup_layer_control() {
 		this.layer_control = L.control.layers({
 			// Base layer(s)
 			"OpenStreetMap": this.layer_openstreet
 		}, { // Overlay(s)
 			"Devices": this.device_markers.layer,
-			// TODO: Have 1 heatmap layer per reading type?
+			// FUTURE: Have 1 heatmap layer per reading type?
 			"Heatmap": this.overlay.layer
 		}, { // Options
 			

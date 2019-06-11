@@ -21,20 +21,37 @@ class VoronoiManager {
 		
 		this.layer = null;
 		
-		this.setup_guage();
-		this.setup_overlay();
+		this.last_datetime = new Date();
+		this.last_reading_type = "PM25";
 	}
 	
-	setup_overlay() {
+	async setup() {
+		this.setup_guage();
+		await this.setup_overlay();
+	}
+	
+	async setup_overlay() {
 		this.overlay = new VoronoiOverlay();
-		this.set_data(new Date(), "PM25"); // TODO: Make this customisable
+		await this.set_data(new Date(), "PM25"); // TODO: Make this customisable? Probably elsewhere though, as this is a reasonable default
 	}
 	
 	setup_guage() {
 		this.guage = new Guage(document.getElementById("canvas-guage"));
 	}
 	
+	// ------------------------------------------------------------------------
+	
+	async update_reading_type(new_reading_type) {
+		await this.set_data(this.last_datetime, new_reading_type);
+	}
+	async update_datetime(new_datetime) {
+		await this.set_data(new_datetime, this.last_reading_type);
+	}
+	
 	async set_data(datetime, reading_type) {
+		this.last_datetime = datetime;
+		this.last_reading_type = reading_type;
+		
 		this.spec = Specs[reading_type];
 		if(typeof this.spec.chroma == "undefined")
 			this.spec.chroma = chroma.scale(Object.values(this.spec.gradient))
@@ -68,8 +85,6 @@ class VoronoiManager {
 		// Generate & add the new layer
 		this.layer = this.overlay.generate_layer();
 		this.layer.addTo(this.map);
-		
-		console.log(result);
 	}
 }
 

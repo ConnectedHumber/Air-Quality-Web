@@ -2,6 +2,7 @@
 
 import L from 'leaflet';
 import { Delaunay } from 'd3-delaunay';
+import chroma from 'chroma-js';
 
 import Vector2 from '../Helpers/Vector2.mjs';
 import Rectangle from '../Helpers/Rectangle.mjs';
@@ -110,7 +111,11 @@ class VoronoiOverlay {
 		return L.geoJSON(this.render(), {
 			// FUTURE: If we want to be even moar fanceh, we can check out https://leafletjs.com/reference-1.5.0.html#path
 			style: (feature) => { return {
-				color: feature.properties.colour,
+				// Stroke
+				color: chroma(feature.properties.colour).darken(0.75).toString(),
+				
+				// Fill
+				fillColor: feature.properties.colour,
 				fillOpacity: 0.4
 			} }
 		});

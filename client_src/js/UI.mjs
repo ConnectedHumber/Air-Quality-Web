@@ -58,7 +58,7 @@ class UI {
 				callback: ((event) => {
 					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).short_descr;
 					
-					this.map_manager.heatmap.update_reading_type(new_type);
+					this.map_manager.overlay.update_reading_type(new_type);
 				}).bind(this)
 			},
 			{
