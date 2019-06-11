@@ -13,8 +13,6 @@ import VoronoiManager from './Overlay/VoronoiManager.mjs';
 import DeviceData from './DeviceData.mjs';
 import UI from './UI.mjs';
 
-import Vector2 from './Helpers/Vector2.mjs';
-
 class MapManager {
 	constructor() {
 		console.log(Config);

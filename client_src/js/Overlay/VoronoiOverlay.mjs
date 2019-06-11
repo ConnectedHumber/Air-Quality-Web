@@ -6,9 +6,6 @@ import { Delaunay } from 'd3-delaunay';
 import Vector2 from '../Helpers/Vector2.mjs';
 import Rectangle from '../Helpers/Rectangle.mjs';
 
-import SvgWriter from '../Helpers/SvgWriter.mjs';
-
-
 /**
  * Generates and manages a single voronoi SVGOverlay layer.
  */
@@ -41,8 +38,6 @@ class VoronoiOverlay {
 		}
 		
 		for(let cell of this.cells) {
-			// TODO: Remove this restriction
-			if(cell.point.y < 40) continue; // Exclude the freetown one for testing 'cause it's miles away
 			if(cell.point.x < result.x_min) result.x_min = cell.point.x;
 			if(cell.point.x > result.x_max) result.x_max = cell.point.x;
 			if(cell.point.y < result.y_min) result.y_min = cell.point.y;
@@ -87,37 +82,34 @@ class VoronoiOverlay {
 		
 		// TODO: Investigate GeoJSON. Maybe it could help us avoid the complexity of an SVGOverlay? It looks like we might be able to apply a custom colour to a GeoJSON polygon too: https://leafletjs.com/reference-1.5.0.html#geojson
 		
-		let svg = new SvgWriter(
-			"100%", "100%",
-			bounding_box,
-			true
-		);
+		let geojson = [];
 		
 		// TODO: Render the SVG here
 		for(let cell of this.cells) {
-			if(cell.polygon !== null) {
-				svg.addPolygon(
-					`hsla(${(Math.random()*360).toFixed(2)}, 50%, 50%, 0.6)`,
-					cell.polygon
-				);
+			if(cell.polygon == null) {
+				console.warn("Warning: Null cell polygon encountered.", cell);
+				continue;
 			}
-			svg.addCircle(cell.point, 0.005, "red");
+			
+			geojson.push({
+				"type": "Feature",
+				"geometry": {
+					"type": "Polygon",
+					"coordinates": [cell.polygon.map((point) => [point.x, point.y])],
+				},
+				"properties": {
+					// TODO: Replace this with an actual colour
+					"colour": `hsla(${(Math.random()*360).toFixed(2)}, 50%, 50%, 0.6)`
+				}
+			});
 		}
-		
-		svg.complete();
-		console.log(svg.toString());
-		return svg.toString();
+		return geojson;
 	}
 	
 	add_to(map) {
-		let bounds = this.computeBoundingBox();
-		this.layer = L.svgOverlay(
-			SvgWriter.string2element(this.render()),
-			L.latLngBounds(
-				L.latLng(bounds.TopLeft.y, bounds.TopLeft.x),
-				L.latLng(bounds.BottomRight.y, bounds.BottomRight.x)
-			)
-		);
+		this.layer = L.geoJSON(this.render(), {
+			style: (feature) => { return { color: feature.properties.colour } }
+		});
 		this.layer.addTo(map);
 	}
 	

@@ -2,7 +2,7 @@
 
 import XMLWriter from 'xml-writer';
 
-import Rectangle from './Rectangle.mjs';
+// import Rectangle from './Rectangle.mjs';
 import Vector2 from './Vector2.mjs';
 
 /*
