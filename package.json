@@ -27,6 +27,7 @@
 		"leaflet.markercluster": "^1.4.1",
 		"moment": "^2.24.0",
 		"nanomodal": "^5.1.1",
+		"shepherd.js": "^2.9.1",
 		"smartsettings": "^1.2.3",
 		"tabs": "^0.2.0",
 		"xml-writer": "^1.7.0"
