@@ -17,6 +17,14 @@ class VoronoiOverlay {
 	}
 	
 	/**
+	 * Sets the list of cells in the voronoi overlay.
+	 * @param {VoronoiCell[]} cells The cells to add, as an array.
+	 */
+	setCells(cells) {
+		this.cells.length = 0;
+		this.addCells(...cells);
+	}
+	/**
 	 * Adds a cell to the voronoi overlay.
 	 * @param {VoronoiCell} cells The cell to add. May be specified as many times as requires to add cells in bulk.
 	 */
@@ -67,9 +75,6 @@ class VoronoiOverlay {
 			bounding_box.Right, bounding_box.Bottom
 		]);
 		
-		console.log(voronoi);
-		
-		// TODO: Map the generated polygons back onto this.cells
 		let i = 0;
 		for(let polygon of voronoi.cellPolygons()) {
 			let our_cell = this.cells[i];
@@ -77,10 +82,6 @@ class VoronoiOverlay {
 			
 			i++;
 		}
-		
-		console.log(this.cells);
-		
-		// TODO: Investigate GeoJSON. Maybe it could help us avoid the complexity of an SVGOverlay? It looks like we might be able to apply a custom colour to a GeoJSON polygon too: https://leafletjs.com/reference-1.5.0.html#geojson
 		
 		let geojson = [];
 		

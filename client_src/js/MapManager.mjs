@@ -66,8 +66,9 @@ class MapManager {
 		this.ui.setup().then(() => console.log("[map] Settings initialised."));
 	}
 	
-	setup_overlay() {
+	async setup_overlay() {
 		this.overlay = new VoronoiManager(this.device_data, this.map);
+		await this.overlay.set_data(new Date(), "PM25");
 	}
 	
 	setup_time_dimension() {

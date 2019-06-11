@@ -13,7 +13,7 @@ class Guage {
 		this.context = this.canvas.getContext("2d");
 	}
 	
-	set_spec(spec, max) {
+	set_spec({ gradient: spec, max }) {
 		this.spec = spec;
 		this.max = max;
 	}
