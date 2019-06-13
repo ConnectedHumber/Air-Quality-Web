@@ -1,14 +1,14 @@
 # Changelog
 
-## v0.10.2
+## v0.10.2 - 13rd June 2019
  - [API Docs] Add links to action sections
  - [API] Bugfix: Fix default index action so it actually displays the api welcome message
 
-## v0.10.1
+## v0.10.1 - 10th June 2019
  - Remove heatmap blob radius UI setting
  - Add welcome tour, which shows the first time the page is loaded
 
-## v0.10
+## v0.10 - 10th June 2019
  - Change heatmap into a voronoi diagram ([#30](https://github.com/ConnectedHumber/Air-Quality-Web/issues/30))
 
 ## v0.9.2 - 3rd June 2019
