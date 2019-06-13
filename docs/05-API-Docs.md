@@ -103,8 +103,8 @@ Parameter			| Type		| Meaning
 --------------------|-----------|---------------------
 `device-id`			| int		| The id of the device to get data for.
 `reading-type`		| string	| The type of reading to obtain data for.
-`start`				| datetime  | The starting datetime.
-`end`				| datetime  | The ending datetime.
+`start`				| datetime  | The starting datetime, or the special keyword "now".
+`end`				| datetime  | The ending datetime, or the special keyword "now".
 `average-seconds`	| int		| Optional. If specified, readings will be grouped into lumps of this many seconds and averaged. For example a value of 3600 (1 hour) will return 1 data point per hour, with the value of each point an average of all the readings for that hour.
 `format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
@@ -112,7 +112,10 @@ Parameter			| Type		| Meaning
 https://example.com/path/to/api.php?action=device-data&device-id=18&reading-type=PM25&start=2019-01-19T18:14:59.992Z&end=2019-01-20T18:14:59.992Z
 https://example.com/path/to/api.php?action=device-data&device-id=18&reading-type=PM25&start=2019-01-19T18:14:59.992Z&end=2019-01-20T18:14:59.992Z&average-seconds=3600
 https://example.com/path/to/api.php?action=device-data&device-id=18&reading-type=PM25&start=2019-01-19T18:14:59.992Z&end=now&average-seconds=3600&format=csv
+https://example.com/path/to/api.php?action=device-data&device-id=18&reading-type=PM25&start=2019-06-13T00:00:00&end=now&format=csv
 ```
+
+
 
 
 ## changelog
