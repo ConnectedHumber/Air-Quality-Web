@@ -1,5 +1,8 @@
 # Changelog
 
+# v0.10.2
+ - [API Docs] Add links to action sections
+
 # v0.10.1
  - Remove heatmap blob radius UI setting
  - Add welcome tour, which shows the first time the page is loaded
