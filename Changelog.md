@@ -2,6 +2,7 @@
 
 # v0.10.2
  - [API Docs] Add links to action sections
+ - [API] Bugfix: Fix default index action so it actually displays the api welcome message
 
 # v0.10.1
  - Remove heatmap blob radius UI setting
