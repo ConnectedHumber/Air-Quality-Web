@@ -6,7 +6,7 @@ use \SBRL\TomlConfig;
 
 use \AirQuality\PerfFormatter;
 
-class Changelog implements IAction {
+class Index implements IAction {
 	/** @var TomlConfig */
 	private $settings;
 	
