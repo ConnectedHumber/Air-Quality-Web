@@ -1,27 +1,27 @@
 # Changelog
 
-# v0.10.2
+## v0.10.2
  - [API Docs] Add links to action sections
  - [API] Bugfix: Fix default index action so it actually displays the api welcome message
 
-# v0.10.1
+## v0.10.1
  - Remove heatmap blob radius UI setting
  - Add welcome tour, which shows the first time the page is loaded
 
-# v0.10
+## v0.10
  - Change heatmap into a voronoi diagram ([#30](https://github.com/ConnectedHumber/Air-Quality-Web/issues/30))
 
-# v0.9.2 - 3rd June 2019
+## v0.9.2 - 3rd June 2019
  - [API] Updated the [API documentation](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html) with a quick reference of the available actions at the top.
 
-# v0.9.1 - 16th May 2019
+## v0.9.1 - 16th May 2019
  - [API] Changed the default action. It now displays a helpful message by default instead of routing directly to `fetch-data`.
 
-# v0.9 - 9th May 2019
+## v0.9 - 9th May 2019
  - Add heatmap gauge at the right-hand-side
  - Display the changelog the first time a user loads the page after an update
 
-# v0.8 - 23rd April 2019
+## v0.8 - 23rd April 2019
  - Update heatmap colours to match the [official DEFRA standards](https://uk-air.defra.gov.uk/air-pollution/daqi?view=more-info&pollutant=pm25#pollutant)
  - Bugfix: Allow different reading types to be selected once more in the bottom-left
  - Bugfix: Immediately update heatmap when changing the blob radius
