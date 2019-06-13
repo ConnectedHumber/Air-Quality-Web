@@ -51,6 +51,37 @@ class Validator {
 			"Error: The field $key in your request isn't a number."
 		);
 	}
+	
+	/**
+	 * Ensures that the value associated with the given key is at most a given 
+	 * value.
+	 * @param	string		$key	The key to test the value of.
+	 * @param	int|float	$max	The maximum value allowed.
+	 * @return	void
+	 */
+	public function is_max(string $key, $max) {
+		$this->add_test(
+			$key,
+			function($data) use($max) { return floatval($data) <= $max; },
+			400,
+			"Error: The field $key in your request must be at most $max."
+		);
+	}
+	/**
+	 * Ensures that the value associated with the given key is at least a given 
+	 * value.
+	 * @param	string		$key	The key to test the value of.
+	 * @param	int|float	$min	The minimum value allowed.
+	 * @return	void
+	 */
+	public function is_min(string $key, $min) {
+		$this->add_test(
+			$key,
+			function($data) use($min) { return floatval($data) >= $min; },
+			400,
+			"Error: The field $key in your request must be at least $min."
+		);
+	}
 	/**
 	 * Checks that the value associated with the given key is a least a given 
 	 * number of characters long.
@@ -138,7 +169,7 @@ class Validator {
 			$message
 		);
 	}
-
+	
 	/**
 	 * Ensures the value associated with the specified key is a valid datetime.
 	 * @param  string  $key The key of the value to check.
