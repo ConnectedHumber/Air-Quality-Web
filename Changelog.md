@@ -1,6 +1,10 @@
 # Changelog
 
-## v0.10.2 - 13rd June 2019
+## v0.10.3 - 13th June 2019
+ - [API] Added new [`device-data-recent`](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html#device-data-recent) action.
+ - [Code] Improve documentation of underlying code.
+
+## v0.10.2 - 13th June 2019
  - [API Docs] Add links to action sections
  - [API] Bugfix: Fix default index action so it actually displays the api welcome message
 
