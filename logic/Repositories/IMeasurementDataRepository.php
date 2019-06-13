@@ -29,4 +29,13 @@ interface IMeasurementDataRepository {
 	 */
 	public function get_readings_by_device(int $device_id, int $type_id, \DateTime $start, \DateTime $end, int $average_seconds = 1);
 	
+	/**
+	 * Retrieves a given number of the most recent readings for a specific device.
+	 * @param	int		$device_id	The id of the device to get recent readings for.
+	 * @param	int		$type_id	The id of the reading type to fetch data for.
+	 * @param	int		$count		The number of readings to return.
+	 * @return	array	The requested data.
+	 */
+	public function get_recent_readings(int $device_id, int $type_id, int $count);
+	
 }

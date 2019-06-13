@@ -115,8 +115,20 @@ https://example.com/path/to/api.php?action=device-data&device-id=18&reading-type
 https://example.com/path/to/api.php?action=device-data&device-id=18&reading-type=PM25&start=2019-06-13T00:00:00&end=now&format=csv
 ```
 
+## device-data-recent
+> Gets a given number of the most recent readings for a specific device.
 
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`device-id`			| int		| The id of the device to get data for.
+`reading-type`		| string	| The type of reading to obtain data for.
+`count`				| int		| The number of recent readings to return.
+`format`            | string    | Optional. Specifies the format that the response will be returned in. Valid values: `json`, `csv`. Default: `json`.
 
+```
+https://example.com/path/to/api.php?action=device-data-recent&device-id=21&reading-type=PM25&count=5
+https://example.com/path/to/api.php?action=device-data-recent&device-id=36&reading-type=humidity&count=30
+```
 
 ## changelog
 > Gets the changelog as a fragment of HTML.

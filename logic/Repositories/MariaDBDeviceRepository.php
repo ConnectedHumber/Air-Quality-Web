@@ -35,7 +35,10 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	 */
 	private $database;
 	
-	/** Function that gets a static variable by it's name. Useful in preparing SQL queries. */
+	/** 
+	 * Function that gets a static variable by it's name. Useful in preparing SQL queries.
+	 * @var callable
+	 */
 	private $get_static;
 	
 	function __construct(\AirQuality\Database $in_database) {

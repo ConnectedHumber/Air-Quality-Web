@@ -45,3 +45,12 @@ max-age = 2592000 # 30 days
 # time-step. Ideally, this value should be half of the actual data recording 
 # interval.
 max_reading_timediff = 180
+
+[limits]
+# Various tunable limits.
+
+[limits.device_data_recent]
+# The device-data-recent action
+
+# The max. number of rows allowed in a single request
+max_rows = 1000
