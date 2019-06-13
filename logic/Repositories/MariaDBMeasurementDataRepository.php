@@ -166,13 +166,13 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 		$s = $this->get_static;
 		return $this->database->query(
 			"SELECT
-				AVG({$s("table_name_values")}.{$s("column_values_value")}) AS {$s("column_values_value")},
-				MIN({$s("table_name_values")}.{$s("column_values_reading_id")}) AS {$s("column_values_reading_id")},
+				{$s("table_name_values")}.{$s("column_values_value")} AS {$s("column_values_value")},
+				{$s("table_name_values")}.{$s("column_values_reading_id")} AS {$s("column_values_reading_id")},
 				
-				MIN(COALESCE(
+				COALESCE(
 					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
 					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				)) AS datetime
+				) AS datetime
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON
 				{$s("table_name_metadata")}.{$s("column_metadata_id")} = {$s("table_name_values")}.{$s("column_values_reading_id")}
@@ -182,7 +182,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 			ORDER BY COALESCE(
 				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
 				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			)
+			) DESC
 			LIMIT :count;", [
 				"device_id" => $device_id,
 				"reading_type" => $type_id,

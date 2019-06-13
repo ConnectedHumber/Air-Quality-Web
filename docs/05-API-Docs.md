@@ -14,7 +14,11 @@ Action									| Meaning
 [`device-data`](#device-data)			| Gets data by device given a start and end time.
 [`changelog`](#changelog)				| Gets the changelog as a fragment of HTML.
 
-These are explained in detail below:
+These are explained in detail below. First though, a few notes:
+
+ - All dates are in UTC.
+ - All datetime-type fields support the keyword `now`.
+
 
 ## version
 > Returns the version of the application.
