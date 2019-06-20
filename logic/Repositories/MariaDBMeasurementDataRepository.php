@@ -63,6 +63,11 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	}
 	
 	public function get_readings_by_date(\DateTime $datetime, int $type_id) {
+		$max_reading_timediff = $this->settings->get("data.max_reading_timediff");
+		
+		$start_datetime = (clone $datetime)->sub(new \DateInterval("PT${max_reading_timediff}S"));
+		$end_datetime = (clone $datetime)->add(new \DateInterval("PT${max_reading_timediff}S"));
+		
 		$s = $this->get_static;
 		$o = $this->get_static_extra;
 		
@@ -80,22 +85,24 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				COUNT({$s("table_name_metadata")}.{$s("column_metadata_device_id")}) AS record_count
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON {$s("table_name_values")}.{$s("column_values_reading_id")} = {$s("table_name_metadata")}.id
-			WHERE ABS(TIME_TO_SEC(TIMEDIFF(
-				:datetime,
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				)
-			))) < :max_reading_timediff
+			WHERE
+			COALESCE(
+				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+			) >= :start_datetime AND
+			COALESCE(
+				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
+				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
+			) <= :end_datetime
 			AND 
 				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type
 			GROUP BY {$s("table_name_metadata")}.{$s("column_metadata_device_id")}
 			ORDER BY {$s("table_name_metadata")}.{$s("column_metadata_recordedon")}
 				", [
-				// The database likes strings, not PHP DateTime() instances
-				"datetime" => $datetime->format(\DateTime::ISO8601),
 				"reading_type" => $type_id,
-				"max_reading_timediff" => $this->settings->get("data.max_reading_timediff")
+				// The database likes strings, not PHP DateTime() instances
+				"start_datetime" => $start_datetime->format(\DateTime::ISO8601),
+				"end_datetime" => $end_datetime->format(\DateTime::ISO8601),
 			]
 		)->fetchAll();
 	}
