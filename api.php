@@ -12,15 +12,22 @@ $autoloader->addPrefix("AirQuality", "logic");
 $autoloader->addPrefix("SBRL", "lib/SBRL");
 $autoloader->register();
 
+// 1.5: Performance counter
+$perfcounter = new \SBRL\PerformanceCounter();
+$perfcounter->start("total");
 
 // 2: Settings
+$perfcounter->start("settings");
 $settings = new \SBRL\TomlConfig(
 	"data/settings.toml",
 	"settings.default.toml"
 );
+$perfcounter->end("settings");
 
 
 // 3: Dependency injection
+
+$perfcounter->start("di");
 
 $di_builder = new DI\ContainerBuilder();
 $di_builder->addDefinitions("di_config.php");
@@ -37,6 +44,7 @@ if($settings->get("env.mode") == "production") {
 
 $di_container = $di_builder->build();
 
+$perfcounter->end("di");
 
 // 4: Database
 
@@ -68,6 +76,8 @@ if(!class_exists($handler_name)) {
 	exit("Error: No action with the name '$action' could be found.");
 }
 
-// FUTURE: A PSR-7 request/response system would be rather nice here.
 $handler = $di_container->get($handler_name);
+
+$perfcounter->start("handle");
+// FUTURE: A PSR-7 request/response system would be rather nice here.
 $handler->handle();

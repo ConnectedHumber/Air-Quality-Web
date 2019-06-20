@@ -4,25 +4,27 @@ namespace AirQuality\Actions;
 
 use \SBRL\TomlConfig;
 
-use \AirQuality\PerfFormatter;
 
 class Index implements IAction {
 	/** @var TomlConfig */
 	private $settings;
+	/** @var \SBRL\PerformanceCounter */
+	private $perfcounter;
 	
 	/** @var \ParsedownExtra */
 	private $parsedown_ext;
 	
 	public function __construct(
-		TomlConfig $in_settings) {
+		TomlConfig $in_settings,
+		\SBRL\PerformanceCounter $in_perfcounter) {
 		$this->settings = $in_settings;
+		$this->perfcounter = $in_perfcounter;
 	}
 	
 	public function handle() : bool {
 		global $start_time;
 		
-		$start_handle = microtime(true);
-		
+		$this->perfcounter->start("handle");
 		
 		// 1: Parse markdown
 		$result = "Welcome to the Air Quality Web HTTP API!
@@ -38,7 +40,7 @@ Note that if you have deployed your own version of the air quality web interface
 		// 2: Send response
 		header("content-length: " . strlen($result));
 		header("content-type: text/plain");
-		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null));
+		header("x-time-taken: " . $this->perfcounter->render());
 		echo($result);
 		return true;
 	}

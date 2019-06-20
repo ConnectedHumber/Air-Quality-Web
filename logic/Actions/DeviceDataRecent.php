@@ -9,7 +9,7 @@ use \AirQuality\Repositories\IMeasurementTypeRepository;
 use \AirQuality\ApiResponseSender;
 
 use \AirQuality\Validator;
-use \AirQuality\PerfFormatter;
+
 
 /**
  * Action that retrieves recent data for a device.
@@ -17,6 +17,8 @@ use \AirQuality\PerfFormatter;
 class DeviceDataRecent implements IAction {
 	/** @var TomlConfig */
 	private $settings;
+	/** @var \SBRL\PerformanceCounter */
+	private $perfcounter;
 	
 	/** @var IMeasurementDataRepository */
 	private $measurement_repo;
@@ -33,11 +35,13 @@ class DeviceDataRecent implements IAction {
 		TomlConfig $in_settings,
 		IMeasurementDataRepository $in_measurement_repo,
 		IMeasurementTypeRepository $in_type_repo,
-		ApiResponseSender $in_sender) {
+		ApiResponseSender $in_sender,
+		\SBRL\PerformanceCounter $in_perfcounter) {
 		$this->settings = $in_settings;
 		$this->measurement_repo = $in_measurement_repo;
 		$this->type_repo = $in_type_repo;
 		$this->sender = $in_sender;
+		$this->perfcounter = $in_perfcounter;
 		
 		$this->validator = new Validator($_GET);
 	}
@@ -45,7 +49,6 @@ class DeviceDataRecent implements IAction {
 	public function handle() : bool {
 		global $start_time;
 		
-		$start_handle = microtime(true);
 		
 		// 1: Validate params
 		$this->validator->is_numberish("device-id");
@@ -69,24 +72,26 @@ class DeviceDataRecent implements IAction {
 		if($reading_type_id == null) {
 			$this->sender->send_error_plain(
 				400, "Error: That reading type is invalid.", [
-					[ "x-time-taken", PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+					[ "x-time-taken", $this->perfcounter->render() ]
 				]
 			);
 			return false;
 		}
 		
 		// 2: Pull data from database
+		$this->perfcounter->start("sql");
 		$data = $this->measurement_repo->get_recent_readings(
 			intval($_GET["device-id"]),
 			$reading_type_id,
 			$count
 		);
+		$this->perfcounter->end("sql");
 		
 		// 2.5: Validate data from database
 		if(empty($data)) {
 			http_response_code(404);
 			header("content-type: text/plain");
-			header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, null));
+			header("x-time-taken: " . $this->perfcounter->render());
 			echo("Error: No data has been recorded from the device id for that measurement type in the selected time scale or it doesn't exist.");
 			return false;
 		}
@@ -96,7 +101,7 @@ class DeviceDataRecent implements IAction {
 		
 		// FUTURE: Refactor this into an AbstractAction or something, but the careful not to shift too much work there
 		// We might want to consider a HttpResponse container or something if we can find a decent PSR implementation
-		$start_encode = microtime(true);
+		$this->perfcounter->start("encode");
 		$response_type = "application/octet-stream";
 		$response_suggested_filename = "data-" . date(\DateTime::ATOM) . "";
 		$response = null;
@@ -112,13 +117,14 @@ class DeviceDataRecent implements IAction {
 				$response = ResponseEncoder::encode_csv($data);
 				break;
 		}
+		$this->perfcounter->end("encode");
 		
 		
 		// 4: Send response
 		header("content-length: " . strlen($response));
 		header("content-type: $response_type");
 		header("content-disposition: inline; filename=$response_suggested_filename");
-		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
+		header("x-time-taken: " . $this->perfcounter->render());
 		echo($response);
 		return true;
 	}

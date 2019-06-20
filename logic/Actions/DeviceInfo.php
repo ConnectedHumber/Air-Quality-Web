@@ -4,14 +4,18 @@ namespace AirQuality\Actions;
 
 use \SBRL\TomlConfig;
 use \AirQuality\Repositories\IDeviceRepository;
+use \AirQuality\Repositories\IMeasurementTypeRepository;
 use \AirQuality\ApiResponseSender;
 
 use \AirQuality\Validator;
-use \AirQuality\PerfFormatter;
+
 
 class DeviceInfo implements IAction {
 	/** @var TomlConfig */
 	private $settings;
+	/** @var \SBRL\PerformanceCounter */
+	private $perfcounter;
+	
 	/** @var IDeviceRepository */
 	private $device_repo;
 	
@@ -27,10 +31,12 @@ class DeviceInfo implements IAction {
 	public function __construct(
 		TomlConfig $in_settings,
 		IDeviceRepository $in_device_repo,
-		ApiResponseSender $in_sender) {
+		ApiResponseSender $in_sender,
+		\SBRL\PerformanceCounter $in_perfcounter) {
 		$this->settings = $in_settings;
 		$this->device_repo = $in_device_repo;
 		$this->sender = $in_sender;
+		$this->perfcounter = $in_perfcounter;
 		
 		$this->validator = new Validator($_GET);
 	}
@@ -38,28 +44,30 @@ class DeviceInfo implements IAction {
 	public function handle() : bool {
 		global $start_time;
 		
-		$start_handle = microtime(true);
 		
 		// 1: Validate params
 		$this->validator->is_numberish("device-id");
 		$this->validator->run();
 		
 		// 2: Pull data from database
+		$this->perfcounter->start("sql");
 		$data = $this->device_repo->get_device_info_ext(
 			$_GET["device-id"]
 		);
+		$this->perfcounter->end("sql");
 		
 		// 2.5: Validate data from database
 		if(empty($data)) {
 			$this->sender->send_error_plain(404, "Error: No data could be found for that device id.", [
-				[ "x-time-taken: ", PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+				[ "x-time-taken: ", $this->perfcounter->render() ]
 			]);
 			return false;
 		}
 		
 		// 3: Serialise data
-		$start_encode = microtime(true);
+		$this->perfcounter->start("encode");
 		$response = json_encode($data);
+		$this->perfcounter->end("encode");
 		
 		// 4: Send response
 		
@@ -70,7 +78,7 @@ class DeviceInfo implements IAction {
 		
 		header("content-length: " . strlen($response));
 		header("content-type: application/json");
-		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
+		header("x-time-taken: " . $this->perfcounter->render());
 		echo($response);
 		return true;
 	}

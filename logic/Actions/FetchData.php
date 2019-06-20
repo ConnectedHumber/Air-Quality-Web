@@ -9,11 +9,13 @@ use \AirQuality\Repositories\IMeasurementTypeRepository;
 use \AirQuality\ApiResponseSender;
 
 use \AirQuality\Validator;
-use \AirQuality\PerfFormatter;
+
 
 class FetchData implements IAction {
 	/** @var TomlConfig */
 	private $settings;
+	/** @var \SBRL\PerformanceCounter */
+	private $perfcounter;
 	
 	/** @var IMeasurementDataRepository */
 	private $measurement_repo;
@@ -30,11 +32,13 @@ class FetchData implements IAction {
 		TomlConfig $in_settings,
 		IMeasurementDataRepository $in_measurement_repo,
 		IMeasurementTypeRepository $in_type_repo,
-		ApiResponseSender $in_sender) {
+		ApiResponseSender $in_sender,
+		\SBRL\PerformanceCounter $in_perfcounter) {
 		$this->settings = $in_settings;
 		$this->measurement_repo = $in_measurement_repo;
 		$this->type_repo = $in_type_repo;
 		$this->sender = $in_sender;
+		$this->perfcounter = $in_perfcounter;
 		
 		$this->validator = new Validator($_GET);
 	}
@@ -42,7 +46,6 @@ class FetchData implements IAction {
 	public function handle() : bool {
 		global $start_time;
 		
-		$start_handle = microtime(true);
 		
 		// 1: Validate params
 		$this->validator->is_datetime("datetime");
@@ -58,7 +61,7 @@ class FetchData implements IAction {
 		if($measurement_type_id == null) {
 			$this->sender->send_error_plain(
 				400, "Error: That reading type is invalid.", [
-					[ "x-time-taken", PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+					[ "x-time-taken", $this->perfcounter->render() ]
 				]
 			);
 			return false;
@@ -66,24 +69,26 @@ class FetchData implements IAction {
 		
 		
 		// 2: Pull data from database
+		$this->perfcounter->start("sql");
 		$data = $this->measurement_repo->get_readings_by_date(
 			new \DateTime($_GET["datetime"]),
 			$measurement_type_id
 		);
+		$this->perfcounter->end("sql");
 		
 		
 		// 2.5: Validate data from database
 		if(empty($data)) {
 			$this->sender->send_error_plain(404,
 				"Error: No data could be found for that timestamp.",
-				[ PerfFormatter::format_perf_data($start_time, $start_handle, null) ]
+				[ [ "x-time-taken", $this->perfcounter->render() ] ]
 			);
 			return false;
 		}
 		
 		
 		// 3: Serialise data
-		$start_encode = microtime(true);
+		$this->perfcounter->start("encode");
 		$response_type = "application/octet-stream";
 		$response_suggested_filename = "data-" . date(\DateTime::ATOM) . "";
 		$response = null;
@@ -99,6 +104,7 @@ class FetchData implements IAction {
 				$response = ResponseEncoder::encode_csv($data);
 				break;
 		}
+		$this->perfcounter->end("encode");
 		
 		
 		// 4: Send response
@@ -111,7 +117,7 @@ class FetchData implements IAction {
 		header("content-type: $response_type");
 		header("content-length: " . strlen($response));
 		header("content-disposition: inline; filename=$response_suggested_filename");
-		header("x-time-taken: " . PerfFormatter::format_perf_data($start_time, $start_handle, $start_encode));
+		header("x-time-taken: " . $this->perfcounter->render());
 		echo($response);
 		return true;
 	}
