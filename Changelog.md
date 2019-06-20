@@ -3,6 +3,7 @@
 ## v0.10.4 - 20th June 2019
  - [API] Optimise `fetch-data` (the action behind the voronoi diagram heatmap) a bit - it's roughly 100ms faster now
      - More speed will be coming soon with the addition of database indexes
+ - Update dependencies behind web interface
 
 ## v0.10.3 - 13th June 2019
  - [API] Added new [`device-data-recent`](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html#device-data-recent) action.
