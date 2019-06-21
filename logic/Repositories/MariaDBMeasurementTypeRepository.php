@@ -20,8 +20,15 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 	 */
 	private $database;
 	
-	/** Functions that get a static variable by it's name. Useful in preparing SQL queries. */
+	/**
+	 * Functions that get a static variable by it's name. Useful in preparing SQL queries.
+	 * @var callable
+	 */
 	private $get_static;
+	/**
+	 * Functions that get a static variable by it's class and property names. Useful in preparing SQL queries.
+	 * @var callable
+	 */
 	private $get_static_extra;
 	
 	function __construct(\AirQuality\Database $in_database) {

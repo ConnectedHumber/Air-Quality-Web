@@ -57,11 +57,17 @@ class Database
 			error_log("[Database/SQL] $sql");
 		
 		// FUTURE: Optionally cache prepared statements?
-		$statement = $this->connection->prepare($sql);
+		// Note that we replace tabs with spaces for debugging purposes
+		$statement = $this->connection->prepare(str_replace("\t", "    ", $sql));
 		$statement->execute($variables);
 		return $statement; // fetchColumn(), fetchAll(), etc. are defined on the statement, not the return value of execute()
 	}
 	
+	/**
+	 * Returns the connection string to use to connect to the database.
+	 * This is calculated from the values specified in the settings file.
+	 * @return	string	The connection string.
+	 */
 	private function get_connection_string() {
 		return "{$this->settings->get("database.type")}:host={$this->settings->get("database.host")};dbname={$this->settings->get("database.name")};charset=utf8mb4";
 	}

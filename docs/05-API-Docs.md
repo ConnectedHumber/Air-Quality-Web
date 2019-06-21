@@ -8,6 +8,7 @@ Action									| Meaning
 [`version`](#version)					| Gets the version of _Air Quality Web_ that's currently running.
 [`fetch-data`](#fetch-data)				| Fetches air quality data from the system for a specific data type at a specific date and time.
 [`list-devices`](#list-devices)			| Fetches a list of devices currently in the system.
+[`list-devices-near`](#list-devices-near)   | Lists the devices close to a given location (new since v0.11!)
 [`device-info`](#device-info)			| Gets (lots of) information about a single device.
 [`list-reading-types`](#list-reading-types)	| Lists the different types of readings that can be specified.
 [`device-data-bounds`](#device-data-bounds)	| Gets the start and end DateTime bounds for the data recorded for a specific device.
@@ -18,6 +19,8 @@ These are explained in detail below. First though, a few notes:
 
  - All dates are in UTC.
  - All datetime-type fields support the keyword `now`.
+ - Additional object properties MAY be returned by the API at a later date. Clients MUST ignore additional unknown properties they do not understand.
+ - Clients SHOULD respect the `cache-control` headers returned by the API.
 
 
 ## version
@@ -63,6 +66,49 @@ Examples:
 https://example.com/path/to/api.php?action=list-devices
 https://example.com/path/to/api.php?action=list-devices&only-with-location=yes
 ```
+
+## list-devices-near
+> Lists devices close to a given location.
+
+
+**Remember:** Don't forget that unlike most other API actions, this requires a `POST` request and not a `GET`! This is to preserve privacy, as the web server stores GET parameters along with request urls in the server logs.
+
+### GET Parameters
+
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`count` 			| int		| Required. Specifies the number of devices to return.
+
+### POST Parameters
+POST parameters should be specified as part of the request body. The request should have a `content-type` of `application/x-www-form-urlencoded`.
+
+Parameter			| Type		| Meaning
+--------------------|-----------|---------------------
+`latitude`			| float		| Required. The latitude of the location to search for nearby devices.
+`longitude`			| float		| Required. The longitude of the location to search for nearby devices.
+
+### Example HTTP Request
+
+```
+POST /api.php?action=list-devices-near&count=5 HTTP/1.1
+host: airquality.example.com
+content-length: 38
+content-type: application/x-www-form-urlencoded
+
+latitude=12.345678&longitude=98.765432
+```
+
+### Response Object Properties
+Since it may not be obvious, the properties returned in a response object are detailed below:
+
+Property			| Meaning
+--------------------|----------------------------------
+`id`				| The device's unique id.
+`name`				| The device's name. Should be unique, but don't count on it.
+`latitude`			| The latitude of the device in question.
+`longitude`			| The longitude of the aforementioned device.
+`distance_calc`		| The distance between the specified point and the device, represented as the length of a relative (lat, long) vector between the 2. _Should_ be accurate enough to get the devices in the right order with respect to the actual distance, but if not please [open an issue](https://github.com/ConnectedHumber/Aiq-Quality-Web/issues/new)
+`distance_actual`	| The actual distance between the specified point and the device, in metres.
 
 ## device-info
 > Gets (lots of) information about a single device.

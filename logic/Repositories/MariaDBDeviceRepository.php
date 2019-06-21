@@ -2,6 +2,10 @@
 
 namespace AirQuality\Repositories;
 
+use Location\Coordinate;
+use Location\Distance\Vincenty;
+
+
 /**
  * Fetches device info from a MariaDB database.
  */
@@ -13,6 +17,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public static $column_owner_id = "owner_id";
 	public static $column_lat = "device_latitude";
 	public static $column_long = "device_longitude";
+	public static $column_point = "lat_lon";
 	public static $column_altitude = "device_altitude";
 	
 	public static $table_name_type = "device_types";
@@ -35,14 +40,21 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	 */
 	private $database;
 	
+	/**
+	 * The distance calculator. From the mjaschen/phpgeo library on packagist.
+	 * @var Vincenty
+	 */
+	private $distance_calculator;
+	
 	/** 
 	 * Function that gets a static variable by it's name. Useful in preparing SQL queries.
 	 * @var callable
 	 */
 	private $get_static;
 	
-	function __construct(\AirQuality\Database $in_database) {
+	function __construct(\AirQuality\Database $in_database, Vincenty $in_distance_calculator) {
 		$this->database = $in_database;
+		$this->distance_calculator = $in_distance_calculator;
 		
 		$this->get_static = function($name) { return self::$$name; };
 	}
@@ -101,6 +113,45 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			
 			$result[strtolower($key)] = $value;
 		}
+		return $result;
+	}
+	
+	public function get_near_location(float $lat, float $long, int $count) {
+		$s = $this->get_static;
+		
+		$result = $this->database->query(
+			"SELECT
+				{$s("table_name")}.{$s("column_device_id")} AS id,
+				{$s("table_name")}.{$s("column_device_name")} AS name,
+				{$s("table_name")}.{$s("column_lat")} AS latitude,
+				{$s("table_name")}.{$s("column_long")} AS longitude,
+				ST_DISTANCE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc
+			FROM {$s("table_name")}
+			WHERE {$s("table_name")}.{$s("column_point")} IS NOT NULL
+			ORDER BY ST_DISTANCE(POINT(:latitude_again, :longitude_again), {$s("table_name")}.{$s("column_point")})
+			LIMIT :count;", [
+				"latitude" => $lat,
+				"longitude" => $long,
+				"latitude_again" => $lat,
+				"longitude_again" => $long,
+				"count" => $count
+			]
+		)->fetchAll();
+		
+		// Calculate the *actual* distance in metres.
+		// This is complicated and requires nasty formulae, so we're using a library here
+		// FUTURE: Apparently said library supports caching with PSR-6 - maybe we could take advantage of a PSR-6 implementation both here and elsewhere?
+		$loc = new Coordinate($lat, $long);
+		foreach($result as &$item) {
+			$item["distance_actual"] = $this->distance_calculator->getDistance(
+				$loc,
+				new Coordinate(
+					floatval($item["latitude"]),
+					floatval($item["longitude"])
+				)
+			);
+		}
+		
 		return $result;
 	}
 }
