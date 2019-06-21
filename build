@@ -363,6 +363,7 @@ SFTPCOMMANDS
 		
 		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
 		echo "mv \"${deploy_root_dir}/www-new\" \"${deploy_root_dir}/www\"";
+		echo "rm -r \"../data/cache\"";
 		echo "rm -r \"${deploy_root_dir}/www-old\"";
 		echo "bye";
 	) >"${lftp_commands_filename}";
