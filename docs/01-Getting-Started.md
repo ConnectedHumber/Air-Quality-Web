@@ -20,7 +20,9 @@ The process is outlined in detail below.
  - [Composer](https://getcomposer.org/) (for installing server-side dependencies)
  - PHP modules:
      - `pdo-mysql` (for the database connection)
- - A [MariaDB](https://mariadb.com/) server with a database already setup with the schema data in it. Please get in contact with [ConnectedHumber](https://connectedhumber.org/) for information about the database schema and structure.
+ - A [MariaDB](https://mariadb.com/) server with a database already setup with the schema loaded into it.
+     - Find that here: https://github.com/ConnectedHumber/MQTT/blob/master/database/aqdb_V2_no_data.sql ([direct link](https://raw.githubusercontent.com/ConnectedHumber/MQTT/master/database/aqdb_V2_no_data.sql))
+     - If you have any issue, please get in contact with [ConnectedHumber](https://connectedhumber.org/).
 
 
 ## Installation
