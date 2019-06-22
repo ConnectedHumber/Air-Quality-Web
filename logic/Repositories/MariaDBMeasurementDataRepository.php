@@ -20,6 +20,11 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	public static $column_metadata_id = "id";
 	public static $column_metadata_storedon = "storedon";
 	public static $column_metadata_recordedon = "recordedon";
+	/**
+	 * A coaleasce of storedon and recorded on.
+	 * @var string
+	 */
+	public static $column_metadata_datetime = "datetime";
 	public static $column_metadata_device_id = "device_id";
 	public static $column_metadata_lat = "reading_latitude";
 	public static $column_metadata_long = "reading_longitude";
@@ -78,26 +83,17 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				{$s("table_name_values")}.{$s("column_values_reading_id")},
 				
 				{$s("table_name_metadata")}.{$s("column_metadata_device_id")},
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				) AS datetime,
+				{$s("table_name_metadata")}.{$s("column_metadata_datetime")} AS datetime,
 				COUNT({$s("table_name_metadata")}.{$s("column_metadata_device_id")}) AS record_count
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON {$s("table_name_values")}.{$s("column_values_reading_id")} = {$s("table_name_metadata")}.id
 			WHERE
-			COALESCE(
-				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			) >= :start_datetime AND
-			COALESCE(
-				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			) <= :end_datetime
+			{$s("table_name_metadata")}.{$s("column_metadata_datetime")} >= :start_datetime AND
+			{$s("table_name_metadata")}.{$s("column_metadata_datetime")} <= :end_datetime
 			AND 
 				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type
 			GROUP BY {$s("table_name_metadata")}.{$s("column_metadata_device_id")}
-			ORDER BY {$s("table_name_metadata")}.{$s("column_metadata_recordedon")}
+			ORDER BY {$s("table_name_metadata")}.{$s("column_metadata_datetime")}
 				", [
 				"reading_type" => $type_id,
 				// The database likes strings, not PHP DateTime() instances
@@ -111,14 +107,8 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 		$s = $this->get_static;
 		return $this->database->query(
 			"SELECT
-				MIN(COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				)) AS start,
-				MAX(COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				)) AS end
+				MIN({$s("table_name_metadata")}.{$s("column_metadata_datetime")}) AS start,
+				MAX({$s("table_name_metadata")}.{$s("column_metadata_datetime")}) AS end
 			FROM {$s("table_name_metadata")}
 			WHERE {$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id;", [
 				"device_id" => $device_id
@@ -135,10 +125,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				AVG({$s("table_name_values")}.{$s("column_values_value")}) AS {$s("column_values_value")},
 				MIN({$s("table_name_values")}.{$s("column_values_reading_id")}) AS {$s("column_values_reading_id")},
 				
-				MIN(COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				)) AS datetime
+				MIN({$s("table_name_metadata")}.{$s("column_metadata_datetime")}) AS datetime
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON
 				{$s("table_name_metadata")}.{$s("column_metadata_id")} = {$s("table_name_values")}.{$s("column_values_reading_id")}
@@ -146,18 +133,9 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				{$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id AND
 				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type AND
 				
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				) >= :start_datetime AND
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				) <= :end_datetime
-			GROUP BY CEIL(UNIX_TIMESTAMP(COALESCE(
-				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			)) / :average_seconds);", [
+				{$s("table_name_metadata")}.{$s("column_metadata_datetime")} >= :start_datetime AND
+				{$s("table_name_metadata")}.{$s("column_metadata_datetime")} <= :end_datetime
+			GROUP BY CEIL(UNIX_TIMESTAMP({$s("table_name_metadata")}.{$s("column_metadata_datetime")}) / :average_seconds);", [
 				"device_id" => $device_id,
 				"reading_type" => $type_id,
 				"start_datetime" => $start->format(\DateTime::ISO8601),
@@ -176,20 +154,14 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				{$s("table_name_values")}.{$s("column_values_value")} AS {$s("column_values_value")},
 				{$s("table_name_values")}.{$s("column_values_reading_id")} AS {$s("column_values_reading_id")},
 				
-				COALESCE(
-					{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-					{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-				) AS datetime
+				{$s("table_name_metadata")}.{$s("column_metadata_datetime")} AS datetime
 			FROM {$s("table_name_values")}
 			JOIN {$s("table_name_metadata")} ON
 				{$s("table_name_metadata")}.{$s("column_metadata_id")} = {$s("table_name_values")}.{$s("column_values_reading_id")}
 			WHERE
 				{$s("table_name_metadata")}.{$s("column_metadata_device_id")} = :device_id AND
 				{$s("table_name_values")}.{$s("column_values_reading_type")} = :reading_type
-			ORDER BY COALESCE(
-				{$s("table_name_metadata")}.{$s("column_metadata_recordedon")},
-				{$s("table_name_metadata")}.{$s("column_metadata_storedon")}
-			) DESC
+			ORDER BY {$s("table_name_metadata")}.{$s("column_metadata_datetime")} DESC
 			LIMIT :count;", [
 				"device_id" => $device_id,
 				"reading_type" => $type_id,

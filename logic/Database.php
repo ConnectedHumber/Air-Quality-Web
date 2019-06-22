@@ -53,12 +53,14 @@ class Database
 	}
 	
 	public function query($sql, $variables = []) {
+		// Replace tabs with spaces for debugging purposes
+		$sql = str_replace("\t", "    ", $sql);
+		
 		if($this->settings->get("env.mode") == "development")
 			error_log("[Database/SQL] $sql");
 		
 		// FUTURE: Optionally cache prepared statements?
-		// Note that we replace tabs with spaces for debugging purposes
-		$statement = $this->connection->prepare(str_replace("\t", "    ", $sql));
+		$statement = $this->connection->prepare($sql);
 		$statement->execute($variables);
 		return $statement; // fetchColumn(), fetchAll(), etc. are defined on the statement, not the return value of execute()
 	}
