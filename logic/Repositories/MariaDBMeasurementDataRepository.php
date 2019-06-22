@@ -2,6 +2,7 @@
 
 namespace AirQuality\Repositories;
 
+use \AirQuality\Constants;
 use \AirQuality\Database;
 use \SBRL\TomlConfig;
 
@@ -97,8 +98,8 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 				", [
 				"reading_type" => $type_id,
 				// The database likes strings, not PHP DateTime() instances
-				"start_datetime" => $start_datetime->format(\DateTime::ISO8601),
-				"end_datetime" => $end_datetime->format(\DateTime::ISO8601),
+				"start_datetime" => $start_datetime->format(Constants::DATETIME_FORMAT_SQL),
+				"end_datetime" => $end_datetime->format(Constants::DATETIME_FORMAT_SQL),
 			]
 		)->fetchAll();
 	}
@@ -138,8 +139,8 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 			GROUP BY CEIL(UNIX_TIMESTAMP({$s("table_name_metadata")}.{$s("column_metadata_datetime")}) / :average_seconds);", [
 				"device_id" => $device_id,
 				"reading_type" => $type_id,
-				"start_datetime" => $start->format(\DateTime::ISO8601),
-				"end_datetime" => $end->format(\DateTime::ISO8601),
+				"start_datetime" => $start->format(Constants::DATETIME_FORMAT_SQL),
+				"end_datetime" => $end->format(Constants::DATETIME_FORMAT_SQL),
 				"average_seconds" => $average_seconds
 			]
 		)->fetchAll();

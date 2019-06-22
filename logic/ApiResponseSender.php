@@ -7,11 +7,20 @@ namespace AirQuality;
  */
 class ApiResponseSender
 {
-	
+	/**
+	 * Creates a new ApiResponseSender.
+	 */
 	function __construct() {
 		
 	}
 	
+	/**
+	 * Sends a plain-text error message.
+	 * @param	int		$code			The HTTP status code to send.
+	 * @param	string	$message		The plain-text message to send.
+	 * @param	array	$extra_headers	Any extra headers to return, in the format [["header", "value"], ["header", "value"], .....]
+	 * @return	void
+	 */
 	public function send_error_plain($code, $message, $extra_headers = []) {
 		http_response_code($code);
 		header("content-type: text/plain");

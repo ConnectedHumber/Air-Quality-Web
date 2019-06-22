@@ -56,8 +56,10 @@ class Database
 		// Replace tabs with spaces for debugging purposes
 		$sql = str_replace("\t", "    ", $sql);
 		
-		if($this->settings->get("env.mode") == "development")
+		if($this->settings->get("env.mode") == "development") {
+			// error_log("[Database/SQL]" . var_export($variables, true));
 			error_log("[Database/SQL] $sql");
+		}
 		
 		// FUTURE: Optionally cache prepared statements?
 		$statement = $this->connection->prepare($sql);
