@@ -107,7 +107,7 @@ Property			| Meaning
 `name`				| The device's name. Should be unique, but don't count on it.
 `latitude`			| The latitude of the device in question.
 `longitude`			| The longitude of the aforementioned device.
-`distance_calc`		| The distance between the specified point and the device, represented as the length of a relative (lat, long) vector between the 2. _Should_ be accurate enough to get the devices in the right order with respect to the actual distance, but if not please [open an issue](https://github.com/ConnectedHumber/Aiq-Quality-Web/issues/new)
+`distance_calc`		| The distance between the specified point and the device, represented as the length of a relative (lat, long) vector between the 2. _Should_ be accurate enough to get the devices in the right order with respect to the actual distance, but if not please [open an issue](https://github.com/ConnectedHumber/Air-Quality-Web/issues/new)
 `distance_actual`	| The actual distance between the specified point and the device, in metres.
 
 ## device-info
