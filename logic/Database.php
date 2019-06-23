@@ -21,8 +21,16 @@ class Database
 	 * @var	bool
 	 */
 	private const read_only = true;
+	/**
+	 * The internal PDO connection to the database.
+	 * @var \PDO
+	 */
 	private $connection;
 	
+	/**
+	 * The PDO connection options.
+	 * @var array
+	 */
 	private $pdo_options = [
 		// https://devdocs.io/php/pdo.setattribute
 	    \PDO::ATTR_ERRMODE				=> \PDO::ERRMODE_EXCEPTION,
@@ -31,6 +39,12 @@ class Database
 		\PDO::ATTR_AUTOCOMMIT			=> false
 	];
 	
+	/**
+	 * Initialises a new Database class instance that manages a single 
+	 * connection to a database.
+	 * @param	TomlConfig					$in_settings	The settings object to use to connect to the database
+	 * @param	\SBRL\PerformanceCounter	$in_perfcounter	The performance counter for debugging purposes.
+	 */
 	function __construct(TomlConfig $in_settings, \SBRL\PerformanceCounter $in_perfcounter) {
 		$this->settings = $in_settings;
 		$this->perfcounter = $in_perfcounter;
@@ -38,6 +52,10 @@ class Database
 		$this->connect(); // Connect automagically
 	}
 	
+	/**
+	 * Initailises the connection to the database according to the currently loaded settings.
+	 * @return void
+	 */
 	public function connect() {
 		$this->perfcounter->start("dbconnect");
 		$this->connection = new \PDO(
@@ -52,13 +70,19 @@ class Database
 		$this->perfcounter->end("dbconnect");
 	}
 	
+	/**
+	 * Makes a query against the database.
+	 * @param	string	$sql		The (potentially parametised) query to make.
+	 * @param	array	$variables	Optional. The variables to substitute into the SQL query.
+	 * @return	\PDOStatement		The result of the query, as a PDOStatement.
+	 */
 	public function query($sql, $variables = []) {
 		// Replace tabs with spaces for debugging purposes
 		$sql = str_replace("\t", "    ", $sql);
 		
 		if($this->settings->get("env.mode") == "development") {
-			// error_log("[Database/SQL]" . var_export($variables, true));
-			error_log("[Database/SQL] $sql");
+			error_log("[Database/SQL:Variables]" . var_export($variables, true));
+			error_log("[Database/SQL:Exec] $sql");
 		}
 		
 		// FUTURE: Optionally cache prepared statements?
