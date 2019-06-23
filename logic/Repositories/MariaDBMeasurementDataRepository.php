@@ -25,7 +25,7 @@ class MariaDBMeasurementDataRepository implements IMeasurementDataRepository {
 	 * A coaleasce of storedon and recorded on.
 	 * @var string
 	 */
-	public static $column_metadata_datetime = "datetime";
+	public static $column_metadata_datetime = "s_or_r";
 	public static $column_metadata_device_id = "device_id";
 	public static $column_metadata_lat = "reading_latitude";
 	public static $column_metadata_long = "reading_longitude";
