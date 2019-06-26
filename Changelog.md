@@ -5,6 +5,9 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
+## v0.12-dev
+ - [API] Improve accuracy of `distance_calc` for the `list-devices-near` action by using _Haversine's Formula_.
+
 ## v0.11.1 - 22nd June 2019
  - Drastically improve the performance of the backend SQL queries that power the heatmap and device graphs by over 35x in some cases!
      - For users of the HTTP API, said queries are `fetch-data` and `device-data`.

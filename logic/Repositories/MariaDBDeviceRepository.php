@@ -125,10 +125,10 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				{$s("table_name")}.{$s("column_device_name")} AS name,
 				{$s("table_name")}.{$s("column_lat")} AS latitude,
 				{$s("table_name")}.{$s("column_long")} AS longitude,
-				ST_DISTANCE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc
+				ST_DISTANCE_SPHERE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc
 			FROM {$s("table_name")}
 			WHERE {$s("table_name")}.{$s("column_point")} IS NOT NULL
-			ORDER BY ST_DISTANCE(POINT(:latitude_again, :longitude_again), {$s("table_name")}.{$s("column_point")})
+			ORDER BY ST_DISTANCE_SPHERE(POINT(:latitude_again, :longitude_again), {$s("table_name")}.{$s("column_point")})
 			LIMIT :count;", [
 				"latitude" => $lat,
 				"longitude" => $long,
