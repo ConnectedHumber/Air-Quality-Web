@@ -52,16 +52,25 @@ class VoronoiManager {
 		this.last_datetime = datetime;
 		this.last_reading_type = reading_type;
 		
-		this.spec = Specs[reading_type];
+		this.spec = Specs[reading_type] || Specs["unknown"];
 		if(typeof this.spec.chroma == "undefined")
 			this.spec.chroma = chroma.scale(Object.values(this.spec.gradient))
 				.domain(Object.keys(this.spec.gradient));
 		this.guage.set_spec(this.spec);
 		this.guage.render();
 		
-		let dataset = JSON.parse(await GetFromUrl(
-			`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(datetime.toISOString())}&reading_type=${encodeURIComponent(reading_type)}`
-		));
+		
+		let dataset = null;
+		try {
+			dataset = JSON.parse(await GetFromUrl(
+				`${Config.api_root}?action=fetch-data&datetime=${encodeURIComponent(datetime.toISOString())}&reading_type=${encodeURIComponent(reading_type)}`
+			));
+		}
+		catch(error) { // string
+			document.querySelector("main").classList.remove("working-visual");
+			alert(error);
+			throw new Error(error);
+		}
 		
 		let result = [];
 		for(let row of dataset) {

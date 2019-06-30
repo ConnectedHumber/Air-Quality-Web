@@ -87,12 +87,20 @@ var pressure = {
 		"1100": "#BFED91"
 	}
 };
+var unknown = {
+	max: 100,
+	gradient: {
+		"0": "green",
+		"100": "red"
+	}
+}
 
 var specs = {
 	PM10, PM25,
 	humidity,
 	temperature,
-	pressure
+	pressure,
+	unknown
 };
 
 export default specs;
@@ -100,5 +108,6 @@ export {
 	PM10, PM25,
 	humidity,
 	temperature,
-	pressure
+	pressure,
+	unknown
 };
