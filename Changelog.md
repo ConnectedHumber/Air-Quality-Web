@@ -8,7 +8,9 @@ This is the changelog for the air quality web interface and its associated HTTP 
 ## v0.12-dev
  - Added loading animation while the map is loading
  - [API] Improve accuracy of `distance_calc` for the `list-devices-near` action by using _Haversine's Formula_.
- - [API] Added new `last_seen` property to the `list-devices` and `device-info` actions.
+ - Display how long ago a device was last seen in it's pop-up box
+     - [API] HTTP API users can now use the new `last_seen` property to the `list-devices` and `device-info` actions.
+ - 
 
 ## v0.11.1 - 22nd June 2019
  - Drastically improve the performance of the backend SQL queries that power the heatmap and device graphs by over 35x in some cases!
