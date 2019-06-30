@@ -54,10 +54,13 @@ class UI {
 				type: "select",
 				name: "Reading Type",
 				items: this.reading_types.map((type) => type.friendly_text),
-				callback: ((event) => {
+				callback: (async (event) => {
 					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).short_descr;
 					
-					this.map_manager.overlay.update_reading_type(new_type);
+					
+					document.querySelector("main").classList.add("working-visual");
+					await this.map_manager.overlay.update_reading_type(new_type);
+					document.querySelector("main").classList.remove("working-visual");
 				}).bind(this)
 			},
 			{

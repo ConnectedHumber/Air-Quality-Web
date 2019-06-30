@@ -59,7 +59,7 @@ button.selected {
     font-weight: bolder;
 }
 
-.working { cursor: progress; }
+.working { cursor: progress !important; }
 
 .working-visual::after {
     content: "";
@@ -71,5 +71,6 @@ button.selected {
     
     background: url(images/spinning-circles.svg) center center / 25% no-repeat;
     
+    cursor: progress !important;
     pointer-events: none;
 }
