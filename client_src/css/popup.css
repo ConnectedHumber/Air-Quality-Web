@@ -4,7 +4,7 @@
 
 h2.device-name { text-align: center; }
 .device-name::after {
-	content: "#" attr(data-id);
+	content: "#" attr(data-id) ", " attr(data-minutes_ago);
 	float: right; margin-right: 1em;
 	
 	font-size: 80%;

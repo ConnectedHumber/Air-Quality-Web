@@ -26,8 +26,12 @@ class DeviceData {
 		
 		// Create a map to help us lookup ids faster
 		this.device_map = new Map();
-		for(let device of this.devices)
+		for(let device of this.devices) {
+			// Parse the last_seen date into a JS date object
+			device.last_seen = new Date(device.last_seen);
+			// Add the device to the device map
 			this.device_map.set(device.id, device);
+		}
 	}
 	
 	/**

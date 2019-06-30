@@ -11,6 +11,7 @@ import Emitter from 'event-emitter-es6';
 import Config from './Config.mjs';
 import DeviceReadingDisplay from './DeviceReadingDisplay.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
+import { human_time_since } from './Helpers/DateHelper.mjs';
 
 class LayerDeviceMarkers extends Emitter {
 	constructor(in_map, in_device_data) {
@@ -70,6 +71,7 @@ class LayerDeviceMarkers extends Emitter {
 		console.info("Fetching device info for device", device_id);
 		let device_info = JSON.parse(await GetFromUrl(`${Config.api_root}?action=device-info&device-id=${device_id}`));
 		
+		device_info.last_seen = new Date(`${device_info.last_seen}+0000`); // Force parsing as UTC
 		device_info.location = [ device_info.latitude, device_info.longitude ];
 		delete device_info.latitude;
 		delete device_info.longitude;
@@ -88,6 +90,8 @@ class LayerDeviceMarkers extends Emitter {
 			`Device: ${device_info.name}`
 		));
 		result.querySelector(".device-name").dataset.id = device_info.id;
+		result.querySelector(".device-name").dataset.last_seen = device_info.last_seen;
+		result.querySelector(".device-name").dataset.minutes_ago = human_time_since(device_info.last_seen);
 		
 		
 		// ----------------------------------
