@@ -88,6 +88,12 @@ class Database
 		// FUTURE: Optionally cache prepared statements?
 		$statement = $this->connection->prepare($sql);
 		$statement->execute($variables);
+		
+		if($this->settings->get("env.mode") == "development") {
+			$warnings = $this->connection->query("SHOW WARNINGS;")->fetchAll();
+			error_log("Warnings: " . var_export($warnings, true));
+		}
+		
 		return $statement; // fetchColumn(), fetchAll(), etc. are defined on the statement, not the return value of execute()
 	}
 	
