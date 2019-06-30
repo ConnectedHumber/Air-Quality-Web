@@ -6,6 +6,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
 ## v0.12-dev
+ - Added loading animation while the map is loading
  - [API] Improve accuracy of `distance_calc` for the `list-devices-near` action by using _Haversine's Formula_.
  - [API] Added new `last_seen` property to the `list-devices` and `device-info` actions.
 
