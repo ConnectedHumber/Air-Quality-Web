@@ -41,6 +41,9 @@ class MapManager {
 		this.map.attributionControl.addAttribution("Data: <a href='https://connectedhumber.org/'>Connected Humber</a>");
 		this.map.attributionControl.addAttribution("<a href='https://github.com/ConnectedHumber/Air-Quality-Web/'>Air Quality Web</a> by <a href='https://starbeamrainbowlabs.com/'>Starbeamrainbowlabs</a>");
 		
+		// Setup the UI
+		this.ui = new UI(Config, this);
+		this.ui.setup().then(() => console.log("[map] UI setup complete."));
 		
 		// Load the device information
 		this.device_data = new DeviceData();
@@ -49,11 +52,13 @@ class MapManager {
 		
 		// Add the device markers
 		console.info("[map] Loading device markers....");
-		this.setup_device_markers()
-			.then(() => console.info("[map] Device markers loaded successfully."))
-			.then(this.setup_overlay.bind(this))
-			.then(this.setup_layer_control.bind(this))
-			.then(() => document.querySelector("main").classList.remove("working-visual"));
+		Promise.all([
+			this.setup_device_markers.bind(this)()
+				.then(() => console.info("[map] Device markers loaded successfully.")),
+			
+			this.setup_overlay.bind(this)()
+				.then(this.setup_layer_control.bind(this))
+		]).then(() => document.querySelector("main").classList.remove("working-visual"));
 		
 		// Add the heatmap
 		// console.info("[map] Loading heatmap....");
@@ -62,9 +67,6 @@ class MapManager {
 		// 	// ...and the time dimension
 		// 	.then(this.setup_time_dimension.bind(this))
 		// 	.then(() => console.info("[map] Time dimension initialised."));
-		
-		this.ui = new UI(Config, this);
-		this.ui.setup().then(() => console.log("[map] UI setup complete."));
 	}
 	
 	async setup_overlay() {

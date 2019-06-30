@@ -43,6 +43,8 @@ class UI {
 	}
 	
 	async setup() {
+		await show_changelog(true);
+		
 		this.reading_types = JSON.parse(
 			await GetFromUrl(`${this.config.api_root}?action=list-reading-types`)
 		);
@@ -75,8 +77,6 @@ class UI {
 		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
 		
-		
-		await show_changelog(true);
 		await this.tour.run_once();
 	}
 }
