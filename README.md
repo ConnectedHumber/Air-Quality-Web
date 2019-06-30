@@ -33,5 +33,9 @@ Contributions are welcome - feel free to [open an issue](https://github.com/Conn
 
 The [issue tracker](https://github.com/ConnectedHumber/Air-Quality-Web/issues) is the place where all the tasks relating to the project are kept.
 
+## Credits
+ - Map: [Leaflet.js](https://leafletjs.com/) showing [OpenStreetMaps](https://www.openstreetmap.org/)
+ - [Loading Animation](https://github.com/SamHerbert/SVG-Loaders)
+
 ## License
 This project is licensed under the _Mozilla Public License 2.0_. The full text of this license can be found in the [LICENSE](https://github.com/ConnectedHumber/Air-Quality-Web/blob/master/LICENSE) file of this repository, along with a helpful summary of what you can and can't do provided by GitHub.

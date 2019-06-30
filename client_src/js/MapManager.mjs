@@ -52,7 +52,8 @@ class MapManager {
 		this.setup_device_markers()
 			.then(() => console.info("[map] Device markers loaded successfully."))
 			.then(this.setup_overlay.bind(this))
-			.then(this.setup_layer_control.bind(this));
+			.then(this.setup_layer_control.bind(this))
+			.then(() => document.querySelector("main").classList.remove("working-visual"));
 		
 		// Add the heatmap
 		// console.info("[map] Loading heatmap....");
