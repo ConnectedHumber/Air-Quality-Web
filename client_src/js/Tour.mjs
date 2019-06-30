@@ -145,8 +145,10 @@ class Tour {
 		
 		let result = [];
 		if(!no_prev) result.push(prev);
-		if(!no_continue) result.push(next);
-		result.push(exit);
+		if(!no_continue) {
+			result.push(next);
+			result.push(exit);
+		}
 		
 		return result;
 	}
