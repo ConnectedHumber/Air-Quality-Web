@@ -34,7 +34,9 @@ Contributions are welcome - feel free to [open an issue](https://github.com/Conn
 The [issue tracker](https://github.com/ConnectedHumber/Air-Quality-Web/issues) is the place where all the tasks relating to the project are kept.
 
 ## Credits
- - Map: [Leaflet.js](https://leafletjs.com/) showing [OpenStreetMaps](https://www.openstreetmap.org/)
+ - Map: [Leaflet.js](https://leafletjs.com/) showing [OpenStreetMaps](https://www.openstreetmap.org/) using various plugins
+ - Colour manipulation by [chroma.js](https://github.com/gka/chroma.js)
+ - Device graphs by [chart.js](https://www.chartjs.org)
  - [Loading Animation](https://github.com/SamHerbert/SVG-Loaders)
 
 ## License
