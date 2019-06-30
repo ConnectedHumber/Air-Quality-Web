@@ -2,6 +2,8 @@
 
 namespace AirQuality\Repositories;
 
+use \AirQuality\Repositories\MariaDBMeasurementDataRepository;
+
 use Location\Coordinate;
 use Location\Distance\Vincenty;
 
@@ -51,33 +53,51 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	 * @var callable
 	 */
 	private $get_static;
+	/**
+	 * Function that gets a static variable by it's name & class. Useful in preparing SQL queries.
+	 * @var callable
+	 */
+	private $get_static_extra;
 	
 	function __construct(\AirQuality\Database $in_database, Vincenty $in_distance_calculator) {
 		$this->database = $in_database;
 		$this->distance_calculator = $in_distance_calculator;
 		
 		$this->get_static = function($name) { return self::$$name; };
+		$this->get_static_extra = function($class_name, $name) {
+			return $class_name::$$name;
+		};
 	}
 	
 	
 	public function get_all_devices($only_with_location) {
 		$s = $this->get_static;
+		$o = $this->get_static_extra;
+		
+		$data_repo_name = MariaDBMeasurementDataRepository::class;
+		$data_repo_table_meta = $o($data_repo_name, "table_name_metadata");
+		$data_repo_col_datetime = "$data_repo_table_meta.{$o($data_repo_name, "column_metadata_datetime")}";
+		$data_repo_col_device_id = "$data_repo_table_meta.{$o($data_repo_name, "column_metadata_device_id")}";
 		
 		$sql = "SELECT
-			{$s("column_device_id")} AS id,
-			{$s("column_device_name")} AS name,
-			{$s("column_lat")} AS latitude,
-			{$s("column_long")} AS longitude,
-			{$s("column_altitude")} AS altitude,
-			{$s("column_device_type")} AS type_id
-		FROM {$s("table_name")}";
+			{$s("table_name")}.{$s("column_device_id")} AS id,
+			{$s("table_name")}.{$s("column_device_name")} AS name,
+			{$s("table_name")}.{$s("column_lat")} AS latitude,
+			{$s("table_name")}.{$s("column_long")} AS longitude,
+			{$s("table_name")}.{$s("column_altitude")} AS altitude,
+			{$s("table_name")}.{$s("column_device_type")} AS type_id,
+			MAX($data_repo_col_datetime) AS last_seen
+		FROM {$s("table_name")}
+		JOIN $data_repo_table_meta ON
+		   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}";
 		
 		if($only_with_location)
 			$sql .= "\nWHERE
 				{$s("column_lat")} IS NOT NULL
 				AND {$s("column_long")} IS NOT NULL";
 		
-		$sql .= ";";
+		$sql .= "
+		GROUP BY $data_repo_col_device_id;";
 		
 		return $this->database->query($sql)->fetchAll();
 	}

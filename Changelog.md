@@ -7,6 +7,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
 
 ## v0.12-dev
  - [API] Improve accuracy of `distance_calc` for the `list-devices-near` action by using _Haversine's Formula_.
+ - [API] Added new `last_seen` property to the `list-devices` action.
 
 ## v0.11.1 - 22nd June 2019
  - Drastically improve the performance of the backend SQL queries that power the heatmap and device graphs by over 35x in some cases!
