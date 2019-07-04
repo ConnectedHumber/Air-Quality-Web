@@ -12,7 +12,10 @@
 /** Ensure that some assets are copied that aren't by default **/
 .non-existent {
     background: url(../../node_modules/leaflet/dist/images/marker-icon-2x.png),
-        url(../../node_modules/leaflet/dist/images/marker-shadow.png);
+        url(../../node_modules/leaflet/dist/images/marker-shadow.png),
+        url(../logo-small.png),
+        url(../logo.png),
+        url(../logo.svg);
 }
 
 html, body { font-size: 100%; }
