@@ -92,7 +92,7 @@ task_download-composer() {
 	
 	
 	task_begin "Downloading composer"; 
-	execute curl "https://getcomposer.org/composer.phar" -o "${cache_dir}/composer"; exit_code=$?;
+	execute curl -sS "https://getcomposer.org/composer.phar" -o "${cache_dir}/composer"; exit_code=$?;
 	chmod +x "${cache_dir}/composer";
 	task_end ${exit_code};
 }
