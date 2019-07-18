@@ -14,17 +14,17 @@ import postcss_copy from 'postcss-copy';
 
 let plugins = [
 	resolve({
-		// use "module" field for ES6 module if possible
-		module: true, // Default: true
-
-		// use "jsnext:main" if possible
-		// – see https://github.com/rollup/rollup/wiki/jsnext:main
-		jsnext: true, // Default: false
-
-		// use "main" field or index.js, even if it's not an ES6 module
-		// (needs to be converted from CommonJS to ES6
-		// – see https://github.com/rollup/rollup-plugin-commonjs
-		main: true, // Default: true
+		mainFields: [
+			// use "module" field for ES6 module if possible
+			"module", // Check for ES6 modules
+			// use "jsnext:main" if possible
+			// – see https://github.com/rollup/rollup/wiki/jsnext:main
+			"jsnext:main",
+			// use "main" field or index.js, even if it's not an ES6 module
+			// (needs to be converted from CommonJS to ES6
+				// – see https://github.com/rollup/rollup-plugin-commonjs
+			"main" // ...otherwise use the main entry point
+		],
 
 		// some package.json files have a `browser` field which
 		// specifies alternative files to load for people bundling
