@@ -39,6 +39,7 @@ deploy_ssh_host="www.connectedhumber.org";
 deploy_ssh_port="22";
 
 deploy_root_dir="Air-Quality-Web";
+deploy_root_dir_beta="Air-Quality-Web-Beta";
 
 ###############################################################################
 
@@ -275,10 +276,20 @@ task_ci() {
 	latest_commit="$(git log -n 1 --pretty=format:"%H")";
 	current_commit="$(git rev-parse HEAD)";
 	
-	if [ "${GIT_REF_NAME}" == "refs/heads/master" ] && [ "${latest_commit}" == "${current_commit}" ]; then
+	if [ "${latest_commit}" != "${current_commit}" ]; then
+		echo "Not deploying, as this isn't the latest commit on the branch.";
+		echo "It's likely that this commit is actually 1 of several in a queue to be processed by the CI server at once.";
+		return 0;
+	fi
+	
+	if [ "${GIT_REF_NAME}" == "refs/heads/master" ]; then
+		tasks_run deploy;
+	else if [ "${GIT_REF_NAME}" == "refs/heads/dev" ]; then
+		echo "Deploying as beta release, as we're on the dev branch";
+		deploy_root_dir="${deploy_root_dir_beta}";
 		tasks_run deploy;
 	else
-		echo "Not deploying, as this build wasn't on the master branch.";
+		echo "Not deploying, as we're not on either the master or dev branches.";
 	fi
 }
 
