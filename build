@@ -281,7 +281,7 @@ task_ci() {
 	
 	if [ "${latest_commit}" != "${current_commit}" ]; then
 		echo "Not deploying, as this isn't the latest commit on the branch.";
-		echo "It's likely that this commit is actually 1 of several in a queue to be processed by the CI server at once.";
+		echo "It's likely that this commit is actually one of several in a queue to be processed by the CI server at once.";
 		return 0;
 	fi
 	
