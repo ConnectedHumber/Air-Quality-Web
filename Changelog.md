@@ -11,6 +11,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - Display how long ago a device was last seen in it's pop-up box
      - [API] HTTP API users can now use the new `last_seen` property to the `list-devices` and `device-info` actions.
  - Add favicon logo, thanks to [@BNNorman](https://github.com/BNNorman)
+ - [API] Added new `sensors` array to `device-info` output, which lists the sensors that a device has
 
 ## v0.11.1 - 22nd June 2019
  - Drastically improve the performance of the backend SQL queries that power the heatmap and device graphs by over 35x in some cases!
