@@ -7,6 +7,8 @@ This is the changelog for the air quality web interface and its associated HTTP 
 
 ## v0.12-dev
  - Added loading animation while the map is loading
+ - Added new favicon
+ - Added device sensor information to the device info tab in the popup
  - [API] Improve accuracy of `distance_calc` for the `list-devices-near` action by using _Haversine's Formula_.
  - Display how long ago a device was last seen in it's pop-up box
      - [API] HTTP API users can now use the new `last_seen` property to the `list-devices` and `device-info` actions.
