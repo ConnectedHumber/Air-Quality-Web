@@ -134,6 +134,14 @@ class LayerDeviceMarkers extends Emitter {
 					case "location":
 						value = `(${value[0]}, ${value[1]})`;
 						break;
+					case "sensors":
+						value = CreateElement("table", 
+							...value.map((sensor) => CreateElement("tr",
+								CreateElement("td", sensor.type),
+								CreateElement("td", sensor.description)
+							))
+						);
+						break;
 					default: value = value.toString(); break;
 				}
 			}
