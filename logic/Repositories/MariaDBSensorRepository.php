@@ -9,11 +9,11 @@ use Location\Distance\Vincenty;
 /**
  * Fetches device info from a MariaDB database.
  */
-class MariaDBDeviceRepository implements ISensorRepository {
+class MariaDBSensorRepository implements ISensorRepository {
 	public static $table_name = "sensors";
 	public static $col_id = "id";
 	public static $col_type = "Type";
-	public static $col_descriptioon = "Description";
+	public static $col_description = "Description";
 	
 	public static $table_name_assoc = "device_sensors";
 	public static $col_assoc_device_id = "device_id";
@@ -61,7 +61,7 @@ class MariaDBDeviceRepository implements ISensorRepository {
 			"SELECT
 				{$s("table_name")}.{$s("col_id")} AS id,
 				{$s("table_name")}.{$s("col_type")} AS type,
-				{$s("table_name")}.{$s("col_description")} AS description,
+				{$s("table_name")}.{$s("col_description")} AS description
 			FROM {$s("table_name")};", [
 				
 			]
@@ -75,10 +75,10 @@ class MariaDBDeviceRepository implements ISensorRepository {
 			"SELECT
 				{$s("table_name")}.{$s("col_id")} AS id,
 				{$s("table_name")}.{$s("col_type")} AS type,
-				{$s("table_name")}.{$s("col_description")} AS description,
-			FROM {$s("table_name")}
-			JOIN {$s("table_name_assoc")} ON
-				{$s("table_name_assoc")}.{$s("col_assoc_sensor_id")}
+				{$s("table_name")}.{$s("col_description")} AS description
+			FROM {$s("table_name_assoc")}
+			JOIN {$s("table_name")}
+				ON {$s("table_name")}.{$s("col_id")} = {$s("table_name_assoc")}.{$s("col_assoc_sensor_id")}
 			WHERE {$s("table_name_assoc")}.{$s("col_assoc_device_id")} = :device_id;", [
 				"device_id" => $device_id
 			]

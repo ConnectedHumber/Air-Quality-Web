@@ -4,6 +4,7 @@ namespace AirQuality\Actions;
 
 use \SBRL\TomlConfig;
 use \AirQuality\Repositories\IDeviceRepository;
+use \AirQuality\Repositories\ISensorRepository;
 use \AirQuality\Repositories\IMeasurementTypeRepository;
 use \AirQuality\ApiResponseSender;
 
@@ -19,6 +20,9 @@ class DeviceInfo implements IAction {
 	/** @var IDeviceRepository */
 	private $device_repo;
 	
+	/** @var ISensorRepository */
+	private $sensor_repo;
+	
 	/** @var IMeasurementTypeRepository */
 	private $type_repo;
 	
@@ -31,10 +35,12 @@ class DeviceInfo implements IAction {
 	public function __construct(
 		TomlConfig $in_settings,
 		IDeviceRepository $in_device_repo,
+		ISensorRepository $in_sensor_repo,
 		ApiResponseSender $in_sender,
 		\SBRL\PerformanceCounter $in_perfcounter) {
 		$this->settings = $in_settings;
 		$this->device_repo = $in_device_repo;
+		$this->sensor_repo = $in_sensor_repo;
 		$this->sender = $in_sender;
 		$this->perfcounter = $in_perfcounter;
 		
@@ -52,7 +58,10 @@ class DeviceInfo implements IAction {
 		// 2: Pull data from database
 		$this->perfcounter->start("sql");
 		$data = $this->device_repo->get_device_info_ext(
-			$_GET["device-id"]
+			intval($_GET["device-id"])
+		);
+		$data_sensor = $this->sensor_repo->get_device_sensors(
+			intval($_GET["device-id"])
 		);
 		$this->perfcounter->end("sql");
 		
@@ -66,6 +75,7 @@ class DeviceInfo implements IAction {
 		
 		// 3: Serialise data
 		$this->perfcounter->start("encode");
+		$data["sensors"] = $data_sensor;
 		$response = json_encode($data);
 		$this->perfcounter->end("encode");
 		

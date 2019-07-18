@@ -11,6 +11,8 @@ use AirQuality\Repositories\IMeasurementDataRepository;
 use AirQuality\Repositories\MariaDBMeasurementDataRepository;
 use AirQuality\Repositories\IMeasurementTypeRepository;
 use AirQuality\Repositories\MariaDBMeasurementTypeRepository;
+use AirQuality\Repositories\ISensorRepository;
+use AirQuality\Repositories\MariaDBSensorRepository;
 
 use SBRL\PerformanceCounter;
 
@@ -31,5 +33,6 @@ return [
 	// Interfaces that need mapping to their implementations
 	IDeviceRepository::class => DI\autowire(MariaDBDeviceRepository::class),
 	IMeasurementDataRepository::class => DI\autowire(MariaDBMeasurementDataRepository::class),
-	IMeasurementTypeRepository::class => DI\autowire(MariaDBMeasurementTypeRepository::class)
+	IMeasurementTypeRepository::class => DI\autowire(MariaDBMeasurementTypeRepository::class),
+	ISensorRepository::class => DI\autowire(MariaDBSensorRepository::class)
 ];
