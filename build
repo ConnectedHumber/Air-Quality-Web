@@ -114,6 +114,7 @@ task_setup() {
 	check_command php true;
 	check_command node true;
 	check_command npm true;
+	check_command curl true;
 	
 	check_php_module pdo_mysql;
 	
