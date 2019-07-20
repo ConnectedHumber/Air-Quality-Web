@@ -8,9 +8,9 @@ import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
 import Tour from './Tour.mjs';
 
-function show_nanomodal(html) {
+function show_nanomodal(html, options = {}) {
 	return new Promise((resolve, _reject) => {
-		let modal = NanoModal(html);
+		let modal = NanoModal(html, options);
 		modal.onHide(resolve);
 		modal.show();
 	});
@@ -25,7 +25,10 @@ async function show_changelog(only_if_changed) {
 	}
 	
 	console.log("[UI] Showing changelog");
-	await show_nanomodal(await GetFromUrl(`${Config.api_root}?action=changelog`));
+	await show_nanomodal(await GetFromUrl(`${Config.api_root}?action=changelog`), {
+		classes: "reverse",
+		autoRemove: true
+	});
 	
 	localStorage.setItem("last_seen_version", current_version);
 	return true;
