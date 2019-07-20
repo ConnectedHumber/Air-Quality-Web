@@ -1,0 +1,31 @@
+@media (prefers-color-scheme: dark) {
+	.nanoModal {
+		background: #333;
+		color: #efefef;
+	}
+	.nanoModal a { color: hsl(240, 90%, 80%); }
+	.nanoModal a:visited { color: hsl(240, 90%, 70%); }
+	.nanoModal a:link { color: hsl(240, 90%, 80%); }
+	.nanoModal a:active { color: hsl(217, 89%, 80%); }
+	
+	.nanoModalBtn.nanoModalBtnPrimary { background-color: #1b79cb; }
+	
+	body > h1 {
+		background: rgba(0, 0, 0, 0.5);
+		color: #efefef;
+	}
+	
+	
+	.leaflet-control-attribution {
+		background: rgba(0, 0, 0, 0.7) !important;
+		color: #efefef;
+	}
+	.leaflet-control-attribution a { color: hsl(240, 90%, 90%) !important; }
+	.leaflet-control-attribution a:visited { color: hsl(240, 90%, 80%) !important; }
+	.leaflet-control-attribution a:link { color: hsl(240, 90%, 90%) !important; }
+	.leaflet-control-attribution a:active { color: hsl(217, 89%, 90%) !important; }
+	
+	.leaflet-top.leaflet-left {
+		filter: invert(100%);
+	}
+}

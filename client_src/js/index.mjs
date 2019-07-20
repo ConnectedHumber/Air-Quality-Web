@@ -1,6 +1,6 @@
 "use strict";
 
-import '../css/main.css';
+import '../css/index.css';
 // import '../../node_modules/leaflet-timedimension/dist/leaflet.timedimension.control.css';
 
 // ----------------------------------------------------------------------------
