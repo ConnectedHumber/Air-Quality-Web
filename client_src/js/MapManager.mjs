@@ -21,12 +21,7 @@ class MapManager {
 	async setup() {
 		// Create the map
 		this.map = L.map("map", {
-			fullscreenControl: true,
-			timeDimension: true,
-			timeDimensionOptions: {
-				timeInterval: `2019-01-01/${(new Date()).toISOString().split("T")[0]}`,
-				period: "PT6M" // 6 minutes, in ISO 8601 Durations format: https://en.wikipedia.org/wiki/ISO_8601#Durations
-			}
+			fullscreenControl: true
 		});
 		this.map.setView(Config.default_location, Config.default_zoom);
 		
