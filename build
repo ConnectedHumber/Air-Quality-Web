@@ -197,7 +197,7 @@ task_dev-server() {
 	task_begin "Starting development server";
 	php -S "[::1]:40482" &
 	exit_code=$?;
-	echo $! >/tmp/micro-lantern-dev-server.pid;
+	[[ "${exit_code}" -eq "0" ]] && echo $! >/tmp/micro-lantern-dev-server.pid;
 	task_end $?; # Should be 0 unless php died for some reason
 	sleep 1;
 }
