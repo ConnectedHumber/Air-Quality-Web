@@ -54,6 +54,8 @@ $perfcounter->end("di");
 
 // 5: Action
 
+header("access-control-allow-origin: http://[::1]:40482");
+
 // Figure out the action name
 $action = str_replace(
 	" ", "",
