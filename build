@@ -117,6 +117,7 @@ task_setup() {
 	check_command curl true;
 	
 	check_php_module pdo_mysql;
+	check_php_module mbstring;
 	
 	if [ ! -w "${PWD}" ]; then
 		task_end 1 "${HC}${FRED}Error: Can't write to the repository directory! This usually you have a permission error of some kind. Try using sudo to run this build command as the user that owns this cloned repository.";
