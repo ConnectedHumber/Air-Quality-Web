@@ -1,6 +1,6 @@
 {
 	"name": "air-quality-mapper",
-	"version": "0.10.3",
+	"version": "0.12.0",
 	"description": "The web interface and JSON api for the ConnectedHumber Air Quality Monitoring Project.",
 	"private": true,
 	"main": "index.mjs",

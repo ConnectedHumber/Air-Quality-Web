@@ -8,7 +8,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
-## v0.12-dev
+## v0.12
  - Added loading animation while the map is loading
  - Added device sensor information to the device info tab in the popup
  - Add favicon logo, thanks to [@BNNorman](https://github.com/BNNorman)
