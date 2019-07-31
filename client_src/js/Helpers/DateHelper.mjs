@@ -46,7 +46,23 @@ function human_time(seconds)
 	}
 }
 
+/**
+ * Rounds a Date to match the specified number of minutes.
+ * Useful when making API requests to improve caching.
+ * @param	{Date}	date				The date to round.
+ * @param	{int}	interval_minutes	The number of minutes to round it to. Should be less than 60.
+ * @return	{void}	Doesn't return anything - it mutates the original Date object instead.
+ */
+function round_date_interval(date, interval_minutes) {
+	date.setSeconds(0);
+	date.setMilliseconds(0);
+	date.setMinutes(
+		Math.floor(date.getMinutes() / interval_minutes) * interval_minutes
+	);
+}
+
 export {
 	human_duration_unit,
-	human_time_since, human_time
+	human_time_since, human_time,
+	round_date_interval
 };

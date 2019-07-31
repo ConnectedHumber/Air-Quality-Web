@@ -12,6 +12,7 @@ import Specs from './OverlaySpecs.mjs';
 
 import Vector2 from '../Helpers/Vector2.mjs';
 import GetFromUrl from '../Helpers/GetFromUrl.mjs';
+import { round_date_interval } from '../Helpers/DateHelper.mjs';
 
 class VoronoiManager {
 	
@@ -51,6 +52,8 @@ class VoronoiManager {
 	async set_data(datetime, reading_type) {
 		this.last_datetime = datetime;
 		this.last_reading_type = reading_type;
+		
+		round_date_interval(this.last_datetime, Config.date_rounding_interval);
 		
 		this.spec = Specs[reading_type] || Specs["unknown"];
 		if(typeof this.spec.chroma == "undefined")
