@@ -9,11 +9,12 @@ import moment from 'moment';
 // Chart.js pollutes the global scope, but the main entry point is going to change soon in v2.8 - which should fix our issue here
 import Chart from '../../node_modules/chart.js/dist/Chart.bundle.min.js';
 
+import Config from './Config.mjs';
+
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import GetContainingElement from './Helpers/GetContainingElement.mjs';
 import Postify from './Helpers/Postify.mjs';
-import { human_duration_unit } from './Helpers/DateHelper.mjs';
-
+import { human_duration_unit, round_date_interval } from './Helpers/DateHelper.mjs';
 
 class DeviceReadingDisplay {
 	constructor(in_config, in_device_id) {
@@ -26,8 +27,10 @@ class DeviceReadingDisplay {
 		// The number of points to display at a time.
 		this.points_resolution = 50;
 		
-		this.start_time = moment().subtract(1, "days");
-		this.end_time = moment();
+		let date = new Date();
+		round_date_interval(date, Config.date_rounding_interval);
+		this.start_time = moment(date).subtract(1, "days");
+		this.end_time = moment(date);
 		
 		
 		this.default_colours = {
