@@ -1,4 +1,7 @@
+The data displayed has been produced by low-cost devices developed by [Connected Humber](https://www.connectedhumber.org/) members as part of a community driven effort to build a network of smart sensors in the Humber Region.
 # Changelog
+
+
 This is the changelog for the air quality web interface and its associated HTTP API.
 
  - `[API]` refers to changes to the [HTTP API](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html).
