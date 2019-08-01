@@ -39,7 +39,8 @@ class Tour {
 		});
 
 		this.tour.addStep("reading-type", {
-			text: "Devices report multiple types of measurement. Change to another reading type now.",
+			text: "Devices report multiple types of measurement."
+			+ " Change to another reading type now.".bold(),
 			attachTo: {
 				element: document.querySelector("select").parentNode,
 				on: "top"
@@ -71,7 +72,8 @@ class Tour {
 		});
 
 		this.tour.addStep("device-graph", {
-			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data. Try clicking one now.",
+			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data."
+			 + " Try clicking one now.".bold(),
 			attachTo: {
 				element: "#map",
 				on: "top"
@@ -91,7 +93,8 @@ class Tour {
 			buttons: this.get_buttons()
 		});
 		this.tour.addStep("device-graph-b", {
-			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more. Click this now.",
+			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more."
+			+ " Click this now.".bold(),
 			attachTo: {
 				element: ".tabs :first-child",
 				on: "left"
