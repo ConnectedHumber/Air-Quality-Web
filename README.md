@@ -33,6 +33,8 @@ Contributions are welcome - feel free to [open an issue](https://github.com/Conn
 
 The [issue tracker](https://github.com/ConnectedHumber/Air-Quality-Web/issues) is the place where all the tasks relating to the project are kept.
 
+**Please remember: All pull requests should be made against the `dev` branch, not master! The `master` branch is the stable version that automatically gets pushed to production.**
+
 ## Credits
  - Map: [Leaflet.js](https://leafletjs.com/) showing [OpenStreetMaps](https://www.openstreetmap.org/) using various plugins
  - Colour manipulation by [chroma.js](https://github.com/gka/chroma.js)
