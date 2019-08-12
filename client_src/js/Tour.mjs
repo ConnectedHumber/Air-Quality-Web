@@ -126,7 +126,7 @@ class Tour {
 			text: "Tour complete!\nIf you need any additional assistance, let us know :-)",
 			buttons: [
 				{ text: "Previous", action: this.tour.back },
-				{ text: "Done", action: this.tour.next }
+				{ text: "Done", action: this.tour.cancel } //Changed from next to cancel for ease
 			]
 		});
 	}
@@ -135,7 +135,7 @@ class Tour {
 		if(window.localStorage.getItem("completed_tour") === null)
 			this.run();
 
-		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
+		//window.localStorage.setItem("completed_tour", (new Date()).toISOString()); -- removed due to an accidental refresh possiblity
 	}
 
 	run() {
@@ -147,7 +147,11 @@ class Tour {
 	get_buttons(no_continue = false, no_prev = false) {
 		let next = { text: "Next", action: this.tour.next },
 			prev = { text: "Previous", action: this.tour.back },
-			exit = { text: "Exit", action: this.tour.cancel };
+			exit = { text: "Exit", action: () =>
+			{
+				window.localStorage.setItem("completed_tour", (new Date()).toISOString());
+				this.tour.cancel()
+			} };
 
 		let result = [];
 		if(!no_prev) result.push(prev);
