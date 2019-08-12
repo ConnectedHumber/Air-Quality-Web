@@ -18,7 +18,7 @@ class Tour {
 
 		this.tour.addStep("welcome", {
 			text: "Welcome to the air quality web interface! Press next to get a short tour.",
-			buttons: this.get_buttons(false, true)
+			buttons: this.get_buttons(true, false)
 		});
 
 		this.tour.addStep("map", {
@@ -39,14 +39,13 @@ class Tour {
 		});
 
 		this.tour.addStep("reading-type", {
-			text: "Devices report multiple types of measurement."
-			+ " Change to another reading type now.".bold(),
+			text: "Devices report multiple types of measurement. <strong>Change to another reading type now.</strong>",
 			attachTo: {
 				element: document.querySelector("select").parentNode,
 				on: "top"
 			},
 			advanceOn: { selector: "select", event: "change" },
-			buttons: this.get_buttons(true)
+			buttons: this.get_buttons(false)
 		});
 		this.tour.addStep("reading-type-complete", {
 			text: "Hey, the map changed! Some devices only report certain types of measurement, and different measurements have different colour scales.",
@@ -72,13 +71,12 @@ class Tour {
 		});
 
 		this.tour.addStep("device-graph", {
-			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data."
-			 + " Try clicking one now.".bold(),
+			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data. <strong>Try clicking one now.</strong>",
 			attachTo: {
 				element: "#map",
 				on: "top"
 			},
-			buttons: this.get_buttons(true)
+			buttons: this.get_buttons(false)
 
 		}).on("show", (() => {
 			this.map_manager.device_markers.once("marker-popup-opened", this.tour.next.bind(this.tour));
@@ -93,14 +91,13 @@ class Tour {
 			buttons: this.get_buttons()
 		});
 		this.tour.addStep("device-graph-b", {
-			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more."
-			+ " Click this now.".bold(),
+			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more. <strong>Click this now.</strong>",
 			attachTo: {
 				element: ".tabs :first-child",
 				on: "left"
 			},
 			advanceOn: { selector: ".tabs :first-child a", event: "click" },
-			buttons: this.get_buttons(true)
+			buttons: this.get_buttons(false)
 		});
 
 
@@ -124,7 +121,7 @@ class Tour {
 
 		this.tour.addStep("complete", {
 			text: "Tour complete!\nIf you need any additional assistance, let us know :-)",
-			buttons: this.get_buttons(true, false, false)
+			buttons: this.get_buttons(false, true, true)
 		});
 	}
 
@@ -146,29 +143,27 @@ class Tour {
 		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
 	}
 
-	get_buttons(no_continue = false, no_prev = false, no_end = true) {
+	get_buttons(isContinue = true, isPrev = true, isEnd = false) {
 		let next = { text: "Next", action: this.tour.next },
 			prev = { text: "Previous", action: this.tour.back },
-			exit = { text: "Exit", action: () =>
-			{
+			exit = { text: "Exit", action: () => {
 				this.completed_tour();
 				this.tour.cancel();
 			} },
 
-			end = { text: "Done", action: () =>
-			{
+			end = { text: "Done", action: () => {
 				this.completed_tour();
 				this.tour.next();
 			} }
 
 		let result = [];
 
-		if(!no_prev) result.push(prev);
-		if(!no_continue) {
+		if(isPrev) result.push(prev);
+		if(isContinue) {
 			result.push(next);
 			result.push(exit);
 		}
-		if(!no_end) result.push(end);
+		if(isEnd) result.push(end);
 
 		return result;
 	}
