@@ -124,10 +124,7 @@ class Tour {
 
 		this.tour.addStep("complete", {
 			text: "Tour complete!\nIf you need any additional assistance, let us know :-)",
-			buttons: [
-				{ text: "Previous", action: this.tour.back },
-				{ text: "Done", action: this.tour.cancel } //Changed from next to cancel for ease
-			]
+			buttons: this.get_buttons(true, false, false)
 		});
 	}
 
@@ -144,21 +141,34 @@ class Tour {
 		this.tour.start();
 	}
 
-	get_buttons(no_continue = false, no_prev = false) {
+	completed_tour()
+	{
+		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
+	}
+
+	get_buttons(no_continue = false, no_prev = false, no_end = true) {
 		let next = { text: "Next", action: this.tour.next },
 			prev = { text: "Previous", action: this.tour.back },
 			exit = { text: "Exit", action: () =>
 			{
-				window.localStorage.setItem("completed_tour", (new Date()).toISOString());
-				this.tour.cancel()
-			} };
+				this.completed_tour();
+				this.tour.cancel();
+			} },
+
+			end = { text: "Done", action: () =>
+			{
+				this.completed_tour();
+				this.tour.next();
+			} }
 
 		let result = [];
+
 		if(!no_prev) result.push(prev);
 		if(!no_continue) {
 			result.push(next);
 			result.push(exit);
 		}
+		if(!no_end) result.push(end);
 
 		return result;
 	}

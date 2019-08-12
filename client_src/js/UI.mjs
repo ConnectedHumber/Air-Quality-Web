@@ -23,13 +23,13 @@ async function show_changelog(only_if_changed) {
 		console.log("[UI] Not showing changelog.");
 		return false;
 	}
-	
+
 	console.log("[UI] Showing changelog");
 	await show_nanomodal(await GetFromUrl(`${Config.api_root}?action=changelog`), {
 		classes: "reverse",
 		autoRemove: true
 	});
-	
+
 	localStorage.setItem("last_seen_version", current_version);
 	return true;
 }
@@ -38,20 +38,20 @@ class UI {
 	constructor(in_config, in_map_manager) {
 		this.config = in_config;
 		this.map_manager = in_map_manager;
-		
+
 		this.ui_panel = new SmartSettings("Settings");
 		// this.ui_panel.watch((event) => console.log(event));
-		
+
 		this.tour = new Tour(this.map_manager);
 	}
-	
+
 	async setup() {
 		await show_changelog(true);
-		
+
 		this.reading_types = JSON.parse(
 			await GetFromUrl(`${this.config.api_root}?action=list-reading-types`)
 		);
-		
+
 		this.ui_panel.loadConfig([
 			{
 				type: "select",
@@ -59,8 +59,8 @@ class UI {
 				items: this.reading_types.map((type) => type.friendly_text),
 				callback: (async (event) => {
 					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).short_descr;
-					
-					
+
+
 					document.querySelector("main").classList.add("working-visual");
 					await this.map_manager.overlay.update_reading_type(new_type);
 					document.querySelector("main").classList.remove("working-visual");
@@ -82,7 +82,7 @@ class UI {
 			}
 		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
-		
+
 		await this.tour.run_once();
 	}
 }
