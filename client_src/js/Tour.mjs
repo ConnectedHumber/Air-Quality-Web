@@ -18,7 +18,7 @@ class Tour {
 		
 		this.tour.addStep("welcome", {
 			text: "Welcome to the air quality web interface! Press next to get a short tour.",
-			buttons: this.get_buttons(false, true)
+			buttons: this.get_buttons(true, false)
 		});
 		
 		this.tour.addStep("map", {
@@ -39,13 +39,13 @@ class Tour {
 		});
 		
 		this.tour.addStep("reading-type", {
-			text: "Devices report multiple types of measurement. Change to another reading type now.",
+			text: "Devices report multiple types of measurement. <strong>Change to another reading type now.</strong>",
 			attachTo: {
 				element: document.querySelector("select").parentNode,
 				on: "top"
 			},
 			advanceOn: { selector: "select", event: "change" },
-			buttons: this.get_buttons(true)
+			buttons: this.get_buttons(false)
 		});
 		this.tour.addStep("reading-type-complete", {
 			text: "Hey, the map changed! Some devices only report certain types of measurement, and different measurements have different colour scales.",
@@ -60,7 +60,7 @@ class Tour {
 			},
 			buttons: this.get_buttons()
 		});
-		
+	
 		this.tour.addStep("map-controls", {
 			text: "You can control the zoom level and go fullscreen here. You can also zoom with your mouse wheel if you have one, and pan by clicking and dragging.",
 			attachTo: {
@@ -71,12 +71,12 @@ class Tour {
 		});
 		
 		this.tour.addStep("device-graph", {
-			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data. Try clicking one now.",
+			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data. <strong>Try clicking one now.</strong>",
 			attachTo: {
 				element: "#map",
 				on: "top"
 			},
-			buttons: this.get_buttons(true)
+			buttons: this.get_buttons(false)
 			
 		}).on("show", (() => {
 			this.map_manager.device_markers.once("marker-popup-opened", this.tour.next.bind(this.tour));
@@ -91,16 +91,16 @@ class Tour {
 			buttons: this.get_buttons()
 		});
 		this.tour.addStep("device-graph-b", {
-			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more. Click this now.",
+			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more. <strong>Click this now.</strong>",
 			attachTo: {
 				element: ".tabs :first-child",
 				on: "left"
 			},
 			advanceOn: { selector: ".tabs :first-child a", event: "click" },
-			buttons: this.get_buttons(true)
+			buttons: this.get_buttons(false)
 		});
-		
-		
+	
+	
 		this.tour.addStep("report-bug", {
 			text: "If you find a bug, you can report it by clicking this button.",
 			attachTo: {
@@ -117,11 +117,11 @@ class Tour {
 			},
 			buttons: this.get_buttons()
 		});
-		
-		
+	
+	
 		this.tour.addStep("complete", {
 			text: "Tour complete!\nIf you need any additional assistance, let us know :-)",
-			buttons: [{ text: "Done", action: this.tour.next }]
+			buttons: this.get_buttons(false, true, true)
 		});
 	}
 	
@@ -129,7 +129,7 @@ class Tour {
 		if(window.localStorage.getItem("completed_tour") === null)
 			this.run();
 		
-		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
+		//window.localStorage.setItem("completed_tour", (new Date()).toISOString()); -- removed due to an accidental refresh possiblity
 	}
 	
 	run() {
@@ -138,18 +138,33 @@ class Tour {
 		this.tour.start();
 	}
 	
-	get_buttons(no_continue = false, no_prev = false) {
+	completed_tour()
+	{
+		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
+	}
+	
+	get_buttons(isContinue = true, isPrev = true, isEnd = false) {
 		let next = { text: "Next", action: this.tour.next },
 			prev = { text: "Previous", action: this.tour.back },
-			exit = { text: "Exit", action: this.tour.cancel };
-		
+			exit = { text: "Exit", action: () => {
+				this.completed_tour();
+				this.tour.cancel();
+			} },
+
+			end = { text: "Done", action: () => {
+				this.completed_tour();
+				this.tour.next();
+			} }
+
 		let result = [];
-		if(!no_prev) result.push(prev);
-		if(!no_continue) {
+
+		if(isPrev) result.push(prev);
+		if(isContinue) {
 			result.push(next);
 			result.push(exit);
 		}
-		
+		if(isEnd) result.push(end);
+
 		return result;
 	}
 }
