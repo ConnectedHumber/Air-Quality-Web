@@ -7,8 +7,9 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
-## v0.13
+## v0.13-dev
  - Round dates before making API requests to improve caching potential
+ - [@Mr-Pepp](https://github.com/Mr-Pepp): Improve initial on-boarding tour
 
 ## v0.12
  - Added loading animation while the map is loading
