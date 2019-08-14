@@ -148,14 +148,22 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public function get_near_location(float $lat, float $long, int $count) {
 		$s = $this->get_static;
 		
+		$data_repo_class = MariaDBMeasurementDataRepository::class;
+		$data_repo_table_meta = $o($data_repo_class, "table_name_metadata");
+		$data_repo_col_datetime = "$data_repo_table_meta.{$o($data_repo_class, "column_metadata_datetime")}";
+		$data_repo_col_device_id = "$data_repo_table_meta.{$o($data_repo_class, "column_metadata_device_id")}";
+		
 		$result = $this->database->query(
 			"SELECT
 				{$s("table_name")}.{$s("column_device_id")} AS id,
 				{$s("table_name")}.{$s("column_device_name")} AS name,
 				{$s("table_name")}.{$s("column_lat")} AS latitude,
 				{$s("table_name")}.{$s("column_long")} AS longitude,
-				ST_DISTANCE_SPHERE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc
+				ST_DISTANCE_SPHERE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc,
+				MAX($data_repo_col_datetime) AS last_seen
 			FROM {$s("table_name")}
+			JOIN $data_repo_table_meta ON
+			   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
 			WHERE {$s("table_name")}.{$s("column_point")} IS NOT NULL
 			ORDER BY ST_DISTANCE_SPHERE(POINT(:latitude_again, :longitude_again), {$s("table_name")}.{$s("column_point")})
 			LIMIT :count;", [
