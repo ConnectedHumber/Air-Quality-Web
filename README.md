@@ -40,6 +40,7 @@ The [issue tracker](https://github.com/ConnectedHumber/Air-Quality-Web/issues) i
  - Colour manipulation by [chroma.js](https://github.com/gka/chroma.js)
  - Device graphs by [chart.js](https://www.chartjs.org)
  - [Loading Animation](https://github.com/SamHerbert/SVG-Loaders)
+ - Some icons from [Open Iconic](https://useiconic.com/open)
 
 ## License
 This project is licensed under the _Mozilla Public License 2.0_. The full text of this license can be found in the [LICENSE](https://github.com/ConnectedHumber/Air-Quality-Web/blob/master/LICENSE) file of this repository, along with a helpful summary of what you can and can't do provided by GitHub.

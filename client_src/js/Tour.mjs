@@ -1,7 +1,7 @@
 "use strict";
 
 import Sheperd from 'shepherd.js';
-import '../../node_modules/shepherd.js/dist/css/shepherd-theme-default.css';
+// import '../../node_modules/shepherd.js/dist/css/shepherd-theme-default.css';
 
 class Tour {
 	constructor(in_map_manager) {

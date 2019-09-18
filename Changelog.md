@@ -11,6 +11,8 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - Round dates before making API requests to improve caching potential
  - [@Mr-Pepp](https://github.com/Mr-Pepp): Improve initial on-boarding tour
  - Added `last_seen` to `list-devices-near` (#36)
+ - Update lots of dependencies
+ - Add new export as image button menu to the top-left
 
 ## v0.12
  - Added loading animation while the map is loading

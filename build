@@ -30,6 +30,7 @@ build_output_folder="./app";
 # Database settings for ssh port forwarding task
 database_host="db.connectedhumber.org";
 database_name="aq_db";
+database_user="www-data";
 
 # Minimum major version of npm
 min_npm_version_major="6";
@@ -188,7 +189,7 @@ task_database() {
 	ssh -TN "${database_host}" -L 3306:localhost:3306 &
 	ssh_pid=$!;
 	sleep 1;
-	mysql --host 127.0.0.1 --port 3306 --database "${database_name}" --user "${USER}" --password;
+	mysql --host 127.0.0.1 --port 3306 --database "${database_name}" --user "${database_user}" --password;
 	
 	kill "${ssh_pid}"; wait; sleep 0.5;
 	task_end $?;
@@ -221,7 +222,7 @@ task_dev-server-stop() {
 
 task_client() {
 	task_begin "Packaging Javascript";
-	execute node_modules/rollup/bin/rollup --sourcemap --config rollup.config.js;
+	execute node_modules/.bin/rollup --sourcemap --config rollup.config.js;
 	task_end $? "Error: rollup packing failed!";
 	
 	task_begin "Copying html";

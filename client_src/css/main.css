@@ -71,3 +71,8 @@ button.selected {
 .leaflet-control-attribution a {
     color: #0050B6;
 }
+
+
+.easyPrintSizeMode .HiResLandscape {
+    background-image: url(images/openiconic-image.png);
+}

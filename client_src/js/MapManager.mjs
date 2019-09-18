@@ -3,6 +3,7 @@
 // Import leaflet, but some plugins require it to have the variable name 'L' :-/
 import L from 'leaflet';
 import 'leaflet-fullscreen';
+import 'leaflet-easyprint';
 // import '../../node_modules/leaflet-timedimension/dist/leaflet.timedimension.src.withlog.js';
 
 import Config from './Config.mjs';
@@ -39,6 +40,9 @@ class MapManager {
 		// Setup the UI
 		this.ui = new UI(Config, this);
 		this.ui.setup().then(() => console.log("[map] UI setup complete."));
+		
+		// Set the export to image button
+		this.setup_print_export();
 		
 		// Load the device information
 		this.device_data = new DeviceData();
@@ -110,6 +114,32 @@ class MapManager {
 	async setup_device_markers() {
 		this.device_markers = new LayerDeviceMarkers(this.map, this.device_data);
 		await this.device_markers.setup();
+	}
+	
+	setup_print_export() {
+		L.easyPrint({
+			title: "Export as image",
+			position: "topleft",
+			exportOnly: true,
+			sizeModes: [
+				"A4Portrait",
+				"A4Landscape",
+				"Current",
+				{
+					width: 3308,
+					height: 2339,
+					name: "HiRes Landscape",
+					className: 'HiResLandscape',
+					tooltip: 'HiRes Landscape'
+				}
+			],
+			defaultSizeTitles: {
+				Current: 'Current Size',
+				A4Landscape: 'A4 Landscape',
+				A4Portrait: 'A4 Portrait',
+				HiResLandscape: 'HiRes Landscape'
+			}
+		}).addTo(this.map);
 	}
 	
 	setup_layer_control() {
