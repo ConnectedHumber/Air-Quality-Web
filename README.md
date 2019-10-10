@@ -4,7 +4,7 @@
 
 This project contains the web interface for the ConnectedHumber sensor system. Despite being called _Air Quality Web_, it is designed to display any kind of sensor data - not just air quality sensor readings.
 
- It is composed of 2 parts:
+It is composed of 2 parts:
 
  - A PHP-based JSON API server (entry point: api.php) that's backed by a MariaDB server
  - A Javascript client application that runs in the browser

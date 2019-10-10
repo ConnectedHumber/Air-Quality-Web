@@ -83,8 +83,9 @@ class ListDevicesNear implements IAction {
 		// 4: Send response
 		
 		// Send a cache-control header, but only in production mode
+		// FUTURE: Move last-seen to a different API call if caching becomes critically important?
 		if($this->settings->get("env.mode") == "production") {
-			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age"));
+			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age-supershort"));
 		}
 		
 		header("content-length: " . strlen($response));

@@ -34,6 +34,9 @@ default-action = "index"
 # Note also that cache headers are only sent in production mode - see env.mode above
 max-age = 2592000 # 30 days
 
+# The max-age for time-sensitive data (e.g. last_seen values). Defaults to 30 seconds, which should yield some benefit).
+max-age-supershort = 30 # 30 seconds
+
 [data]
 # Settings relating to the data returned by the API.
 

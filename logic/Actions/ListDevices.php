@@ -83,8 +83,11 @@ class ListDevices implements IAction {
 		
 		// 4: Send response
 		
-		// Don't a cache control header, because new devices might get added at any time
-		// TODO: Investigate adding a short-term (~10mins?) cache-control header here
+		// Don't cache for ages, because new devices might get added at any time
+		// FUTURE: Move last-seen to a different API call if caching becomes critically important?
+		if($this->settings->get("env.mode") == "production") {
+			header("cache-control: public, max-age=" . $this->settings->get("cache.max-age-supershort"));
+		}
 		
 		header("content-length: " . strlen($response));
 		header("content-type: $response_type");
