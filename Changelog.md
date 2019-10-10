@@ -13,6 +13,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - Added `last_seen` to `list-devices-near` (#36)
  - Update lots of dependencies
  - Add new export as image button menu to the top-left
+ - Change the display name from "Air Quality Map" to "Sensor Map"
 
 ## v0.12
  - Added loading animation while the map is loading
