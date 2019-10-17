@@ -8,7 +8,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
 
-## v0.13-dev
+## v0.13
  - Round dates before making API requests to improve caching potential
  - [@Mr-Pepp](https://github.com/Mr-Pepp): Improve initial on-boarding tour
  - Added `last_seen` to `list-devices-near` (#36)
