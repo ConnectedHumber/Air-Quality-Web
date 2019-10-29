@@ -138,8 +138,7 @@ class Tour {
 		this.tour.start();
 	}
 	
-	completed_tour()
-	{
+	completed_tour() {
 		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
 	}
 	
