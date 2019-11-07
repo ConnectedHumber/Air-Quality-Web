@@ -54,7 +54,7 @@ class ListReadingTypes implements IAction {
 		if(!is_int($device_id))
 			$data = $this->types_repo->get_all_types();
 		else
-			$data = $this->types_repo->get_types_by_device($device_id. $days_to_analyse);
+			$data = $this->types_repo->get_types_by_device($device_id, $days_to_analyse);
 		$this->perfcounter->end("sql");
 		
 		// 1.5: Validate data from database
@@ -86,7 +86,7 @@ class ListReadingTypes implements IAction {
 		// Don't a cache control header, because new types might get added at any time
 		// TODO: Investigate adding a short-term (~10mins?) cache-control header here
 		
-		header("content-length: " . strlen($response));
+		// header("content-length: " . strlen($response));
 		header("content-type: $response_type");
 		header("content-disposition: inline; filename=$response_suggested_filename");
 		header("x-time-taken: " . $this->perfcounter->render());

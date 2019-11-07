@@ -36,5 +36,5 @@ interface IMeasurementTypeRepository {
 	 * @param	int			$day_to_analyse	The number of days worth fo data to analyse. Defaults to -1, which is everything. Set to 0 for readings recorded in the last 24 hours, which is much faster.
 	 * @return	string[]	A list of device ids.
 	 */
-	public function get_types_by_device(int $device_id, int $days_to_analyse);
+	public function get_types_by_device(int $device_id, int $days_to_analyse = -1);
 }
