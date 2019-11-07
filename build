@@ -378,6 +378,10 @@ SFTPCOMMANDS
 		
 		echo "ln -s \"../data\" \"${deploy_root_dir}/www-new/data\"";
 		
+		if [ "${GIT_REF_NAME}" == "refs/heads/master" ]; then
+			echo "ln -s \"../../Air-Quality-Web-Beta/www/\" \"${deploy_root_dir}/www-new/beta\"";
+		fi
+		
 		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
 		echo "mv \"${deploy_root_dir}/www-new\" \"${deploy_root_dir}/www\"";
 		echo "rm -r \"${deploy_root_dir}/data/cache\"";

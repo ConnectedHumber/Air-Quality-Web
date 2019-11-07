@@ -16,12 +16,12 @@ class Tour {
 			}
 		});
 		
-		this.tour.addStep("welcome", {
+		this.tour.addStep({
 			text: "Welcome to the air quality web interface! Press next to get a short tour.",
 			buttons: this.get_buttons(true, false)
 		});
 		
-		this.tour.addStep("map", {
+		this.tour.addStep({
 			text: "Each device has a blue marker. The shape a marker is located in changes colour depending on the value of the measure it reported.",
 			attachTo: {
 				element: "#map",
@@ -29,7 +29,7 @@ class Tour {
 			},
 			buttons: this.get_buttons()
 		});
-		this.tour.addStep("guage", {
+		this.tour.addStep({
 			text: "This guage is a key to the colour of the shapes underneath the device markers.",
 			attachTo: {
 				element: document.querySelector("#canvas-guage"),
@@ -38,7 +38,7 @@ class Tour {
 			buttons: this.get_buttons()
 		});
 		
-		this.tour.addStep("reading-type", {
+		this.tour.addStep({
 			text: "Devices report multiple types of measurement. <strong>Change to another reading type now.</strong>",
 			attachTo: {
 				element: document.querySelector("select").parentNode,
@@ -47,12 +47,12 @@ class Tour {
 			advanceOn: { selector: "select", event: "change" },
 			buttons: this.get_buttons(false)
 		});
-		this.tour.addStep("reading-type-complete", {
+		this.tour.addStep({
 			text: "Hey, the map changed! Some devices only report certain types of measurement, and different measurements have different colour scales.",
 			attachTo: { element: "#map", on: "bottom" },
 			buttons: this.get_buttons()
 		});
-		this.tour.addStep("layer-showhide", {
+		this.tour.addStep({
 			text: "You can show and hide the device markers and the heatmap here.",
 			attachTo: {
 				element: ".leaflet-control-layers",
@@ -61,7 +61,7 @@ class Tour {
 			buttons: this.get_buttons()
 		});
 	
-		this.tour.addStep("map-controls", {
+		this.tour.addStep({
 			text: "You can control the zoom level and go fullscreen here. You can also zoom with your mouse wheel if you have one, and pan by clicking and dragging.",
 			attachTo: {
 				element: ".leaflet-top.leaflet-left",
@@ -70,7 +70,7 @@ class Tour {
 			buttons: this.get_buttons()
 		});
 		
-		this.tour.addStep("device-graph", {
+		this.tour.addStep({
 			text: "By clicking a blue marker, you can view additional information about that device. Not all device are actively reporting data. <strong>Try clicking one now.</strong>",
 			attachTo: {
 				element: "#map",
@@ -82,7 +82,7 @@ class Tour {
 			this.map_manager.device_markers.once("marker-popup-opened", this.tour.next.bind(this.tour));
 		}).bind(this));
 		
-		this.tour.addStep("device-graph-a", {
+		this.tour.addStep({
 			text: "This is a device information popup. By default it displays recent data that the device has reported on the line graph, but you can control this with the blue buttons.",
 			attachTo: {
 				element: ".popup-device",
@@ -90,7 +90,7 @@ class Tour {
 			},
 			buttons: this.get_buttons()
 		});
-		this.tour.addStep("device-graph-b", {
+		this.tour.addStep({
 			text: "By clicking here, you can see the specification of the device, including its software, sensor models, exact location, more. <strong>Click this now.</strong>",
 			attachTo: {
 				element: ".tabs :first-child",
@@ -101,7 +101,7 @@ class Tour {
 		});
 	
 	
-		this.tour.addStep("report-bug", {
+		this.tour.addStep({
 			text: "If you find a bug, you can report it by clicking this button.",
 			attachTo: {
 				element: "button[value='Report bug']",
@@ -109,7 +109,7 @@ class Tour {
 			},
 			buttons: this.get_buttons()
 		});
-		this.tour.addStep("changelog", {
+		this.tour.addStep({
 			text: "The changelog will be automatically shown every time this web interface updates. Click the version information here to review it again at other times.",
 			attachTo: {
 				element: "button[value~='built']",
@@ -119,7 +119,7 @@ class Tour {
 		});
 	
 	
-		this.tour.addStep("complete", {
+		this.tour.addStep({
 			text: "Tour complete!\nIf you need any additional assistance, let us know :-)",
 			buttons: this.get_buttons(false, true, true)
 		});
@@ -138,8 +138,7 @@ class Tour {
 		this.tour.start();
 	}
 	
-	completed_tour()
-	{
+	completed_tour() {
 		window.localStorage.setItem("completed_tour", (new Date()).toISOString());
 	}
 	
