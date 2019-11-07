@@ -81,7 +81,7 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 		)->fetchAll();
 	}
 	
-	public function get_types_by_device($device_id) {
+	public function get_types_by_device($device_id, $days_to_analyse = -1) {
 		$s = $this->get_static;
 		$o = $this->get_static_extra;
 		return $this->database->query(
@@ -93,7 +93,9 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 				{$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_id")} = {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}.{$o(MariaDBMeasurementDataRepository::class, "column_values_reading_id")}
 			JOIN {$s("table_name")} ON
 				{$s("table_name")}.{$s("column_id")} = {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}.{$o(MariaDBMeasurementDataRepository::class, "column_values_reading_type")}
-			WHERE {$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_device_id")} = :device_id
+			WHERE
+				{$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_device_id")} = :device_id
+				" . ($days_to_analyse >= 0 ? "AND and DATEDIFF(NOW(),s_or_r) = 0" : "") . "
 			GROUP BY {$s("table_name")}.{$s("column_id")};", [
 				"device_id" => $device_id
 			]
