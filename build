@@ -28,7 +28,7 @@ cache_dir="./.cache";
 build_output_folder="./app";
 
 # Database settings for ssh port forwarding task
-database_host="db.connectedhumber.org";
+database_host="aq.connectedhumber.org";
 database_name="aq_db";
 database_user="www-data";
 
@@ -37,7 +37,7 @@ min_npm_version_major="6";
 
 # Deployment settings
 deploy_ssh_user="ci";
-deploy_ssh_host="aq.connectedhumber.org";
+deploy_ssh_host="sensors.connectedhumber.org";
 deploy_ssh_port="22";
 
 deploy_root_dir="Air-Quality-Web";
