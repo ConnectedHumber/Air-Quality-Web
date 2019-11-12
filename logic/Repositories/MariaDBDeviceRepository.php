@@ -21,6 +21,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public static $column_long = "device_longitude";
 	public static $column_point = "lat_lon";
 	public static $column_altitude = "device_altitude";
+	public static $column_last_seen = "last_seen";
 	
 	public static $table_name_type = "device_types";
 	public static $column_type_id = "device_type";
@@ -86,7 +87,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			{$s("table_name")}.{$s("column_long")} AS longitude,
 			{$s("table_name")}.{$s("column_altitude")} AS altitude,
 			{$s("table_name")}.{$s("column_device_type")} AS type_id,
-			MAX($data_repo_col_datetime) AS last_seen
+			{$s("table_name")}.{$s("column_last_seen")} AS last_seen
 		FROM {$s("table_name")}
 		JOIN $data_repo_table_meta ON
 		   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}";
@@ -119,7 +120,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				{$s("table_name")}.{$s("column_long")} AS longitude,
 				{$s("table_name")}.{$s("column_altitude")} AS altitude,
 				{$s("table_name_type")}.*,
-				MAX($data_repo_col_datetime) AS last_seen
+				{$s("table_name")}.{$s("column_last_seen")} AS last_seen
 			FROM {$s("table_name")}
 			JOIN {$s("table_name_type")} ON
 				{$s("table_name")}.{$s("column_device_type")} = {$s("table_name_type")}.{$s("column_type_id")}
@@ -160,7 +161,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				{$s("table_name")}.{$s("column_lat")} AS latitude,
 				{$s("table_name")}.{$s("column_long")} AS longitude,
 				ST_DISTANCE_SPHERE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc,
-				MAX($data_repo_col_datetime) AS last_seen
+				{$s("table_name")}.{$s("column_last_seen")} AS last_seen
 			FROM {$s("table_name")}
 			JOIN $data_repo_table_meta ON
 			   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
