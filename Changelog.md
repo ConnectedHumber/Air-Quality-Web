@@ -7,6 +7,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
+
 ## v0.13.2
  - Improve performance of device graph pop-up
  - Improve performance of device last seen times by taking advantage of new database column
