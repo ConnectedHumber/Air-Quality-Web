@@ -16,7 +16,7 @@ Note that this project is _not_ responsible for entering data into the database.
 ## Documentation
 Documentation has moved! You can view it here:
 
- - https://aq.connectedhumber.org/__nightdocs/00-Welcome.html
+ - https://sensors.connectedhumber.org/__nightdocs/00-Welcome.html
 
 ## Branches
  - `master`
