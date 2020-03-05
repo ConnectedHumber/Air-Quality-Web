@@ -148,6 +148,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	
 	public function get_near_location(float $lat, float $long, int $count) {
 		$s = $this->get_static;
+		$o = $this->get_static_extra;
 		
 		$data_repo_class = MariaDBMeasurementDataRepository::class;
 		$data_repo_table_meta = $o($data_repo_class, "table_name_metadata");
