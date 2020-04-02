@@ -7,6 +7,9 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
+## v0.13.5
+ - Disable the tour, as it's now causing a crash on startup :-(
+
 ## v0.13.4
  - [API] Fix crash in `list-devices-near` action
 
