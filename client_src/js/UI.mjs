@@ -69,6 +69,13 @@ class UI {
 			},
 			{
 				type: "button",
+				name: "View disclaimer",
+				callback: ((_event) => {
+					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/tree/dev#disclaimer", "_blank")
+				})
+			},
+			{
+				type: "button",
 				name: "Report bug",
 				callback: ((_event) => {
 					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/issues/new", "_blank");
