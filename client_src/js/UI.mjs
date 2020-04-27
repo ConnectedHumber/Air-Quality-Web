@@ -39,7 +39,9 @@ class UI {
 		this.config = in_config;
 		this.map_manager = in_map_manager;
 		
-		this.ui_panel = new SmartSettings("Settings");
+		this.ui_panel = new SmartSettings({
+			name: "Settings"
+		});
 		// this.ui_panel.watch((event) => console.log(event));
 		
 		this.tour_enabled = false;
@@ -57,6 +59,7 @@ class UI {
 			{
 				type: "select",
 				name: "Reading Type",
+				selected: "PM25",
 				items: this.reading_types.map((type) => type.friendly_text),
 				callback: (async (event) => {
 					let new_type = this.reading_types.find((type) => type.friendly_text == event.target.value).short_descr;
@@ -89,7 +92,7 @@ class UI {
 				})
 			}
 		];
-		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
+		// this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
 		
 		if(this.tour_enabled) await this.tour.run_once();
 	}
