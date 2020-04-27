@@ -1,4 +1,6 @@
 The data displayed has been produced by low-cost devices developed by [Connected Humber](https://www.connectedhumber.org/) members as part of a community driven effort to build a network of smart sensors in the Humber Region.
+
+**Please read the [Disclaimer](https://github.com/ConnectedHumber/Air-Quality-Web/tree/dev#disclaimer) for important information about the accuracy of our sensors.**
 # Changelog
 
 This is the changelog for the air quality web interface and its associated HTTP API.
