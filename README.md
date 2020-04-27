@@ -13,10 +13,12 @@ The client-side browser application is powered by [Leaflet](https://leafletjs.co
 
 Note that this project is _not_ responsible for entering data into the database. This project's purpose is simply to display the data.
 
+
 ## Documentation
 Documentation has moved! You can view it here:
 
  - https://sensors.connectedhumber.org/__nightdocs/00-Welcome.html
+
 
 ## Branches
  - `master`
@@ -25,6 +27,7 @@ Documentation has moved! You can view it here:
  - `dev`
      - The development branch
      - May not always be stable.
+
 
 ## Notes
  - Readings are taken every 6 minutes as standard.
@@ -36,6 +39,17 @@ Contributions are welcome - feel free to [open an issue](https://github.com/Conn
 The [issue tracker](https://github.com/ConnectedHumber/Air-Quality-Web/issues) is the place where all the tasks relating to the project are kept.
 
 **Please remember: All pull requests should be made against the `dev` branch, not master! The `master` branch is the stable version that automatically gets pushed to production.**
+
+
+## Disclaimer
+This website displays sensor reading from devices created by individuals with an interest in monitoring their environment and is not endorsed or funded in any way by UK government supported bodies such as DEFRA. It is , however, hoped that this work may be useful in educational applications.
+
+The sensors, on the map, are installed in different ways, in different enclosures, at different heights and with different exposures to sunlight and wind . This means that, although individual sensors may use the same detectors, those detectors could produce varying results due to the above and also due to component tolerance spread. 
+
+No attempt has been made, by us, to calibrate the sensor readings in any way though the visual representation will include some aggregation of readings.
+
+If you wish to create a device to display data on this map please register with mattermost.connectedhumber.org and we will provide you with direction and designs to build your own sensor device.
+
 
 ## Credits
  - Map: [Leaflet.js](https://leafletjs.com/) showing [OpenStreetMaps](https://www.openstreetmap.org/) using various plugins
