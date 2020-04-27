@@ -53,7 +53,7 @@ class UI {
 			await GetFromUrl(`${this.config.api_root}?action=list-reading-types`)
 		);
 		
-		this.ui_panel.config = [
+		this.ui_panel.loadConfig([
 			{
 				type: "select",
 				name: "Reading Type",
@@ -69,13 +69,6 @@ class UI {
 			},
 			{
 				type: "button",
-				name: "View disclaimer",
-				callback: ((_event) => {
-					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/tree/dev#disclaimer", "_blank")
-				})
-			},
-			{
-				type: "button",
 				name: "Report bug",
 				callback: ((_event) => {
 					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/issues/new", "_blank");
@@ -88,7 +81,7 @@ class UI {
 					show_changelog(false);
 				})
 			}
-		];
+		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
 		
 		if(this.tour_enabled) await this.tour.run_once();
