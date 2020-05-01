@@ -22,6 +22,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public static $column_point = "lat_lon";
 	public static $column_altitude = "device_altitude";
 	public static $column_last_seen = "last_seen";
+	public static $column_visible = "visible";
 	
 	public static $table_name_type = "device_types";
 	public static $column_type_id = "device_type";
@@ -90,7 +91,8 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			{$s("table_name")}.{$s("column_last_seen")} AS last_seen
 		FROM {$s("table_name")}
 		JOIN $data_repo_table_meta ON
-		   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}";
+		   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
+		WHERE {$s("table_name")}.{$s("column_visible")} != 0";
 		
 		if($only_with_location)
 			$sql .= "\nWHERE
@@ -126,7 +128,8 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				{$s("table_name")}.{$s("column_device_type")} = {$s("table_name_type")}.{$s("column_type_id")}
 			JOIN $data_repo_table_meta ON
 				$data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
-			WHERE {$s("table_name")}.{$s("column_device_id")} = :device_id;", [
+			WHERE {$s("table_name")}.{$s("column_device_id")} = :device_id
+			AND {$s("table_name")}.{$s("column_visible")} != 0;", [
 				"device_id" => $device_id
 			]
 		)->fetch(); // gets the next row from the query
@@ -167,6 +170,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			JOIN $data_repo_table_meta ON
 			   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
 			WHERE {$s("table_name")}.{$s("column_point")} IS NOT NULL
+				AND {$s("table_name")}.{$s("column_visible")} != 0
 			ORDER BY ST_DISTANCE_SPHERE(POINT(:latitude_again, :longitude_again), {$s("table_name")}.{$s("column_point")})
 			LIMIT :count;", [
 				"latitude" => $lat,

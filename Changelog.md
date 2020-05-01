@@ -11,6 +11,7 @@ This is the changelog for the air quality web interface and its associated HTTP 
 
 ## v0.13.5
  - Disable the tour, as it's now causing a crash on startup :-(
+ - [API] Don't return devices in the device lists that have the `visible` flag in the database set to `0`
 
 ## v0.13.4
  - [API] Fix crash in `list-devices-near` action
