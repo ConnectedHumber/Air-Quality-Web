@@ -153,11 +153,6 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 		$s = $this->get_static;
 		$o = $this->get_static_extra;
 		
-		$data_repo_class = MariaDBMeasurementDataRepository::class;
-		$data_repo_table_meta = $o($data_repo_class, "table_name_metadata");
-		$data_repo_col_datetime = "$data_repo_table_meta.{$o($data_repo_class, "column_metadata_datetime")}";
-		$data_repo_col_device_id = "$data_repo_table_meta.{$o($data_repo_class, "column_metadata_device_id")}";
-		
 		$result = $this->database->query(
 			"SELECT
 				{$s("table_name")}.{$s("column_device_id")} AS id,
@@ -167,8 +162,6 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 				ST_DISTANCE_SPHERE(POINT(:latitude, :longitude), {$s("table_name")}.{$s("column_point")}) AS distance_calc,
 				{$s("table_name")}.{$s("column_last_seen")} AS last_seen
 			FROM {$s("table_name")}
-			JOIN $data_repo_table_meta ON
-			   $data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
 			WHERE {$s("table_name")}.{$s("column_point")} IS NOT NULL
 				AND {$s("table_name")}.{$s("column_visible")} != 0
 			ORDER BY ST_DISTANCE_SPHERE(POINT(:latitude_again, :longitude_again), {$s("table_name")}.{$s("column_point")})
