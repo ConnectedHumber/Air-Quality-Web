@@ -36,6 +36,7 @@ class MapManager {
 		// Add the attribution
 		this.map.attributionControl.addAttribution("Data: <a href='https://connectedhumber.org/'>Connected Humber</a>");
 		this.map.attributionControl.addAttribution("<a href='https://github.com/ConnectedHumber/Air-Quality-Web/'>Air Quality Web</a> by <a href='https://starbeamrainbowlabs.com/'>Starbeamrainbowlabs</a>");
+		this.map.attributionControl.addAttribution("<strong><a href='https://github.com/ConnectedHumber/Air-Quality-Web/tree/dev#disclaimer'>Sensor Data Disclaimer</a></strong>");
 		
 		// Setup the UI
 		this.ui = new UI(Config, this);

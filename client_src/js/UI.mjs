@@ -6,7 +6,7 @@ import NanoModal from 'nanomodal';
 import Config from './Config.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 
-import Tour from './Tour.mjs';
+// import Tour from './Tour.mjs';
 
 function show_nanomodal(html, options = {}) {
 	return new Promise((resolve, _reject) => {
@@ -42,7 +42,8 @@ class UI {
 		this.ui_panel = new SmartSettings("Settings");
 		// this.ui_panel.watch((event) => console.log(event));
 		
-		this.tour = new Tour(this.map_manager);
+		this.tour_enabled = false;
+		if(this.tour_enabled) this.tour = new Tour(this.map_manager);
 	}
 	
 	async setup() {
@@ -68,6 +69,13 @@ class UI {
 			},
 			{
 				type: "button",
+				name: "View disclaimer",
+				callback: ((_event) => {
+					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/tree/dev#disclaimer", "_blank")
+				})
+			},
+			{
+				type: "button",
 				name: "Report bug",
 				callback: ((_event) => {
 					window.open("https://github.com/ConnectedHumber/Air-Quality-Web/issues/new", "_blank");
@@ -83,7 +91,7 @@ class UI {
 		]);
 		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
 		
-		await this.tour.run_once();
+		if(this.tour_enabled) await this.tour.run_once();
 	}
 }
 

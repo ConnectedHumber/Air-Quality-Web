@@ -1,4 +1,6 @@
 The data displayed has been produced by low-cost devices developed by [Connected Humber](https://www.connectedhumber.org/) members as part of a community driven effort to build a network of smart sensors in the Humber Region.
+
+**Please read the [Disclaimer](https://github.com/ConnectedHumber/Air-Quality-Web/tree/dev#disclaimer) for important information about the accuracy of our sensors.**
 # Changelog
 
 This is the changelog for the air quality web interface and its associated HTTP API.
@@ -6,6 +8,17 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[API]` refers to changes to the [HTTP API](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html).
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
+
+## v0.13.5
+ - Disable the tour, as it's now causing a crash on startup :-(
+ - [API] Don't return devices in the device lists that have the `visible` flag in the database set to `0`
+
+## v0.13.4
+ - [API] Fix crash in `list-devices-near` action
+
+
+## v0.13.3
+ - Update dependencies
 
 
 ## v0.13.2
