@@ -95,7 +95,7 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 		WHERE {$s("table_name")}.{$s("column_visible")} != 0";
 		
 		if($only_with_location)
-			$sql .= "\nWHERE
+			$sql .= "\nAND
 				{$s("column_lat")} IS NOT NULL
 				AND {$s("column_long")} IS NOT NULL";
 		
