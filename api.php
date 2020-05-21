@@ -78,6 +78,10 @@ if(!class_exists($handler_name)) {
 	exit("Error: No action with the name '$action' could be found.");
 }
 
+if($settings->get("http.cors") !== false) {
+	header("access-control-allow-origin: " . $settings->get("http.cors"));
+}
+
 $handler = $di_container->get($handler_name);
 
 $perfcounter->start("handle");
