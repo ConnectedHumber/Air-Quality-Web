@@ -377,6 +377,7 @@ SFTPCOMMANDS
 		echo "connect sftp://${deploy_ssh_user}:@${deploy_ssh_host}:${deploy_ssh_port}";
 		
 		echo "ln -s \"../data\" \"${deploy_root_dir}/www-new/data\"";
+		echo "ln -s \"../../Air-Quality-Web-Beta/www/\" \"${deploy_root_dir}/www-new/beta\"";
 		
 		echo "mv \"${deploy_root_dir}/www\" \"${deploy_root_dir}/www-old\"";
 		echo "mv \"${deploy_root_dir}/www-new\" \"${deploy_root_dir}/www\"";
