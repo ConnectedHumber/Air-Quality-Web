@@ -339,9 +339,9 @@ task_deploy() {
 	rm -r "${temp_dir}/data"; # Delete the default data directory - there's one on the server already
 	subtask_end $?;
 	
-	subtask_begin "Unwinding symlinks";
-	find "${temp_dir}" -D exec -type l -not -path "./beta" -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
-	subtask_end $?;
+	# subtask_begin "Unwinding symlinks";
+	# find "${temp_dir}" -D exec -type l -not -path "./beta" -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
+	# subtask_end $?;
 	
 	task_end $?;
 	
