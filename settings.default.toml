@@ -7,6 +7,19 @@
 # The operating mode. Can be either "development", or "production" (default; activates a number of optimisations which might make development harder, such as 3rd-party library caches)
 mode = "production"
 
+[http]
+# HTTP related settings
+
+# Whether to enable cross-origin-request-sharing. This allows HTTP API queries
+# from origins other than that of the origin of the HTTP API itself.
+# For example, if the HTTP API is running on sensors.connectedhumber.org, then
+# Without CORS a client-side Javascript program running on foo.example.com would
+# not be able to request data.
+# Possible values: false (disabled), a string (an origin to allow; set via the access-control-allow-origin header), or the special string "*" (allows all origins)
+cors = false
+# cors = "subdomain.example.com"
+# cors = "*"
+
 [database]
 # Settings that control the database, or the connection to it
 
