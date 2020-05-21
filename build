@@ -340,7 +340,7 @@ task_deploy() {
 	subtask_end $?;
 	
 	subtask_begin "Unwinding symlinks";
-	find "${temp_dir}" -type l -not -path "./beta" -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
+	find "${temp_dir}" -D exec -type l -not -path "./beta" -exec bash -c 'ln -f "$(readlink -m "$0")" "$0"' {} \;
 	subtask_end $?;
 	
 	task_end $?;
