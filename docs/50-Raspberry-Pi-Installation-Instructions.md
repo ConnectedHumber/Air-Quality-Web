@@ -164,13 +164,13 @@ sudo mysql
 **username** and **password** will be your dbUser and dbPassword which you need to access the database and 
 place in the settings files for dbLoader.py and the Air Quality Map.
 
-## Update Node-Red & NPM
+## Update Node & NPM
 
 ```
-cd $HOME;
-curl -OL https://gitlab.com/sbrl/bin/raw/master/node-update;
-chmod +x node-update;
-./node-update
+echo "deb https://apt.starbeamrainbowlabs.com/ ./ # apt.starbeamrainbowlabs.com" | sudo tee /etc/apt/sources.list.d/sbrl.list
+sudo curl -sSL https://apt.starbeamrainbowlabs.com/aptosaurus.asc -o /etc/apt/trusted.gpg.d/sbrl-aptosaurus.asc;
+sudo apt update
+sudo apt install nodejs-sbrl
 ```
 
 
