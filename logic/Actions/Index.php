@@ -31,7 +31,7 @@ class Index implements IAction {
 
 Although the web interface is the default thing you see, it actually uses this HTTP API as a backend - which can be interacted with directly.
 
-Official usage documentation for the latest version of the API can be found here: https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html
+Official usage documentation for the latest version of the API can be found here: https://sensors.connectedhumber.org/__nightdocs/05-API-Docs.html
 
 Note that if you have deployed your own version of the air quality web interface, you will need to ensure you're up-to-date with the latest commits in the \"master\" branch, otherwise the HTTP API documentation may not be completely accurate with respect to the version you're running.
 ";
