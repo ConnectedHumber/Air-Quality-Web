@@ -11,7 +11,10 @@ This is the changelog for the air quality web interface and its associated HTTP 
 
 
 ## v0.14
+ - Remove the heatmap background overlay :-(
+ - Colour device markers based on the latest reading
  - [API] Optimise `list-reading-types` action, which necessitated a database schema update and the removal of the `count` property on returned objects
+ - [API] Drastically optimise `device-info` by removing a redundant JOIN
 
 
 ## v0.13.6
