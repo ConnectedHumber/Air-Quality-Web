@@ -8,8 +8,6 @@ import 'leaflet-easyprint';
 
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
-// import LayerHeatmap from './LayerHeatmap.mjs';
-// import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
 import DeviceData from './DeviceData.mjs';
 import ReadingsData from './ReadingsData.mjs';
 import UI from './UI.mjs';
@@ -58,50 +56,9 @@ class MapManager {
 				.then(() => console.info("[map] Device markers loaded successfully.")),
 		]).then(() => document.querySelector("main").classList.remove("working-visual"));
 		
-		// Add the heatmap
-		// console.info("[map] Loading heatmap....");
-		// this.setup_heatmap()
-		// 	.then(() => console.info("[map] Heatmap loaded successfully."))
-		// 	// ...and the time dimension
-		// 	.then(this.setup_time_dimension.bind(this))
-		// 	.then(() => console.info("[map] Time dimension initialised."));
 	}
 	
-	setup_time_dimension() {
-		// FUTURE: Replace leaflet-time-dimension with our own solution that's got a better ui & saner API?
-		this.layer_time = new L.TimeDimension({
-			period: "PT1H", // 1 hour
-			timeInterval: `2019-01-01T12:00:00Z/${new Date().toISOString()}`
-		});
-		//this.layer_time.on("timeloading", console.log.bind(null, "timeloading"));
-		
-		this.layer_time_player = new L.TimeDimension.Player({
-			transitionTime: 500,
-			loop: false,
-			startOver: true,
-			buffer: 10 // Default: 5
-		}, this.layer_time);
-		
-		this.layer_time_control = new L.Control.TimeDimension({
-			player: this.layer_time_player,
-			timeDimension: this.layer_time,
-			position: "bottomright",
-			autoplay: false,
-			minSpeed: 1, 
-			speedStep: 0.25,
-			maxSpeed: 15,
-			timeSliderDragUpdate: false
-		});
-		
-		this.map.addControl(this.layer_time_control);
-		
-		// Create the time dimension <---> heatmap glue object
-		this.layer_heatmap_glue = new LayerHeatmapGlue(
-			this.layer_time,
-			this.heatmap
-		);
-		this.layer_heatmap_glue.attachTo(this.map);
-	}
+	// NOTE: We tried leaflet-time-dimension for changing the time displayed, but it didn't work out
 	
 	async setup_device_markers() {
 		this.device_markers = new LayerDeviceMarkers(this, this.device_data);

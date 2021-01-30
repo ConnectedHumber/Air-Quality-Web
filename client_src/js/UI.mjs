@@ -63,7 +63,7 @@ class UI {
 					
 					
 					document.querySelector("main").classList.add("working-visual");
-					await this.map_manager.overlay.update_reading_type(new_type);
+					await this.map_manager.device_markers.update_markers(new_type);
 					document.querySelector("main").classList.remove("working-visual");
 				}).bind(this)
 			},
