@@ -10,6 +10,10 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
 
 
+## v0.14
+ - [API] Optimise `list-reading-types` action, which necessitated a database schema update and the removal of the `count` property on returned objects
+
+
 ## v0.13.6
  - [Code] Add option to allow cross-origin-request sharing HTTP API requests
 

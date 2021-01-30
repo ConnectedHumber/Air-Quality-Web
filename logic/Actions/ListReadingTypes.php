@@ -37,7 +37,6 @@ class ListReadingTypes implements IAction {
 		
 		// 1: Parse & validate parameters
 		$device_id = !empty($_GET["device-id"]) ? intval($_GET["device-id"]) : null;
-		$days_to_analyse = intval($_GET["days"] ?? "1") - 1;
 		
 		$format = $_GET["format"] ?? "json";
 		if(!in_array($format, ["json", "csv"])) {
@@ -54,7 +53,7 @@ class ListReadingTypes implements IAction {
 		if(!is_int($device_id))
 			$data = $this->types_repo->get_all_types();
 		else
-			$data = $this->types_repo->get_types_by_device($device_id, $days_to_analyse);
+			$data = $this->types_repo->get_types_by_device($device_id);
 		$this->perfcounter->end("sql");
 		
 		// 1.5: Validate data from database

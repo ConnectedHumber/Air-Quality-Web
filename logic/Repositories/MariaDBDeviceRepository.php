@@ -33,7 +33,6 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public static $column_type_power = "power";
 	public static $column_type_software = "Software";
 	public static $column_type_notes = "Other";
-
 	
 	
 	// ------------------------------------------------------------------------

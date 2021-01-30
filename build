@@ -28,7 +28,7 @@ cache_dir="./.cache";
 build_output_folder="./app";
 
 # Database settings for ssh port forwarding task
-database_host="db.connectedhumber.org";
+database_host="ch-kimsufi";
 database_name="aq_db";
 database_user="www-data";
 
