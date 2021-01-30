@@ -57,7 +57,14 @@ class LayerDeviceMarkers extends Emitter {
 		
 		// 3: Fetch the latest readings data
 		// --------------------------------------------------------------------
-		let device_values = await this.map_manager.readings_data.fetch(reading_type, datetime);
+		let device_values;
+		try {
+			device_values = await this.map_manager.readings_data.fetch(reading_type, datetime);
+		}
+		catch(error) {
+			alert(error);
+			device_values = new Map();
+		}
 		
 		// 4: Add a marker for each device
 		// --------------------------------------------------------------------
