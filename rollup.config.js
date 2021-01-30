@@ -8,6 +8,7 @@ import postcss from 'rollup-plugin-postcss';
 import { terser } from "rollup-plugin-terser";
 import replace from 'rollup-plugin-replace';
 import json from 'rollup-plugin-json';
+import { string } from 'rollup-plugin-string'
 
 import postcss_import from 'postcss-import';
 import postcss_copy from 'postcss-copy';
@@ -38,6 +39,10 @@ let plugins = [
 	
 	json({
 		
+	}),
+	
+	string({
+		include: '**/*.svg'
 	}),
 	
 	replace({

@@ -8,15 +8,16 @@ import 'leaflet-easyprint';
 
 import Config from './Config.mjs';
 import LayerDeviceMarkers from './LayerDeviceMarkers.mjs';
-import VoronoiManager from './Overlay/VoronoiManager.mjs';
 // import LayerHeatmap from './LayerHeatmap.mjs';
 // import LayerHeatmapGlue from './LayerHeatmapGlue.mjs';
 import DeviceData from './DeviceData.mjs';
+import ReadingsData from './ReadingsData.mjs';
 import UI from './UI.mjs';
 
 class MapManager {
 	constructor() {
 		console.log(Config);
+		this.readings_data = new ReadingsData();
 	}
 	
 	async setup() {
@@ -55,9 +56,6 @@ class MapManager {
 		Promise.all([
 			this.setup_device_markers.bind(this)()
 				.then(() => console.info("[map] Device markers loaded successfully.")),
-			
-			this.setup_overlay.bind(this)()
-				.then(this.setup_layer_control.bind(this))
 		]).then(() => document.querySelector("main").classList.remove("working-visual"));
 		
 		// Add the heatmap
@@ -67,13 +65,6 @@ class MapManager {
 		// 	// ...and the time dimension
 		// 	.then(this.setup_time_dimension.bind(this))
 		// 	.then(() => console.info("[map] Time dimension initialised."));
-	}
-	
-	async setup_overlay() {
-		this.overlay = new VoronoiManager(this.device_data, this.map);
-		await this.overlay.setup();
-		// No need to do this here, as it does it automatically
-		// await this.overlay.set_data(new Date(), "PM25");
 	}
 	
 	setup_time_dimension() {
@@ -113,7 +104,7 @@ class MapManager {
 	}
 	
 	async setup_device_markers() {
-		this.device_markers = new LayerDeviceMarkers(this.map, this.device_data);
+		this.device_markers = new LayerDeviceMarkers(this, this.device_data);
 		await this.device_markers.setup();
 	}
 	
@@ -149,8 +140,7 @@ class MapManager {
 			"OpenStreetMap": this.layer_openstreet
 		}, { // Overlay(s)
 			"Devices": this.device_markers.layer,
-			// FUTURE: Have 1 heatmap layer per reading type?
-			"Heatmap": this.overlay.layer
+			// "Heatmap": this.overlay.layer
 		}, { // Options
 			
 		});

@@ -10,45 +10,121 @@ import Emitter from 'event-emitter-es6';
 
 import Config from './Config.mjs';
 import DeviceReadingDisplay from './DeviceReadingDisplay.mjs';
+import MarkerGenerator from './MarkerGenerator.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
 import { human_time_since } from './Helpers/DateHelper.mjs';
 
 class LayerDeviceMarkers extends Emitter {
-	constructor(in_map, in_device_data) {
+	constructor(in_map_manager, in_device_data) {
 		super();
 		
-		this.map = in_map;
+		this.map_manager = in_map_manager;
 		this.device_data = in_device_data;
 		
+		this.marker_generator = new MarkerGenerator();
+		
 		// Create a new clustering layer
+		this.layer = null;
+	}
+	
+	/**
+	 * Performs initial setup of the device markers layer.
+	 * @return	{Promise}	A Promise that resolves when the initial setup is complete
+	 */
+	async setup() {
+		await this.update_markers(Config.default_reading_type, "now");
+	}
+	
+	/**
+	 * Replaces all existing device markers (if any) with those for a given
+	 * reading type and datetime.
+	 * @param	{string}		reading_type		The reading type to use to colour the markers.
+	 * @param	{String|Date}	[datetime="now"]	The datetime of the data to use to colour the markers (default: the special keyword "now", which indicates to fetch data for the current time)
+	 * @return	{Promise}		A Promise that resolves when the markers have been updated.
+	 */
+	async update_markers(reading_type, datetime = "now") {
+		// 1: Remove the old layer, if present
+		// --------------------------------------------------------------------
+		if(this.layer !== null)
+			this.map_manager.map.removeLayer(this.layer);
+		
+		// 2: Create a new layer
+		// --------------------------------------------------------------------
 		this.layer = L.markerClusterGroup({
 		// this.layer = L.layerGroup({
 			zoomToBoundsOnClick: false
 		});
-	}
-	
-	async setup() {
-		// Add a marker for each device
+		
+		// 3: Fetch the latest readings data
+		// --------------------------------------------------------------------
+		let device_values = await this.map_manager.readings_data.fetch(reading_type, datetime);
+		
+		// 4: Add a marker for each device
+		// --------------------------------------------------------------------
+		let has_data = 0, has_no_data = 0, total = 0;
 		for (let device of this.device_data.devices) {
 			// If the device doesn't have a location, we're not interested
-			// FUTURE: We might be able to displaymobile devices by adding additional logic here
+			// FUTURE: We might be able to display mobile devices by adding additional logic here
 			if(typeof device.latitude != "number" || typeof device.longitude != "number")
 				continue;
-			this.add_device_marker(device);
+			
+			console.log(`[LayerDeviceMarkers] id =`, device.id, `name =`, device.name, `location: (`, device.latitude, `,`, device.longitude, `)`);
+			
+			if(device_values.has(device.id)) {
+				this.add_device_marker(device, reading_type, device_values.get(device.id).value);
+				console.log(`has value`);
+				has_data++;
+			}
+			else {
+				this.add_device_marker(device, "unknown");
+				console.log(`doesn't have value`);
+				has_no_data++;
+			}
+			
+			total++;
 		}
+		console.log(`[LayerDeviceMarkers] has_data`, has_data, `has_no_data`, has_no_data, `total`, total);
 		
-		// Display this layer
-		this.map.addLayer(this.layer);
+		// 5: Display the new layer
+		// --------------------------------------------------------------------
+		this.map_manager.map.addLayer(this.layer);
 	}
 	
-	add_device_marker(device) {
+	/**
+	 * Adds a single device marker with a given reading type and value.
+	 * @param	{Object}	device			The object representing the device to add.
+	 * @param	{string}	reading_type	The reading type to use when colouring the marker. The special "unknown" reading type causes a default blue marker to be shown (regardless of the value passed).
+	 * @param	{number}	value			The reading value to use when colouring the marker.
+	 */
+	add_device_marker(device, reading_type, value) {
+		let icon;
+		if(reading_type !== "unknown") {
+			icon = L.divIcon({
+				className: "device-marker-icon",
+				html: this.marker_generator.marker(value, reading_type),
+				iconSize: L.point(17.418, 27.508),
+				iconAnchor: L.point(8.71, 27.16)
+			});
+			console.log(`[LayerDeviceMarkers/add_device_marker] got value`);
+		}
+		else {
+			icon = L.divIcon({
+				className: "device-marker-icon icon-unknown",
+				html: this.marker_generator.marker_default(),
+				iconSize: L.point(17.418, 27.508),
+				iconAnchor: L.point(8.71, 27.16)
+			});
+			console.log(`[LayerDeviceMarkers/add_device_marker] unknown value`);
+		}
+		
 		// Create the marker
 		let marker = L.marker(
 			L.latLng(device.latitude, device.longitude),
 			{ // See https://leafletjs.com/reference-1.4.0.html#marker
 				title: `Device: ${device.name}`,
 				autoPan: true,
-				autoPanPadding: L.point(100, 100)
+				autoPanPadding: L.point(100, 100),
+				icon
 			}
 		);
 		// Create the popup

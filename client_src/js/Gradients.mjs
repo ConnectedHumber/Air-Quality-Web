@@ -1,5 +1,6 @@
 "use strict";
 
+import chroma from 'chroma-js';
 
 var PM25 = {
 	/*
@@ -102,6 +103,11 @@ var specs = {
 	pressure,
 	unknown
 };
+
+for(let spec of Object.values(specs)) {
+	spec.chroma = chroma.scale(Object.values(spec.gradient))
+		.domain(Object.keys(spec.gradient));
+}
 
 export default specs;
 export {
