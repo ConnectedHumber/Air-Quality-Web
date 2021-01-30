@@ -5,6 +5,7 @@ import NanoModal from 'nanomodal';
 
 import Config from './Config.mjs';
 import GetFromUrl from './Helpers/GetFromUrl.mjs';
+import Gauge from './Gauge.mjs';
 
 // import Tour from './Tour.mjs';
 
@@ -40,6 +41,9 @@ class UI {
 		this.map_manager = in_map_manager;
 		
 		this.ui_panel = new SmartSettings("Settings");
+		this.gauge = new Gauge(document.getElementById("canvas-guage"));
+		this.gauge.set_reading_type(Config.default_reading_type);
+		
 		// this.ui_panel.watch((event) => console.log(event));
 		
 		this.tour_enabled = false;
@@ -64,6 +68,7 @@ class UI {
 					
 					document.querySelector("main").classList.add("working-visual");
 					await this.map_manager.device_markers.update_markers(new_type);
+					this.gauge.set_reading_type(new_type);
 					document.querySelector("main").classList.remove("working-visual");
 				}).bind(this)
 			},
@@ -89,7 +94,7 @@ class UI {
 				})
 			}
 		]);
-		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == "PM25"));
+		this.ui_panel.setIndex("Reading Type", this.reading_types.findIndex((type) => type.short_descr == Config.default_reading_type));
 		
 		if(this.tour_enabled) await this.tour.run_once();
 	}
