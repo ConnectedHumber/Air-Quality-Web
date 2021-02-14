@@ -277,6 +277,10 @@ task_docs() {
 # ██      ██
 #  ██████ ██
 task_ci() {
+	if [[ -z "${TERM}" ]]; then
+		export TERM=xterm-256color;
+	fi
+	
 	tasks_run setup setup-dev
 	NODE_ENV="production" tasks_run client docs archive;
 	
