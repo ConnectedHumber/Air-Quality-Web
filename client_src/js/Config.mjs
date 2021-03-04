@@ -10,6 +10,8 @@ export default {
 	// The default zoom level to use when loading the page.
 	default_zoom: 12,
 	
+	default_reading_type: "PM25",
+	
 	// The number of minutes to round dates to when making time-based HTTP API requests.
 	// Very useful for improving cache hit rates.
 	date_rounding_interval: 6,

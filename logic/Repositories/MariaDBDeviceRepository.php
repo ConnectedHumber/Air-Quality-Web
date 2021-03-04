@@ -33,7 +33,6 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 	public static $column_type_power = "power";
 	public static $column_type_software = "Software";
 	public static $column_type_notes = "Other";
-
 	
 	
 	// ------------------------------------------------------------------------
@@ -109,11 +108,6 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 		$s = $this->get_static;
 		$o = $this->get_static_extra;
 		
-		$data_repo_class = MariaDBMeasurementDataRepository::class;
-		$data_repo_table_meta = $o($data_repo_class, "table_name_metadata");
-		$data_repo_col_datetime = "$data_repo_table_meta.{$o($data_repo_class, "column_metadata_datetime")}";
-		$data_repo_col_device_id = "$data_repo_table_meta.{$o($data_repo_class, "column_metadata_device_id")}";
-		
 		$query_result = $this->database->query(
 			"SELECT
 				{$s("table_name")}.{$s("column_device_id")} AS id,
@@ -126,8 +120,6 @@ class MariaDBDeviceRepository implements IDeviceRepository {
 			FROM {$s("table_name")}
 			JOIN {$s("table_name_type")} ON
 				{$s("table_name")}.{$s("column_device_type")} = {$s("table_name_type")}.{$s("column_type_id")}
-			JOIN $data_repo_table_meta ON
-				$data_repo_col_device_id = {$s("table_name")}.{$s("column_device_id")}
 			WHERE {$s("table_name")}.{$s("column_device_id")} = :device_id
 			AND {$s("table_name")}.{$s("column_visible")} != 0;", [
 				"device_id" => $device_id

@@ -3,8 +3,9 @@
 import { set_hidpi_canvas, pixel_ratio } from './Helpers/Canvas.mjs';
 import { RenderGradient } from './Helpers/GradientHelpers.mjs';
 
+import gradients from './Gradients.mjs';
 
-class Guage {
+class Gauge {
 	constructor(in_canvas) {
 		this.canvas = in_canvas;
 		
@@ -13,9 +14,30 @@ class Guage {
 		this.context = this.canvas.getContext("2d");
 	}
 	
+	/**
+	 * Sets the reading type to display on this gauge.
+	 * Pulls gradient definitions from Gradients.mjs.
+	 * @param	{string}	new_reading_type	The reading type code to display.
+	 */
+	set_reading_type(new_reading_type) {
+		if(typeof gradients[new_reading_type] == "undefined") {
+			console.warn(`[Gauge] Warning: Unknown reading type ${new_reading_type} (defaulting to "unknown")`);
+			new_reading_type = "unknown";
+		}
+		
+		this.set_spec(gradients[new_reading_type]);
+	}
+	
+	/**
+	 * Sets the gradient spec to display.
+	 * Automatically re-renders the gauge for convenience.
+	 * @param	{Object}	arg	The gradient spec to set display.
+	 */
 	set_spec({ gradient: spec, max }) {
 		this.spec = spec;
 		this.max = max;
+		
+		this.render();
 	}
 	
 	render() {
@@ -89,4 +111,4 @@ class Guage {
 	}
 }
 
-export default Guage;
+export default Gauge;

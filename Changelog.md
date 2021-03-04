@@ -5,9 +5,17 @@ The data displayed has been produced by low-cost devices developed by [Connected
 
 This is the changelog for the air quality web interface and its associated HTTP API.
 
- - `[API]` refers to changes to the [HTTP API](https://aq.connectedhumber.org/__nightdocs/05-API-Docs.html).
+ - `[API]` refers to changes to the [HTTP API](https://sensors.connectedhumber.org/__nightdocs/05-API-Docs.html).
  - `[Code]` refers to internal changes to the code that have no direct impact on the web interface or the HTTP API, but are significant enough to warrant note.
- - `[Docs]` refers to changes to the [documentation](https://aq.connectedhumber.org/__nightdocs/00-Welcome.html).
+ - `[Docs]` refers to changes to the [documentation](https://sensors.connectedhumber.org/__nightdocs/00-Welcome.html).
+
+
+## v0.14
+ - Remove the heatmap background overlay :-(
+ - Colour device markers based on the latest reading
+ - Properly handle switching to a reading type that doesn't have any readings at all
+ - [API] Optimise `list-reading-types` action, which necessitated a database schema update and the removal of the `count` property on returned objects
+ - [API] Drastically optimise `device-info` by removing a redundant JOIN
 
 
 ## v0.13.6

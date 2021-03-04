@@ -81,27 +81,37 @@ class MariaDBMeasurementTypeRepository implements IMeasurementTypeRepository {
 		)->fetchAll();
 	}
 	
-	public function get_types_by_device($device_id, $days_to_analyse = -1) {
+	public function get_types_by_device($device_id) {
 		$data = [
 			"device_id" => $device_id
 		];
-		if($days_to_analyse >= 0)
-			$data["days"] = $days_to_analyse;
-		
 		$s = $this->get_static;
 		$o = $this->get_static_extra;
+		
+		$repo_device = MariaDBDeviceRepository::class;
+		$repo_sensor = MariaDBSensorRepository::class;
+		/*
+		SELECT reading_value_types.*
+		FROM devices
+		JOIN device_sensors ON device_sensors.device_id = devices.device_id
+		JOIN sensors ON sensors.id = device_sensors.sensors_id
+		JOIN sensor_reading_value_types ON sensor_reading_value_types.sensor_id = sensors.id
+		JOIN reading_value_types ON reading_value_types.id = sensor_reading_value_types.reading_value_types_id
+		WHERE devices.device_id=10
+		GROUP BY reading_value_types.id;
+		 */
 		return $this->database->query(
-			"SELECT
-				{$s("table_name")}.*,
-				COUNT({$s("table_name")}.{$s("column_id")}) AS count
-			FROM {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}
-			JOIN {$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")} ON
-				{$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_id")} = {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}.{$o(MariaDBMeasurementDataRepository::class, "column_values_reading_id")}
-			JOIN {$s("table_name")} ON
-				{$s("table_name")}.{$s("column_id")} = {$o(MariaDBMeasurementDataRepository::class, "table_name_values")}.{$o(MariaDBMeasurementDataRepository::class, "column_values_reading_type")}
-			WHERE
-				{$o(MariaDBMeasurementDataRepository::class, "table_name_metadata")}.{$o(MariaDBMeasurementDataRepository::class, "column_metadata_device_id")} = :device_id
-				" . ($days_to_analyse >= 0 ? "AND DATEDIFF(NOW(),s_or_r) = :days" : "") . "
+			"SELECT {$s("table_name")}.*
+			FROM {$o($repo_device, "table_name")}
+			JOIN {$o($repo_sensor, "table_name_assoc")}
+				ON {$o($repo_sensor, "table_name_assoc")}.{$o($repo_sensor, "col_assoc_device_id")} = {$o($repo_device, "table_name")}.{$o($repo_device, "column_device_id")}
+			JOIN {$o($repo_sensor, "table_name")}
+				ON {$o($repo_sensor, "table_name_assoc")}.{$o($repo_sensor, "col_assoc_sensor_id")} = {$o($repo_sensor, "table_name")}.{$o($repo_sensor, "col_id")}
+			JOIN {$o($repo_sensor, "table_name_rtassoc")}
+				ON {$o($repo_sensor, "table_name")}.{$o($repo_sensor, "col_id")} = {$o($repo_sensor, "table_name_rtassoc")}.{$o($repo_sensor, "col_rtassoc_sensor_id")}
+			JOIN {$s("table_name")}
+				ON {$o($repo_sensor, "table_name_rtassoc")}.{$o($repo_sensor, "col_rtassoc_rvt_id")} = {$s("table_name")}.{$s("column_id")}
+			WHERE {$o($repo_device, "table_name")}.{$o($repo_device, "column_device_id")} = :device_id
 			GROUP BY {$s("table_name")}.{$s("column_id")};",
 			$data
 		)->fetchAll();

@@ -19,6 +19,10 @@ class MariaDBSensorRepository implements ISensorRepository {
 	public static $col_assoc_device_id = "device_id";
 	public static $col_assoc_sensor_id = "sensors_id";
 	
+	public static $table_name_rtassoc = "sensor_reading_value_types";
+	public static $col_rtassoc_sensor_id = "sensor_id";
+	public static $col_rtassoc_rvt_id = "reading_value_types_id";
+	
 	
 	// ------------------------------------------------------------------------
 	

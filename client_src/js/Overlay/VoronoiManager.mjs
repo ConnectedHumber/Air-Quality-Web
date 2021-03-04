@@ -7,7 +7,7 @@ import Config from '../Config.mjs';
 import VoronoiOverlay from './VoronoiOverlay.mjs';
 import VoronoiCell from './VoronoiCell.mjs';
 
-import Guage from '../Guage.mjs';
+import Gauge from '../Gauge.mjs';
 import Specs from './OverlaySpecs.mjs';
 
 import Vector2 from '../Helpers/Vector2.mjs';
@@ -37,7 +37,7 @@ class VoronoiManager {
 	}
 	
 	setup_guage() {
-		this.guage = new Guage(document.getElementById("canvas-guage"));
+		this.guage = new Gauge(document.getElementById("canvas-guage"));
 	}
 	
 	// ------------------------------------------------------------------------

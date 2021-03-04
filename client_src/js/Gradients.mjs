@@ -1,5 +1,6 @@
 "use strict";
 
+import chroma from 'chroma-js';
 
 var PM25 = {
 	/*
@@ -60,7 +61,7 @@ var PM10 = {
 var humidity = {
 	max: 100,
 	gradient: {
-		"0": "hsla(176, 77%, 40%, 0)",
+		"0": "hsla(52, 36%, 61%, 0.5)",
 		"50": "hsl(176, 77%, 40%)",
 		"100": "blue"
 	}
@@ -102,6 +103,11 @@ var specs = {
 	pressure,
 	unknown
 };
+
+for(let spec of Object.values(specs)) {
+	spec.chroma = chroma.scale(Object.values(spec.gradient))
+		.domain(Object.keys(spec.gradient));
+}
 
 export default specs;
 export {
