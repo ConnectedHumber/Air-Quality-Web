@@ -7,7 +7,7 @@ import CreateElement from '../../node_modules/dom-create-element-query-selector/
 import moment from 'moment';
 // import Chart from 'chart.js';
 // Chart.js pollutes the global scope, but the main entry point is going to change soon in v2.8 - which should fix our issue here
-import Chart from '../../node_modules/chart.js/dist/chart.esm.js';
+import * as Chart from '../../node_modules/chart.js/dist/chart.esm.js';
 
 import Config from './Config.mjs';
 
