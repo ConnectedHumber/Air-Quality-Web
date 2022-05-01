@@ -10,6 +10,10 @@ This is the changelog for the air quality web interface and its associated HTTP 
  - `[Docs]` refers to changes to the [documentation](https://sensors.connectedhumber.org/__nightdocs/00-Welcome.html).
 
 
+## v0.14.1 (unreleased)
+ - Update dependencies
+
+
 ## v0.14
  - Remove the heatmap background overlay :-(
  - Colour device markers based on the latest reading
